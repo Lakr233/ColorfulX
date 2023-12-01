@@ -5,11 +5,11 @@
 //  Created by QAQ on 2023/12/1.
 //
 
+import Combine
 import SwiftUI
 
 public struct ColorfulX: View {
     @State private var animationAmount: CGFloat = 0.0
-    @State private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     public struct ColorSet {
         public let a: Color
@@ -29,6 +29,9 @@ public struct ColorfulX: View {
     public let noise: Float
     public let power: Float
     public let colorInterpolation: MulticolorGradient.ColorInterpolation
+    public let fps: Int
+
+    private let timer: Publishers.Autoconnect<Timer.TimerPublisher>
 
     public init(
         colors: ColorSet,
@@ -36,7 +39,8 @@ public struct ColorfulX: View {
         bias: Float = 0.001,
         noise: Float = 128,
         power: Float = 8,
-        colorInterpolation: MulticolorGradient.ColorInterpolation = .hsb
+        colorInterpolation: MulticolorGradient.ColorInterpolation = .hsb,
+        fps: Int = 30
     ) {
         self.colors = colors
         self.speedFactor = speedFactor
@@ -44,6 +48,13 @@ public struct ColorfulX: View {
         self.noise = noise
         self.power = power
         self.colorInterpolation = colorInterpolation
+        self.fps = fps
+
+        let interval: TimeInterval = 1.0 / Double(fps)
+        let timer = Timer
+            .publish(every: interval, on: .main, in: .common)
+            .autoconnect()
+        self.timer = timer
     }
 
     public init(
@@ -52,7 +63,8 @@ public struct ColorfulX: View {
         bias: Float = 0.001,
         noise: Float = 128,
         power: Float = 8,
-        colorInterpolation: MulticolorGradient.ColorInterpolation = .hsb
+        colorInterpolation: MulticolorGradient.ColorInterpolation = .hsb,
+        fps: Int = 30
     ) {
         self.init(
             colors: preset.colors,
@@ -60,7 +72,8 @@ public struct ColorfulX: View {
             bias: bias,
             noise: noise,
             power: power,
-            colorInterpolation: colorInterpolation
+            colorInterpolation: colorInterpolation,
+            fps: fps
         )
     }
 
