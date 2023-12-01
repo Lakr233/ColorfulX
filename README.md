@@ -62,6 +62,12 @@ MulticolorGradient(
 
 > Personally, I prefer to use hsb as color interpolation as it's more natural to human eyes.
 
+## Presets
+
+ColorfulX include a range of presets for you to use. You can identify each in the demo app.
+
+![Screenshot](./Example/Presets.png)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
