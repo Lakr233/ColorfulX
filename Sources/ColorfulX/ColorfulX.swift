@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 public struct ColorfulX: View {
-    @State private var animationAmount: CGFloat = 0.0
+    @State private var animationAmount: CGFloat = .random(in: 0 ... 65535)
 
     public struct ColorSet {
         public let a: Color

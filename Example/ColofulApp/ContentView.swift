@@ -17,10 +17,35 @@ struct ContentView: View {
     @State var colorInterpolation: MulticolorGradient.ColorInterpolation = .allCases.first!
     @State var fps: Int = 30
 
+    @State var openAll: Bool = false
+
     var body: some View {
         ZStack {
             colorful
             control
+        }
+        .sheet(isPresented: $openAll) {
+            VStack(spacing: 8) {
+                HStack {
+                    Text("ColorfulX Presets")
+                    Spacer()
+                    Text("\(ColorfulPreset.allCases.count)")
+                }
+                .font(.system(.title3, design: .rounded, weight: .semibold))
+                Divider()
+                presetGird
+                    .frame(width: 800, height: 400, alignment: .center)
+                Divider()
+                HStack {
+                    Text("[https://github.com/Lakr233/ColorfulX](https://github.com/Lakr233/ColorfulX)")
+                        .underline()
+                        .font(.footnote)
+                        .tint(.white)
+                    Spacer()
+                    Button("Dismiss") { openAll = false }
+                }
+            }
+            .padding()
         }
         .frame(
             minWidth: 400, idealWidth: 600, maxWidth: .infinity,
@@ -41,6 +66,30 @@ struct ContentView: View {
         )
     }
 
+    var presetGird: some View {
+        LazyVGrid(columns: [.init(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
+            ForEach(ColorfulPreset.allCases, id: \.self) { preset in
+                ColorfulX(
+                    preset: preset,
+                    speedFactor: speedFactor,
+                    bias: bias,
+                    noise: noise,
+                    power: power,
+                    colorInterpolation: colorInterpolation,
+                    fps: fps
+                )
+                .overlay(
+                    Text(preset.hint)
+                        .font(.system(.title3, design: .rounded, weight: .black))
+                        .foregroundStyle(.white)
+                        .opacity(0.5)
+                )
+                .frame(height: 120, alignment: .center)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+        }
+    }
+
     var control: some View {
         VStack(alignment: .leading, spacing: 8) {
             Group {
@@ -53,6 +102,7 @@ struct ContentView: View {
                         }
                     }
                     .pickerStyle(.automatic)
+                    Button("All") { openAll = true }
                 }
                 Divider()
             }
