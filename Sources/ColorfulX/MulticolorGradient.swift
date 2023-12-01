@@ -11,7 +11,7 @@ public struct MulticolorGradient {
         .init(points: points, bias: bias, power: power, noise: noise)
     }
 
-    public enum ColorInterpolation {
+    public enum ColorInterpolation: String, CaseIterable {
         case rgb, hsb
     }
 
