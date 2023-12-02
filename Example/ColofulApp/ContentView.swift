@@ -24,7 +24,7 @@ struct ContentView: View {
             colorful
             control
         }
-        .sheet(isPresented: $openAll) {
+        .popover(isPresented: $openAll) {
             VStack(spacing: 8) {
                 HStack {
                     Text("ColorfulX Presets")
@@ -33,19 +33,18 @@ struct ContentView: View {
                 }
                 .font(.system(.title3, design: .rounded, weight: .semibold))
                 Divider()
-                presetGird
-                    .frame(width: 800, height: 400, alignment: .center)
+                ScrollView { presetGird }
                 Divider()
                 HStack {
                     Text("[https://github.com/Lakr233/ColorfulX](https://github.com/Lakr233/ColorfulX)")
                         .underline()
                         .font(.footnote)
-                        .tint(.white)
                     Spacer()
                     Button("Dismiss") { openAll = false }
                 }
             }
             .padding()
+            .frame(minWidth: 400, minHeight: 400)
         }
         .frame(
             minWidth: 400, idealWidth: 600, maxWidth: .infinity,

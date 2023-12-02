@@ -11,7 +11,9 @@ import SwiftUI
 public struct ColorfulX: View {
     @State private var animationAmount: CGFloat = .random(in: 0 ... 65535)
 
-    public struct ColorSet {
+    public struct ColorSet: Hashable, Equatable, Identifiable {
+        public var id: Int { hashValue }
+
         public let a: Color
         public let b: Color
         public let c: Color
@@ -22,6 +24,17 @@ public struct ColorfulX: View {
             self.b = b
             self.c = c
             self.d = d
+        }
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(a)
+            hasher.combine(b)
+            hasher.combine(c)
+            hasher.combine(d)
+        }
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.hashValue == rhs.hashValue
         }
     }
 
