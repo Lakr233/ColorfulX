@@ -1,5 +1,7 @@
 # ColorfulX
 
+**This package is currently undergoing restructuring. Please check back later for a stable API.**
+
 ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ![Screenshot](./Example/Screenshot.png)
