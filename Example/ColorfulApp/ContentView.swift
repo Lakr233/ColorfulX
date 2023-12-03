@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  ColofulApp
+//  ColorfulApp
 //
 //  Created by QAQ on 2023/12/1.
 //
