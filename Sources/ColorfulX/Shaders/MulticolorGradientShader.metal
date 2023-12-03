@@ -6,6 +6,7 @@
 //
 
 #include <metal_stdlib>
+
 using namespace metal;
 
 typedef struct {
@@ -36,7 +37,6 @@ kernel void gradient(texture2d<float, access::write> output [[texture(4)]],
     float totalContribution = 0.0;
     float contribution[8];
     
-    // Compute contributions
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float2 pos = uniforms.points[i] * float2(1.0, float(height) / float(width));
@@ -47,7 +47,6 @@ kernel void gradient(texture2d<float, access::write> output [[texture(4)]],
         totalContribution += c;
     }
     
-    // Contributions normalisation
     float3 col = float3(0, 0, 0);
     float inverseContribution = 1.0 / totalContribution;
     for (int i = 0; i < uniforms.pointCount; i++)

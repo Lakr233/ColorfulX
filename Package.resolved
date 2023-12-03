@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "springinterpolation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Lakr233/SpringInterpolation.git",
+      "state" : {
+        "revision" : "a0dbf95e13d516ca368e93992bae0ea17d305e0c",
+        "version" : "1.0.5"
+      }
+    }
+  ],
+  "version" : 2
+}

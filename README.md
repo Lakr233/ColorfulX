@@ -1,16 +1,8 @@
 # ColorfulX
 
-**This package is currently undergoing restructuring. Please check back later for a stable API.**
-
 ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ![Screenshot](./Example/Screenshot.png)
-
-## Special Thanks
-
-The code here is significantly reused from [this source](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient), thus the name of original author was added to license file.
-
-**The primary focus of this repository is to extend support across multiple platforms, offering a range of ready-to-use presets.**
 
 ## Platform
 
@@ -35,44 +27,83 @@ dependencies: [
 ]
 ```
 
+Generally, you can always have a look at example project for more details. We have included a range of presets for you to use. You can identify each in the demo app. See `ColorfulPreset` for name, and pass `.constant(preset.colors)` into `ColorfulView`.
+
 ### SwiftUI
 
 For animated colors with default animation, use the following code:
 
 ```swift
-ColorfulX(
-    colors: ColorSet, // 3 colors are required
-    speedFactor: Float = 1,
-    bias: Float = 0.001,
-    noise: Float = 128,
-    power: Float = 8,
-    colorInterpolation: MulticolorGradient.ColorInterpolation = .hsb
-)
+import ColorfulX
+
+let defaultPreset: ColorfulPreset = .aurora
+
+struct ContentView: View {
+    @State var colors: [Color] = defaultPreset.colors
+
+    var body: some View {
+        ColorfulView(colors: $colors)
+    }
+}
 ```
 
 For creating a static gradient, use the following code:
 
 ```swift
-MulticolorGradient(
-    points: [ColorStop],
-    bias: Float = 0.001,
-    power: Float = 2.0,
-    noise: Float = 2.0,
-    colorInterpolation: ColorInterpolation = .rgb
-)
+import ColorfulX
+
+struct StaticView: View {
+    var body: some View {
+        MulticolorGradient(
+            parameters: .constant(.init(
+                points: [
+                    .init(color: .init(.init(Color.red)), position: .init(x: 0, y: 0)),
+                    .init(color: .init(.init(Color.blue)), position: .init(x: 1, y: 0)),
+                    .init(color: .init(.init(Color.green)), position: .init(x: 0, y: 1)),
+                    .init(color: .init(.init(Color.yellow)), position: .init(x: 1, y: 1)),
+                ],
+                bias: 0.01,
+                power: 4,
+                noise: 32
+            )))
+    }
+}
 ```
 
-> Personally, I prefer to use hsb as color interpolation as it's more natural to human eyes.
+### UIKit/AppKit
 
-## Presets
+For animated colors with default animation, use the following code:
 
-ColorfulX include a range of presets for you to use. You can identify each in the demo app.
+```swift
+import MetalKit
+import ColorfulX
 
-![Screenshot](./Example/Presets.png)
+let view = AnimatedMulticolorGradientView(fps: fps)
+view.setColors(colors, interpolationEnabled: false)
+view.setSpeedFactor(speedFactor)
+view.setColorTransitionDuration(colorTransitionDuration)
+```
+
+For creating a static gradient, use the following code:
+
+```swift
+import MetalKit
+import ColorfulX
+
+let view = MulticolorGradientView()
+view.parameters = .init(points: [
+    .init(color: .init(r: 1, g: 0, b: 0), position: .init(x: 1, y: 0)),
+    .init(color: .init(r: 0, g: 1, b: 0), position: .init(x: 0, y: 0)),
+    .init(color: .init(r: 0, g: 0, b: 1), position: .init(x: 0, y: 1)),
+    .init(color: .init(r: 1, g: 1, b: 1), position: .init(x: 1, y: 1)),
+], bias: 0.01, power: 2, noise: 32)
+```
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+The shader code is from [here](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient), thus the name of original author was added to license file.
 
 ---
 
