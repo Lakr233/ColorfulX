@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ColofulApp.xcodeproj">
+      location = "group:/Users/qaq/Documents/GitHub/ColorfulX/Example/ColorfulApp.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:..">

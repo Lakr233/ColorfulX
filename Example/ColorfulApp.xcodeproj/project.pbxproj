@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		50C663882B19B04800AF7053 /* ColofulAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C663872B19B04800AF7053 /* ColofulAppApp.swift */; };
+		50C663882B19B04800AF7053 /* ColorfulAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C663872B19B04800AF7053 /* ColorfulAppApp.swift */; };
 		50C6638A2B19B04800AF7053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C663892B19B04800AF7053 /* ContentView.swift */; };
 		50C6638C2B19B04900AF7053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C6638B2B19B04900AF7053 /* Assets.xcassets */; };
 		50C663902B19B04900AF7053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C6638F2B19B04900AF7053 /* Preview Assets.xcassets */; };
@@ -15,11 +15,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		50C663842B19B04800AF7053 /* ColofulApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColofulApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		50C663872B19B04800AF7053 /* ColofulAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColofulAppApp.swift; sourceTree = "<group>"; };
+		50C663842B19B04800AF7053 /* ColorfulApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorfulApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50C663872B19B04800AF7053 /* ColorfulAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulAppApp.swift; sourceTree = "<group>"; };
 		50C663892B19B04800AF7053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		50C6638B2B19B04900AF7053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		50C6638D2B19B04900AF7053 /* ColofulApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ColofulApp.entitlements; sourceTree = "<group>"; };
+		50C6638D2B19B04900AF7053 /* ColorfulApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ColorfulApp.entitlements; sourceTree = "<group>"; };
 		50C6638F2B19B04900AF7053 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -38,7 +38,7 @@
 		50C6637B2B19B04800AF7053 = {
 			isa = PBXGroup;
 			children = (
-				50C663862B19B04800AF7053 /* ColofulApp */,
+				50C663862B19B04800AF7053 /* ColorfulApp */,
 				50C663852B19B04800AF7053 /* Products */,
 				50C663962B19B07B00AF7053 /* Frameworks */,
 			);
@@ -47,21 +47,21 @@
 		50C663852B19B04800AF7053 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				50C663842B19B04800AF7053 /* ColofulApp.app */,
+				50C663842B19B04800AF7053 /* ColorfulApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		50C663862B19B04800AF7053 /* ColofulApp */ = {
+		50C663862B19B04800AF7053 /* ColorfulApp */ = {
 			isa = PBXGroup;
 			children = (
-				50C663872B19B04800AF7053 /* ColofulAppApp.swift */,
+				50C663872B19B04800AF7053 /* ColorfulAppApp.swift */,
 				50C663892B19B04800AF7053 /* ContentView.swift */,
 				50C6638B2B19B04900AF7053 /* Assets.xcassets */,
-				50C6638D2B19B04900AF7053 /* ColofulApp.entitlements */,
+				50C6638D2B19B04900AF7053 /* ColorfulApp.entitlements */,
 				50C6638E2B19B04900AF7053 /* Preview Content */,
 			);
-			path = ColofulApp;
+			path = ColorfulApp;
 			sourceTree = "<group>";
 		};
 		50C6638E2B19B04900AF7053 /* Preview Content */ = {
@@ -82,9 +82,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		50C663832B19B04800AF7053 /* ColofulApp */ = {
+		50C663832B19B04800AF7053 /* ColorfulApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 50C663932B19B04900AF7053 /* Build configuration list for PBXNativeTarget "ColofulApp" */;
+			buildConfigurationList = 50C663932B19B04900AF7053 /* Build configuration list for PBXNativeTarget "ColorfulApp" */;
 			buildPhases = (
 				50C663802B19B04800AF7053 /* Sources */,
 				50C663812B19B04800AF7053 /* Frameworks */,
@@ -94,12 +94,12 @@
 			);
 			dependencies = (
 			);
-			name = ColofulApp;
+			name = ColorfulApp;
 			packageProductDependencies = (
 				50C663972B19B07B00AF7053 /* ColorfulX */,
 			);
-			productName = ColofulApp;
-			productReference = 50C663842B19B04800AF7053 /* ColofulApp.app */;
+			productName = ColorfulApp;
+			productReference = 50C663842B19B04800AF7053 /* ColorfulApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -117,7 +117,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 50C6637F2B19B04800AF7053 /* Build configuration list for PBXProject "ColofulApp" */;
+			buildConfigurationList = 50C6637F2B19B04800AF7053 /* Build configuration list for PBXProject "ColorfulApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -130,7 +130,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				50C663832B19B04800AF7053 /* ColofulApp */,
+				50C663832B19B04800AF7053 /* ColorfulApp */,
 			);
 		};
 /* End PBXProject section */
@@ -153,7 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C6638A2B19B04800AF7053 /* ContentView.swift in Sources */,
-				50C663882B19B04800AF7053 /* ColofulAppApp.swift in Sources */,
+				50C663882B19B04800AF7053 /* ColorfulAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,10 +279,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = ColofulApp/ColofulApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ColorfulApp/ColorfulApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ColofulApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ColorfulApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CMYQQFFT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -301,7 +301,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ColofulApp;
+				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ColorfulApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -316,10 +316,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = ColofulApp/ColofulApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ColorfulApp/ColorfulApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ColofulApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ColorfulApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CMYQQFFT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -338,7 +338,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ColofulApp;
+				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ColorfulApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -351,7 +351,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		50C6637F2B19B04800AF7053 /* Build configuration list for PBXProject "ColofulApp" */ = {
+		50C6637F2B19B04800AF7053 /* Build configuration list for PBXProject "ColorfulApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50C663912B19B04900AF7053 /* Debug */,
@@ -360,7 +360,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		50C663932B19B04900AF7053 /* Build configuration list for PBXNativeTarget "ColofulApp" */ = {
+		50C663932B19B04900AF7053 /* Build configuration list for PBXNativeTarget "ColorfulApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50C663942B19B04900AF7053 /* Debug */,
