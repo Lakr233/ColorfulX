@@ -27,7 +27,7 @@ dependencies: [
 ]
 ```
 
-Generally, you can always have a look at example project for more details. We have included a range of presets for you to use. You can identify each in the demo app. See `ColorfulPreset` for name, and pass `.constant(preset.colors)` into `ColorfulView`.
+For more detailed information, feel free to explore our example projects. We've provided various presets for your convenience. Each one is identifiable within the demo application. For instance, check out `ColorfulPreset` to find the name, and then use `.constant(preset.colors)` to implement it in `ColorfulView`.
 
 ### SwiftUI
 
@@ -99,11 +99,19 @@ view.parameters = .init(points: [
 ], bias: 0.01, power: 2, noise: 32)
 ```
 
+## Performance
+
+There's no feasible way to create these types of gradients without incurring some costs. Yet, by utilizing Metal and GPU technology, we can attain a performance level that's quite satisfactory. The energy impact of this approach is classified as 'Low.'
+
+From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution.
+
+![PerformanceDemo](./Example/Performance.png)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-The shader code is from [here](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient), thus the name of original author was added to license file.
+The shader code originates from [this source](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient). Consequently, the name of the original author has been credited in the license file.
 
 ---
 
