@@ -27,7 +27,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     ///   - fps: frame per second
     ///   - colorTransitionDuration: used in color interpolation
     ///   - colorMoveSpeedFactor: used in location animation with spring interpolation
-    init(fps: Int) {
+    public init(fps: Int) {
         self.fps = fps
         deltaTime = 1.0 / Double(fps)
 
