@@ -19,14 +19,8 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var colorMoveSpeedFactor: Double = 1.0
     public private(set) var colorTransitionDuration: TimeInterval = 5
 
-    public private(set) var lastDraw: Date = .init()
     private var timers: [Timer] = []
 
-    /// create with animation to render
-    /// - Parameters:
-    ///   - fps: frame per second
-    ///   - colorTransitionDuration: used in color interpolation
-    ///   - colorMoveSpeedFactor: used in location animation with spring interpolation
     public init(fps: Int) {
         self.fps = fps
         deltaTime = 1.0 / Double(fps)
@@ -73,8 +67,9 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
         }
     }
 
-    @objc func updateTik() {
+    @objc private func updateTik() {
         assert(Thread.isMainThread)
+
         for idx in 0 ..< colorElements.count where colorElements[idx].enabled {
             var read = colorElements[idx]
             defer { colorElements[idx] = read }
@@ -82,19 +77,34 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             if read.transitionProgress < 1 {
                 read.transitionProgress += deltaTime / colorTransitionDuration
             }
-            // if approaching to target, generate new target
-            let currentPos = read.position.currentPos
-            let targetPos = read.position.targetPos
-            read.position.tik()
-
-            if abs(currentPos.x - targetPos.x) < LOCATION_OVERSHOT / 2,
-               abs(currentPos.y - targetPos.y) < LOCATION_OVERSHOT / 2
+            if read.position.springX.config.deltaTime > 0,
+               read.position.springY.config.deltaTime > 0
             {
-                let rand = randomLocationPair()
-//                print("[*] setting \(idx) new rand \(rand)")
-                read.position.setTarget(.init(x: rand.x, y: rand.y))
+                let currentPos = read.position.currentPos
+                let targetPos = read.position.targetPos
+                read.position.tik()
+
+                if abs(currentPos.x - targetPos.x) < LOCATION_OVERSHOT / 2,
+                   abs(currentPos.y - targetPos.y) < LOCATION_OVERSHOT / 2
+                {
+                    let rand = randomLocationPair()
+                    read.position.setTarget(.init(x: rand.x, y: rand.y))
+                }
             }
         }
+
+        parameters = .init(
+            points: colorElements
+                .filter(\.enabled)
+                .map { .init(
+                    color: $0.currentColor,
+                    position: .init(
+                        x: $0.position.currentPos.x,
+                        y: $0.position.currentPos.y
+                    )
+                ) },
+            noise: 0
+        )
     }
 
     private func randomLocationPair() -> (x: Double, y: Double) {
@@ -111,11 +121,8 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
         assert(Thread.isMainThread)
         for (idx, color) in colors.enumerated() {
             var read = colorElements[idx]
-            // ignore unchanged request
             guard read.targetColor != color else { continue }
             let interpolationEnabled = interpolationEnabled && read.enabled
-//            print("[*] updating color -> \(color)")
-//            print("    interpolationEnabled \(interpolationEnabled)")
             let currentColor = read.currentColor // make copy first then edit
             read.enabled = true
             read.targetColor = color
@@ -126,7 +133,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
         for idx in colors.count ..< colorElements.count {
             colorElements[idx].enabled = false
         }
-//        print("")
+        updateTik()
     }
 
     public func setSpeedFactor(_ value: Double) {
@@ -147,29 +154,5 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     public func setColorTransitionDuration(_ value: TimeInterval) {
         colorTransitionDuration = value
-    }
-
-    override public func draw(in _: MTKView) {
-        guard let drawable = currentDrawable else { return }
-        let updateDelta = Date().timeIntervalSince(lastDraw)
-        assert(updateDelta > 0)
-        lastDraw = Date()
-        computeParameters()
-        draw(with: parameters, in: drawable)
-    }
-
-    func computeParameters() {
-        parameters = .init(
-            points: colorElements
-                .filter(\.enabled)
-                .map { .init(
-                    color: $0.currentColor,
-                    position: .init(
-                        x: $0.position.currentPos.x,
-                        y: $0.position.currentPos.y
-                    )
-                ) },
-            noise: 8
-        )
     }
 }

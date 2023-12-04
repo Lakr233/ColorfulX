@@ -7,42 +7,44 @@
 
 import MetalKit
 
-public class MulticolorGradientView: MTKView, MTKViewDelegate {
-    public var parameters: Parameters = .init()
+public class MulticolorGradientView: MetalView {
+    private var needsRender: Bool = false
 
-    private var commandQueue: MTLCommandQueue
-    private var computePipelineState: MTLComputePipelineState
+    public var parameters: Parameters = .init() {
+        didSet {
+            needsRender = oldValue != parameters
+            renderIfNeeded()
+        }
+    }
 
-    public init() {
-        guard let device = MTLCreateSystemDefaultDevice(),
-              let commandQueue = device.makeCommandQueue(),
-              let library = try? device.makeDefaultLibrary(bundle: Bundle.module),
+    private var computePipelineState: MTLComputePipelineState!
+
+    override public init() {
+        super.init()
+
+        let device = metalDevice
+        guard let library = try? device.makeDefaultLibrary(bundle: Bundle.module),
               let computeProgram = library.makeFunction(name: "gradient"),
               let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
-        else {
-            fatalError("Metal is not supported on this device")
-        }
-        self.commandQueue = commandQueue
+        else { fatalError("Metal program filed to compile") }
         self.computePipelineState = computePipelineState
-
-        super.init(frame: .zero, device: device)
-
-        framebufferOnly = false
-        isPaused = false
-        delegate = self
     }
 
-    @available(*, unavailable)
-    required init(coder _: NSCoder) { fatalError() }
-
-    public func draw(in _: MTKView) {
-        guard let drawable = currentDrawable else { return }
-        draw(with: parameters, in: drawable)
+    override public func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        needsRender = true
     }
 
-    public func mtkView(_: MTKView, drawableSizeWillChange _: CGSize) {}
+    override func shouldRender() -> Bool {
+        needsRender
+    }
 
-    public func draw(with parameters: Parameters, in drawable: CAMetalDrawable) {
+    override func render(
+        withDrawable drawable: CAMetalDrawable,
+        commandBuffer _: MTLCommandBuffer,
+        computeEncoder: MTLComputeCommandEncoder
+    ) {
+        defer { needsRender = false }
         var shaderPoints: [(simd_float2, simd_float3)] = Array(
             repeating: (
                 simd_float2(0.0, 0.0),
@@ -82,9 +84,6 @@ public class MulticolorGradientView: MTKView, MTKViewDelegate {
             color7: shaderPoints[7].1
         )
 
-        guard let commandBuffer = commandQueue.makeCommandBuffer(),
-              let computeEncoder = commandBuffer.makeComputeCommandEncoder()
-        else { return }
         computeEncoder.setComputePipelineState(computePipelineState)
         computeEncoder.setBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
         computeEncoder.setTexture(drawable.texture, index: 4)
@@ -96,7 +95,5 @@ public class MulticolorGradientView: MTKView, MTKViewDelegate {
         )
         computeEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
         computeEncoder.endEncoding()
-        commandBuffer.present(drawable)
-        commandBuffer.commit()
     }
 }

@@ -9,6 +9,7 @@ let package = Package(
         .macOS(.v14),
         .macCatalyst(.v14),
         .tvOS(.v14),
+        .visionOS(.v1),
     ],
     products: [
         .library(name: "ColorfulX", targets: ["ColorfulX"]),
