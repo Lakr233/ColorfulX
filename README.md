@@ -6,15 +6,16 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## Platform
 
-UIKit and AppKit platforms are generally supported. Due to `MTKView` not available on visionOS, it's not supported.
+UIKit and AppKit platforms are generally supported. ~~Due to `MTKView` not available on visionOS, it's not supported.~~
 
 ```
 platforms: [
     .iOS(.v14),
     .macOS(.v14),
     .macCatalyst(.v14),
-    .tvOS(.v15),
-]
+    .tvOS(.v14),
+    .visionOS(.v1), // supported from 2.1.0
+],
 ```
 
 ## Usage
@@ -23,7 +24,7 @@ Add this package into your project.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lakr233/ColorfulX")
+    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "2.1.0"),
 ]
 ```
 
@@ -54,18 +55,17 @@ import ColorfulX
 
 struct StaticView: View {
     var body: some View {
-        MulticolorGradient(
-            parameters: .constant(.init(
-                points: [
-                    .init(color: .init(.init(Color.red)), position: .init(x: 0, y: 0)),
-                    .init(color: .init(.init(Color.blue)), position: .init(x: 1, y: 0)),
-                    .init(color: .init(.init(Color.green)), position: .init(x: 0, y: 1)),
-                    .init(color: .init(.init(Color.yellow)), position: .init(x: 1, y: 1)),
-                ],
-                bias: 0.01,
-                power: 4,
-                noise: 32
-            )))
+        MulticolorGradient(parameters: .constant(.init(
+            points: [
+                .init(color: .init(.init(Color.red)), position: .init(x: 0, y: 0)),
+                .init(color: .init(.init(Color.blue)), position: .init(x: 1, y: 0)),
+                .init(color: .init(.init(Color.green)), position: .init(x: 0, y: 1)),
+                .init(color: .init(.init(Color.yellow)), position: .init(x: 1, y: 1)),
+            ],
+            bias: 0.01,
+            power: 4,
+            noise: 32
+        )))
     }
 }
 ```
@@ -101,9 +101,11 @@ view.parameters = .init(points: [
 
 ## Performance
 
-There's no feasible way to create these types of gradients without incurring some costs. Yet, by utilizing Metal and GPU technology, we can attain a performance level that's quite satisfactory. The energy impact of this approach is classified as 'Low.'
+There's no feasible way to create these types of gradients without incurring some costs. Yet, by utilizing Metal and GPU, we can attain a performance level that's quite satisfactory. The render process will only take place when draw parameters changed.
 
-From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution.
+After all, the energy impact of this approach is classified as 'Low'.
+
+From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution. Just set the `speedFactor` to `0`.
 
 ![PerformanceDemo](./Example/Performance.png)
 
