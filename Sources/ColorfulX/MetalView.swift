@@ -91,7 +91,7 @@ import MetalKit
 
         private func updateDrawableSize() {
             #if os(visionOS)
-                let scaleFactor = 2
+                let scaleFactor: CGFloat = 2
             #else
                 let scaleFactor = window?.screen.scale ?? 1
             #endif
