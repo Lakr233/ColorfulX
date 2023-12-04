@@ -23,7 +23,7 @@ struct ContentView: View {
                 VStack(spacing: 8) {
                     ForEach(ColorfulPreset.allCases, id: \.self) { each in
                         ColorfulView(colors: .constant(each.colors))
-                            .frame(height: 40)
+                            .frame(height: 60)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                             .overlay(
                                 Text(each.hint)
@@ -38,10 +38,11 @@ struct ContentView: View {
                 }
                 .padding(8)
             }
+            .navigationTitle("Library")
         } detail: {
             ColorfulView(fps: fps, colors: $colors, speedFactor: $speed, colorTransitionDuration: $duration)
                 .overlay(controlPanel.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing))
-                .navigationTitle("Colorful Preset - \(preset.hint)")
+                .navigationTitle("Colorful Preview - \(preset.hint)")
                 .ignoresSafeArea()
         }
     }
@@ -94,6 +95,9 @@ struct ContentView: View {
                 .foregroundStyle(.thickMaterial)
         )
         .padding(6)
+        #if os(visionOS)
+            .padding(32)
+        #endif
     }
 }
 
