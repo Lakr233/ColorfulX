@@ -76,16 +76,20 @@ struct ContentView: View {
                 Spacer()
                 Text("\(duration, specifier: "%.2f")s")
             }
-            Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
-            }
+            #if !os(tvOS)
+                Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
+                }
+            #endif
             Divider()
             HStack {
                 Text("Speed Factor")
                 Spacer()
                 Text("\(speed, specifier: "%.2f")")
             }
-            Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
-            }
+            #if !os(tvOS)
+                Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
+                }
+            #endif
         }
         .frame(width: 250)
         .font(.system(.body, design: .rounded, weight: .semibold))
