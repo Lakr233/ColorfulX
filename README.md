@@ -11,7 +11,7 @@ UIKit and AppKit platforms are generally supported. ~~Due to `MTKView` not avail
 ```
 platforms: [
     .iOS(.v14),
-    .macOS(.v14),
+    .macOS(.v11),
     .macCatalyst(.v14),
     .tvOS(.v14),
     .visionOS(.v1), // supported from 2.1.0
@@ -37,10 +37,9 @@ For animated colors with default animation, use the following code:
 ```swift
 import ColorfulX
 
-let defaultPreset: ColorfulPreset = .aurora
-
 struct ContentView: View {
-    @State var colors: [Color] = defaultPreset.colors
+    // Just use [SwiftUI.Color] for colors
+    @State var colors: [Color] = ColorfulPreset.aurora.colors
 
     var body: some View {
         ColorfulView(colors: $colors)
@@ -48,7 +47,7 @@ struct ContentView: View {
 }
 ```
 
-For creating a static gradient, use the following code:
+For creating a static gradient, **parse `speedFactor: 0` to `ColorfulView`**, or use the following code:
 
 ```swift
 import ColorfulX
