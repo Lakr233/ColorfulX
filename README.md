@@ -6,11 +6,12 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
-- 2023.12.16 2.2.0
+- Version 2.2.1
+    - API changed and stabilized.
     - Option to configure noise.
-    - Option to configure fps is now removed, we are now syncing refresh rate with system.
+    - Option to configure fps removed. We are now syncing refresh rate with system.
     - Animation speed now stabilized.
-    - Demo app downgraded. #1
+    - Demo app downgraded to iOS 15.0. See #1.
 
 ## Platform
 
