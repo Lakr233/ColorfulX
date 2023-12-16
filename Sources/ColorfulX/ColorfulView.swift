@@ -8,18 +8,18 @@
 import SwiftUI
 
 public struct ColorfulView: View {
-    @Binding var colors: [Color]
+    @Binding var color: [Color]
     @Binding var speed: Double
     @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
     public init(
-        colors: Binding<[Color]>,
+        color: Binding<[Color]>,
         speed: Binding<Double> = .constant(1.0),
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5)
     ) {
-        _colors = colors
+        _color = color
         _speed = speed
         _noise = noise
         _transitionInterval = transitionInterval
@@ -28,7 +28,7 @@ public struct ColorfulView: View {
     public var body: some View {
         AnimatedMulticolorGradientViewRepresentable(
             color: .init(get: {
-                colors.map { RGBColor(CoreColor($0)) }
+                color.map { RGBColor(CoreColor($0)) }
             }, set: { _ in assertionFailure() }),
             speed: $speed,
             noise: $noise,

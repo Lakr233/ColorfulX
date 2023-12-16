@@ -4,9 +4,17 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ![Screenshot](./Example/Screenshot.png)
 
+## What's New
+
+- 2023.12.16 2.2.0
+    - Option to configure noise.
+    - Option to configure fps is now removed, we are now syncing refresh rate with system.
+    - Animation speed now stabilized.
+    - Demo app downgraded. #1
+
 ## Platform
 
-UIKit and AppKit platforms are generally supported. ~~Due to `MTKView` not available on visionOS, it's not supported.~~
+UIKit and AppKit platforms are generally supported.
 
 ```
 platforms: [
@@ -24,7 +32,7 @@ Add this package into your project.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "2.1.0"),
+    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "2.2.1"),
 ]
 ```
 
@@ -38,16 +46,33 @@ For animated colors with default animation, use the following code:
 import ColorfulX
 
 struct ContentView: View {
-    // Just use [SwiftUI.Color] for colors
+    // Just use [SwiftUI.Color], available up to 8 slot.
     @State var colors: [Color] = ColorfulPreset.aurora.colors
 
     var body: some View {
-        ColorfulView(colors: $colors)
+        ColorfulView(color: $colors)
+            .ignoresSafeArea()
     }
 }
 ```
 
-For creating a static gradient, **parse `speedFactor: 0` to `ColorfulView`**, or use the following code:
+Parameters to control the animation are follow:
+
+```
+@Binding var colors: [Color]
+@Binding var speed: Double
+@Binding var noise: Double
+@Binding var transitionInterval: TimeInterval
+
+ColorfulView(
+    color: $colors,
+    speed: $speed,
+    noise: $noise,
+    transitionInterval: $duration
+)
+```
+
+For creating a static gradient, **parse `speed: 0` to `ColorfulView`**, or use the following code:
 
 ```swift
 import ColorfulX
@@ -77,10 +102,11 @@ For animated colors with default animation, use the following code:
 import MetalKit
 import ColorfulX
 
-let view = AnimatedMulticolorGradientView(fps: fps)
-view.setColors(colors, interpolationEnabled: false)
-view.setSpeedFactor(speedFactor)
-view.setColorTransitionDuration(colorTransitionDuration)
+let view = AnimatedMulticolorGradientView()
+view.setColors(color, interpolationEnabled: false)
+view.speed = speed
+view.transitionDuration = transitionDuration
+view.noise = noise
 ```
 
 For creating a static gradient, use the following code:
@@ -104,7 +130,7 @@ There's no feasible way to create these types of gradients without incurring som
 
 After all, the energy impact of this approach is classified as 'Low'.
 
-From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution. Just set the `speedFactor` to `0`.
+From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution. Just set the `speed` to `0`.
 
 ![PerformanceDemo](./Example/Performance.png)
 
