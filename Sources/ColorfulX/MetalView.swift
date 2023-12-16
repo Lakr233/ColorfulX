@@ -102,6 +102,17 @@ import MetalKit
                 wantsLayer = true
                 layer = metalLayer
                 metalLayer.delegate = self
+
+                CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
+                if let displayLink {
+                    CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
+                        guard let object else { return kCVReturnError }
+                        let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
+                        me.vsync()
+                        return kCVReturnSuccess
+                    }, Unmanaged.passUnretained(self).toOpaque())
+                    CVDisplayLinkStart(displayLink)
+                } else { assertionFailure() }
             }
 
             @available(*, unavailable)
@@ -112,36 +123,6 @@ import MetalKit
             deinit {
                 if let displayLink { CVDisplayLinkStop(displayLink) }
                 displayLink = nil
-            }
-
-            // TODO: DOES NOT WORK
-            override open func viewDidMoveToWindow() {
-                super.viewDidMoveToWindow()
-
-                if let displayLink { CVDisplayLinkStop(displayLink) }
-                displayLink = nil
-
-                guard let screen = window?.screen else { return }
-                guard let displayID = screen.deviceDescription[
-                    .init(rawValue: "NSScreenNumber")
-                ] as? Int else {
-                    assertionFailure()
-                    return
-                }
-
-                CVDisplayLinkCreateWithCGDisplay(CGDirectDisplayID(displayID), &displayLink)
-                guard let displayLink else {
-                    assertionFailure()
-                    return
-                }
-
-                CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
-                    guard let object else { return kCVReturnError }
-                    let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
-                    me.vsync()
-                    return kCVReturnSuccess
-                }, Unmanaged.passUnretained(self).toOpaque())
-                CVDisplayLinkStart(displayLink)
             }
 
             func vsync() {}
