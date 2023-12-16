@@ -26,5 +26,19 @@ public extension AnimatedMulticolorGradientView {
             }
             return previousColor.lerp(to: targetColor, percent: transitionProgress)
         }
+
+        public init(
+            enabled: Bool = false,
+            targetColor: RGBColor = .init(r: 0.5, g: 0.5, b: 0.5),
+            previousColor: RGBColor = .init(r: 0.5, g: 0.5, b: 0.5),
+            transitionProgress: Double = 1,
+            position: SpringInterpolation2D = .init()
+        ) {
+            self.enabled = enabled
+            self.targetColor = targetColor
+            self.previousColor = previousColor
+            self.transitionProgress = transitionProgress
+            self.position = position
+        }
     }
 }

@@ -13,18 +13,20 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var colors: [RGBColor]
     @Binding var speedFactor: Double
     @Binding var colorTransitionDuration: TimeInterval
+    @Binding var noise: Float
 
     public init(
         colors: Binding<[RGBColor]>,
         speedFactor: Binding<Double> = .constant(1),
         colorTransitionDuration: Binding<TimeInterval> = .constant(5),
-        fps: Int = 60
+        noise: Binding<Float> = .constant(0)
     ) {
         _colors = colors
         _speedFactor = speedFactor
         _colorTransitionDuration = colorTransitionDuration
+        _noise = noise
 
-        view = AnimatedMulticolorGradientView(fps: fps)
+        view = AnimatedMulticolorGradientView()
     }
 }
 
@@ -33,15 +35,17 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     extension AnimatedMulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> AnimatedMulticolorGradientView {
             view.setColors(colors, interpolationEnabled: false)
-            view.setSpeedFactor(speedFactor)
-            view.setColorTransitionDuration(colorTransitionDuration)
+            view.colorMoveSpeedFactor = speedFactor
+            view.colorTransitionDuration = colorTransitionDuration
+            view.colorNoise = noise
             return view
         }
 
         public func updateUIView(_ uiView: AnimatedMulticolorGradientView, context _: Context) {
             uiView.setColors(colors, interpolationEnabled: colorTransitionDuration > 0)
-            uiView.setSpeedFactor(speedFactor)
-            uiView.setColorTransitionDuration(colorTransitionDuration)
+            uiView.colorMoveSpeedFactor = speedFactor
+            uiView.colorTransitionDuration = colorTransitionDuration
+            uiView.colorNoise = noise
         }
     }
 #else
@@ -50,15 +54,17 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         extension AnimatedMulticolorGradientViewRepresentable: NSViewRepresentable {
             public func makeNSView(context _: Context) -> AnimatedMulticolorGradientView {
                 view.setColors(colors, interpolationEnabled: false)
-                view.setSpeedFactor(speedFactor)
-                view.setColorTransitionDuration(colorTransitionDuration)
+                view.colorMoveSpeedFactor = speedFactor
+                view.colorTransitionDuration = colorTransitionDuration
+                view.colorNoise = noise
                 return view
             }
 
             public func updateNSView(_ nsView: AnimatedMulticolorGradientView, context _: Context) {
                 nsView.setColors(colors, interpolationEnabled: colorTransitionDuration > 0)
-                nsView.setSpeedFactor(speedFactor)
-                nsView.setColorTransitionDuration(colorTransitionDuration)
+                nsView.colorMoveSpeedFactor = speedFactor
+                nsView.colorTransitionDuration = colorTransitionDuration
+                nsView.colorNoise = noise
             }
         }
     #else

@@ -11,40 +11,16 @@ import SwiftUI
 let defaultPreset: ColorfulPreset = .aurora
 
 struct ContentView: View {
-    let fps: Int = 60
     @State var preset: ColorfulPreset = defaultPreset
     @State var colors: [Color] = defaultPreset.colors
     @State var speed: Double = 1.0
     @State var duration: TimeInterval = 5
 
     var body: some View {
-        NavigationSplitView {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 8) {
-                    ForEach(ColorfulPreset.allCases, id: \.self) { each in
-                        ColorfulView(colors: .constant(each.colors))
-                            .frame(height: 60)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay(
-                                Text(each.hint)
-                                    .font(.system(.title3, design: .rounded, weight: .black))
-                                    .foregroundStyle(.thickMaterial)
-                            )
-                            .onTapGesture {
-                                preset = each
-                                colors = each.colors
-                            }
-                    }
-                }
-                .padding(8)
-            }
-            .navigationTitle("Library")
-        } detail: {
-            ColorfulView(fps: fps, colors: $colors, speedFactor: $speed, colorTransitionDuration: $duration)
-                .overlay(controlPanel.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing))
-                .navigationTitle("Colorful Preview - \(preset.hint)")
-                .ignoresSafeArea()
-        }
+        ColorfulView(colors: $colors, speed: $speed, transitionInterval: $duration)
+            .overlay(controlPanel.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing))
+            .navigationTitle("Colorful Preview - \(preset.hint)")
+            .ignoresSafeArea()
     }
 
     var controlPanel: some View {
@@ -52,7 +28,6 @@ struct ContentView: View {
             HStack {
                 Text("Render")
                 Spacer()
-                Text("\(fps)fps")
             }
             Divider()
             HStack {

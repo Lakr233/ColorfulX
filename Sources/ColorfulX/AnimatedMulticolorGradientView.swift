@@ -9,86 +9,87 @@ import MetalKit
 import SpringInterpolation
 
 private let COLOR_SLOT = 8
-private let LOCATION_OVERSHOT = 0.25
+private let SPRING_CONFIG = SpringInterpolation.Configuration(
+    angularFrequency: 1.5,
+    dampingRatio: 0.2
+)
+private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
-    public let fps: Int
-    public let deltaTime: Double
-
+    public private(set) var lastUpdate = Date()
     public private(set) var colorElements: [ColorElement]
-    public private(set) var colorMoveSpeedFactor: Double = 1.0
-    public private(set) var colorTransitionDuration: TimeInterval = 5
 
-    private var timers: [Timer] = []
+    public var colorMoveSpeedFactor: Double = 1.0
+    public var colorTransitionDuration: TimeInterval = 5
+    public var colorNoise: Float = 0
 
-    public init(fps: Int) {
-        self.fps = fps
-        deltaTime = 1.0 / Double(fps)
-
-        var buildElements = [ColorElement]()
-        for _ in 0 ..< COLOR_SLOT {
-            buildElements.append(.init(
-                enabled: false,
-                targetColor: .init(r: 0.5, g: 0.5, b: 0.5),
-                previousColor: .init(r: 0.5, g: 0.5, b: 0.5),
-                transitionProgress: 1,
-                position: .init(.init())
-            ))
-        }
-        colorElements = buildElements
+    override public init() {
+        colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
 
         super.init()
 
-        for idx in 0 ..< buildElements.count {
-            var rand = randomLocationPair()
+        var rand = randomLocationPair()
+        for idx in 0 ..< colorElements.count {
+            rand = randomLocationPair()
             colorElements[idx].position.setCurrent(.init(x: rand.x, y: rand.y))
             rand = randomLocationPair()
             colorElements[idx].position.setTarget(.init(x: rand.x, y: rand.y))
         }
-
-        setSpeedFactor(1.0)
-
-        timers.append(.init(
-            timeInterval: 1.0 / Double(fps),
-            target: self,
-            selector: #selector(updateTik),
-            userInfo: nil,
-            repeats: true
-        ))
-        timers.forEach {
-            RunLoop.main.add($0, forMode: .common)
-        }
     }
 
-    deinit {
-        timers = timers.compactMap { timer in
-            timer.invalidate()
-            return nil
-        }
+    private func randomLocationPair() -> (x: Double, y: Double) {
+        (
+            x: Double.random(in: 0 ... 1),
+            y: Double.random(in: 0 ... 1)
+        )
     }
 
-    @objc private func updateTik() {
+    public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
         assert(Thread.isMainThread)
+        for (idx, color) in colors.enumerated() {
+            var read = colorElements[idx]
+            guard read.targetColor != color else { continue }
+            let interpolationEnabled = interpolationEnabled && read.enabled
+            let currentColor = read.currentColor
+            read.enabled = true
+            read.targetColor = color
+            read.previousColor = interpolationEnabled ? currentColor : color
+            read.transitionProgress = interpolationEnabled ? 0 : 1
+            colorElements[idx] = read
+        }
+        for idx in colors.count ..< colorElements.count {
+            colorElements[idx].enabled = false
+        }
+        updateRenderParameters()
+    }
+
+    private func updateRenderParameters() {
+        let deltaTime = -lastUpdate.timeIntervalSinceNow
+        lastUpdate = Date()
+        guard deltaTime > 0 else {
+            assertionFailure()
+            return
+        }
+
+        let moveDelta = deltaTime * colorMoveSpeedFactor
 
         for idx in 0 ..< colorElements.count where colorElements[idx].enabled {
-            var read = colorElements[idx]
-            defer { colorElements[idx] = read }
+            var inplaceEdit = colorElements[idx]
+            defer { colorElements[idx] = inplaceEdit }
 
-            if read.transitionProgress < 1 {
-                read.transitionProgress += deltaTime / colorTransitionDuration
+            if inplaceEdit.transitionProgress < 1 {
+                inplaceEdit.transitionProgress += deltaTime / colorTransitionDuration
             }
-            if read.position.springX.config.deltaTime > 0,
-               read.position.springY.config.deltaTime > 0
-            {
-                let currentPos = read.position.currentPos
-                let targetPos = read.position.targetPos
-                read.position.tik()
+            if moveDelta > 0 {
+                inplaceEdit.position.update(withDeltaTime: moveDelta)
 
-                if abs(currentPos.x - targetPos.x) < LOCATION_OVERSHOT / 2,
-                   abs(currentPos.y - targetPos.y) < LOCATION_OVERSHOT / 2
-                {
+                let pos_x = inplaceEdit.position.x.context.currentPos
+                let tar_x = inplaceEdit.position.x.context.targetPos
+                let pos_y = inplaceEdit.position.y.context.currentPos
+                let tar_y = inplaceEdit.position.y.context.targetPos
+                if abs(pos_x - tar_x) < 0.125 || abs(pos_y - tar_y) < 0.125 {
                     let rand = randomLocationPair()
-                    read.position.setTarget(.init(x: rand.x, y: rand.y))
+                    inplaceEdit.position.setTarget(.init(x: rand.x, y: rand.y))
                 }
             }
         }
@@ -99,60 +100,16 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
                 .map { .init(
                     color: $0.currentColor,
                     position: .init(
-                        x: $0.position.currentPos.x,
-                        y: $0.position.currentPos.y
+                        x: $0.position.x.context.currentPos,
+                        y: $0.position.y.context.currentPos
                     )
                 ) },
-            noise: 0
+            noise: colorNoise
         )
     }
 
-    private func randomLocationPair() -> (x: Double, y: Double) {
-        let ret = (
-            // allow out of range for the color stop location
-            // shader will deal it
-            x: Double.random(in: -LOCATION_OVERSHOT ... (1 + LOCATION_OVERSHOT)),
-            y: Double.random(in: -LOCATION_OVERSHOT ... (1 + LOCATION_OVERSHOT))
-        )
-        return ret
-    }
-
-    public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
-        assert(Thread.isMainThread)
-        for (idx, color) in colors.enumerated() {
-            var read = colorElements[idx]
-            guard read.targetColor != color else { continue }
-            let interpolationEnabled = interpolationEnabled && read.enabled
-            let currentColor = read.currentColor // make copy first then edit
-            read.enabled = true
-            read.targetColor = color
-            read.previousColor = interpolationEnabled ? currentColor : color
-            read.transitionProgress = interpolationEnabled ? 0 : 1
-            colorElements[idx] = read
-        }
-        for idx in colors.count ..< colorElements.count {
-            colorElements[idx].enabled = false
-        }
-        updateTik()
-    }
-
-    public func setSpeedFactor(_ value: Double) {
-        assert(Thread.isMainThread)
-
-        colorMoveSpeedFactor = value
-        for idx in 0 ..< colorElements.count {
-            let currentPos = colorElements[idx].position
-            // re init!
-            colorElements[idx].position = .init(.init(deltaTime: deltaTime * value / 5))
-            colorElements[idx].position.setCurrent(
-                currentPos.currentPos,
-                vel: currentPos.currentVel
-            )
-            colorElements[idx].position.setTarget(currentPos.targetPos)
-        }
-    }
-
-    public func setColorTransitionDuration(_ value: TimeInterval) {
-        colorTransitionDuration = value
+    override func vsync() {
+        updateRenderParameters()
+        super.vsync()
     }
 }

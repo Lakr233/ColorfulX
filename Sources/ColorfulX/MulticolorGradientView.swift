@@ -8,15 +8,11 @@
 import MetalKit
 
 public class MulticolorGradientView: MetalView {
-    private var needsRender: Bool = false
-
     public var parameters: Parameters = .init() {
-        didSet {
-            needsRender = oldValue != parameters
-            renderIfNeeded()
-        }
+        didSet { if oldValue != parameters { needsRender = true } }
     }
 
+    private var needsRender: Bool = false
     private var computePipelineState: MTLComputePipelineState!
 
     override public init() {
@@ -35,16 +31,16 @@ public class MulticolorGradientView: MetalView {
         needsRender = true
     }
 
-    override func shouldRender() -> Bool {
-        needsRender
-    }
+    override func vsync() {
+        super.vsync()
 
-    override func render(
-        withDrawable drawable: CAMetalDrawable,
-        commandBuffer _: MTLCommandBuffer,
-        computeEncoder: MTLComputeCommandEncoder
-    ) {
+        guard let drawable = metalLayer.nextDrawable(),
+              let commandBuffer = commandQueue.makeCommandBuffer(),
+              let commandEncoder = commandBuffer.makeComputeCommandEncoder()
+        else { return }
+
         defer { needsRender = false }
+
         var shaderPoints: [(simd_float2, simd_float3)] = Array(
             repeating: (
                 simd_float2(0.0, 0.0),
@@ -84,16 +80,20 @@ public class MulticolorGradientView: MetalView {
             color7: shaderPoints[7].1
         )
 
-        computeEncoder.setComputePipelineState(computePipelineState)
-        computeEncoder.setBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
-        computeEncoder.setTexture(drawable.texture, index: 4)
+        commandEncoder.setComputePipelineState(computePipelineState)
+        commandEncoder.setBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
+        commandEncoder.setTexture(drawable.texture, index: 4)
         let threadGroupCount = MTLSizeMake(1, 1, 1)
         let threadGroups = MTLSizeMake(
             drawable.texture.width / threadGroupCount.width,
             drawable.texture.height / threadGroupCount.height,
             1
         )
-        computeEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
-        computeEncoder.endEncoding()
+
+        commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
+        commandEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilScheduled()
+        drawable.present()
     }
 }
