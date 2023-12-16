@@ -13,10 +13,9 @@ struct ColorfulAppApp: App {
         WindowGroup {
             ContentView()
         }
-        #if !os(tvOS)
-        .windowResizability(.contentSize)
-        #endif
         #if os(macOS)
+        .windowResizability(.contentSize)
+        .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
         #endif
     }

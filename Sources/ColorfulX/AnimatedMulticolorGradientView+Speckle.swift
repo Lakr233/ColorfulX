@@ -1,5 +1,5 @@
 //
-//  AnimatedMulticolorGradientView+ColorElement.swift
+//  AnimatedMulticolorGradientView+Speckle.swift
 //
 //
 //  Created by QAQ on 2023/12/3.

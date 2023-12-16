@@ -11,27 +11,56 @@ import SwiftUI
 let defaultPreset: ColorfulPreset = .aurora
 
 struct ContentView: View {
-    @State var preset: ColorfulPreset = defaultPreset
+    @AppStorage("preset") var preset: ColorfulPreset = defaultPreset
     @State var colors: [Color] = defaultPreset.colors
-    @State var speed: Double = 1.0
-    @State var duration: TimeInterval = 5
+    @AppStorage("speed") var speed: Double = 1.0
+    @AppStorage("noise") var noise: Double = 1
+    @AppStorage("duration") var duration: TimeInterval = 3.5
 
     var body: some View {
-        ColorfulView(colors: $colors, speed: $speed, transitionInterval: $duration)
-            .overlay(controlPanel.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing))
-            .navigationTitle("Colorful Preview - \(preset.hint)")
-            .ignoresSafeArea()
+        ZStack {
+            ColorfulView(colors: $colors, speed: $speed, noise: $noise, transitionInterval: $duration)
+                .ignoresSafeArea()
+
+            VStack {
+                controlPanel
+                #if os(tvOS)
+                    Button {
+                        preset = ColorfulPreset.allCases.randomElement()!
+                    } label: {
+                        Image(systemName: "wind")
+                    }
+                #endif
+            }
+
+            Text("Made with love by @Lakr233")
+                .foregroundStyle(.thinMaterial)
+            #if os(macOS)
+                .font(.system(size: 8, weight: .semibold, design: .rounded))
+            #else
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+            #endif
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding()
+        }
+        .onAppear { colors = preset.colors }
+        .onChange(of: preset) { colors = $0.colors }
     }
 
     var controlPanel: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("Render")
-                Spacer()
-            }
-            Divider()
-            HStack {
-                Text("Shader Colors")
+                #if os(tvOS)
+                    Text("\(preset.hint)")
+                #else
+                    Text("Preset")
+                    Picker("", selection: $preset) {
+                        ForEach(ColorfulPreset.allCases, id: \.self) { preset in
+                            Text(preset.hint).tag(preset)
+                        }
+                    }
+                    .frame(width: 128)
+                #endif
                 Spacer()
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -47,7 +76,27 @@ struct ContentView: View {
             }
             Divider()
             HStack {
-                Text("Color Transition Duration")
+                Text("Speed")
+                Spacer()
+                Text("\(speed, specifier: "%.0f")")
+            }
+            #if !os(tvOS)
+                Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
+                }
+            #endif
+            Divider()
+            HStack {
+                Text("Noise")
+                Spacer()
+                Text("\(noise, specifier: "%.2f")")
+            }
+            #if !os(tvOS)
+                Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
+                }
+            #endif
+            Divider()
+            HStack {
+                Text("Transition")
                 Spacer()
                 Text("\(duration, specifier: "%.2f")s")
             }
@@ -55,25 +104,19 @@ struct ContentView: View {
                 Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
                 }
             #endif
-            Divider()
-            HStack {
-                Text("Speed Factor")
-                Spacer()
-                Text("\(speed, specifier: "%.2f")")
-            }
-            #if !os(tvOS)
-                Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
-                }
-            #endif
         }
-        .frame(width: 250)
-        .font(.system(.body, design: .rounded, weight: .semibold))
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundStyle(.thickMaterial)
-        )
-        .padding(6)
+        .frame(width: 300)
+        #if os(macOS)
+            .font(.system(size: 12, weight: .semibold, design: .rounded))
+        #else
+            .font(.system(size: 16, weight: .semibold, design: .rounded))
+        #endif
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .foregroundStyle(.thickMaterial)
+            )
+            .padding(6)
         #if os(visionOS)
             .padding(32)
         #endif

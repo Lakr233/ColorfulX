@@ -10,13 +10,13 @@ import SwiftUI
 public struct ColorfulView: View {
     @Binding var colors: [Color]
     @Binding var speed: Double
-    @Binding var noise: Float
+    @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
     public init(
         colors: Binding<[Color]>,
         speed: Binding<Double> = .constant(1.0),
-        noise: Binding<Float> = .constant(0),
+        noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5)
     ) {
         _colors = colors

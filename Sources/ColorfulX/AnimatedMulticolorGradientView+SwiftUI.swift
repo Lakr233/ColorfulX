@@ -12,13 +12,13 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 
     @Binding var color: [RGBColor]
     @Binding var speed: Double
-    @Binding var noise: Float
+    @Binding var noise: Double
     @Binding var transitionDuration: TimeInterval
 
     public init(
         color: Binding<[RGBColor]>,
         speed: Binding<Double> = .constant(1),
-        noise: Binding<Float> = .constant(0),
+        noise: Binding<Double> = .constant(0),
         transitionDuration: Binding<TimeInterval> = .constant(3.25)
     ) {
         _color = color

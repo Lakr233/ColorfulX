@@ -39,7 +39,7 @@ import MetalKit
 
             displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall))
             displayLink.add(to: .main, forMode: .common)
-            
+
             backgroundColor = .clear
         }
 

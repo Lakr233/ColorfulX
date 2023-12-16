@@ -20,7 +20,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var colorElements: [Speckle]
 
     public var speed: Double = 1.0
-    public var noise: Float = 0
+    public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
 
     override public init() {
@@ -47,7 +47,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
         assert(Thread.isMainThread)
         assert(!interpolationEnabled || colors.count == colorElements.filter(\.enabled).count)
-        
+
         for (idx, color) in colors.enumerated() {
             var read = colorElements[idx]
             guard read.targetColor != color else { continue }
@@ -72,7 +72,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             return
         }
 
-        let moveDelta = deltaTime * speed
+        let moveDelta = deltaTime * speed * 0.5 // just slow down
 
         for idx in 0 ..< colorElements.count where colorElements[idx].enabled {
             var inplaceEdit = colorElements[idx]
@@ -105,7 +105,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
                         y: $0.position.y.context.currentPos
                     )
                 ) },
-            noise: noise
+            noise: Float(noise)
         )
     }
 
