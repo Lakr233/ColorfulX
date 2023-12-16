@@ -17,11 +17,11 @@ private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var lastUpdate = Date()
-    public private(set) var colorElements: [ColorElement]
+    public private(set) var colorElements: [Speckle]
 
-    public var colorMoveSpeedFactor: Double = 1.0
-    public var colorTransitionDuration: TimeInterval = 5
-    public var colorNoise: Float = 0
+    public var speed: Double = 1.0
+    public var noise: Float = 0
+    public var transitionDuration: TimeInterval = 5
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
@@ -46,6 +46,8 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
         assert(Thread.isMainThread)
+        assert(!interpolationEnabled || colors.count == colorElements.filter(\.enabled).count)
+        
         for (idx, color) in colors.enumerated() {
             var read = colorElements[idx]
             guard read.targetColor != color else { continue }
@@ -60,7 +62,6 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
         for idx in colors.count ..< colorElements.count {
             colorElements[idx].enabled = false
         }
-        updateRenderParameters()
     }
 
     private func updateRenderParameters() {
@@ -71,14 +72,14 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             return
         }
 
-        let moveDelta = deltaTime * colorMoveSpeedFactor
+        let moveDelta = deltaTime * speed
 
         for idx in 0 ..< colorElements.count where colorElements[idx].enabled {
             var inplaceEdit = colorElements[idx]
             defer { colorElements[idx] = inplaceEdit }
 
             if inplaceEdit.transitionProgress < 1 {
-                inplaceEdit.transitionProgress += deltaTime / colorTransitionDuration
+                inplaceEdit.transitionProgress += deltaTime / transitionDuration
             }
             if moveDelta > 0 {
                 inplaceEdit.position.update(withDeltaTime: moveDelta)
@@ -104,7 +105,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
                         y: $0.position.y.context.currentPos
                     )
                 ) },
-            noise: colorNoise
+            noise: noise
         )
     }
 

@@ -10,21 +10,21 @@ import SwiftUI
 public struct AnimatedMulticolorGradientViewRepresentable {
     let view: AnimatedMulticolorGradientView
 
-    @Binding var colors: [RGBColor]
-    @Binding var speedFactor: Double
-    @Binding var colorTransitionDuration: TimeInterval
+    @Binding var color: [RGBColor]
+    @Binding var speed: Double
     @Binding var noise: Float
+    @Binding var transitionDuration: TimeInterval
 
     public init(
-        colors: Binding<[RGBColor]>,
-        speedFactor: Binding<Double> = .constant(1),
-        colorTransitionDuration: Binding<TimeInterval> = .constant(5),
-        noise: Binding<Float> = .constant(0)
+        color: Binding<[RGBColor]>,
+        speed: Binding<Double> = .constant(1),
+        noise: Binding<Float> = .constant(0),
+        transitionDuration: Binding<TimeInterval> = .constant(3.25)
     ) {
-        _colors = colors
-        _speedFactor = speedFactor
-        _colorTransitionDuration = colorTransitionDuration
+        _color = color
+        _speed = speed
         _noise = noise
+        _transitionDuration = transitionDuration
 
         view = AnimatedMulticolorGradientView()
     }
@@ -34,18 +34,18 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     import UIKit
     extension AnimatedMulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> AnimatedMulticolorGradientView {
-            view.setColors(colors, interpolationEnabled: false)
-            view.colorMoveSpeedFactor = speedFactor
-            view.colorTransitionDuration = colorTransitionDuration
-            view.colorNoise = noise
+            view.setColors(color, interpolationEnabled: false)
+            view.speed = speed
+            view.transitionDuration = transitionDuration
+            view.noise = noise
             return view
         }
 
         public func updateUIView(_ uiView: AnimatedMulticolorGradientView, context _: Context) {
-            uiView.setColors(colors, interpolationEnabled: colorTransitionDuration > 0)
-            uiView.colorMoveSpeedFactor = speedFactor
-            uiView.colorTransitionDuration = colorTransitionDuration
-            uiView.colorNoise = noise
+            uiView.setColors(color, interpolationEnabled: transitionDuration > 0)
+            uiView.speed = speed
+            uiView.noise = noise
+            uiView.transitionDuration = transitionDuration
         }
     }
 #else
@@ -53,18 +53,18 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         import AppKit
         extension AnimatedMulticolorGradientViewRepresentable: NSViewRepresentable {
             public func makeNSView(context _: Context) -> AnimatedMulticolorGradientView {
-                view.setColors(colors, interpolationEnabled: false)
-                view.colorMoveSpeedFactor = speedFactor
-                view.colorTransitionDuration = colorTransitionDuration
-                view.colorNoise = noise
+                view.setColors(color, interpolationEnabled: false)
+                view.speed = speed
+                view.transitionDuration = transitionDuration
+                view.noise = noise
                 return view
             }
 
             public func updateNSView(_ nsView: AnimatedMulticolorGradientView, context _: Context) {
-                nsView.setColors(colors, interpolationEnabled: colorTransitionDuration > 0)
-                nsView.colorMoveSpeedFactor = speedFactor
-                nsView.colorTransitionDuration = colorTransitionDuration
-                nsView.colorNoise = noise
+                nsView.setColors(color, interpolationEnabled: transitionDuration > 0)
+                nsView.speed = speed
+                nsView.noise = noise
+                nsView.transitionDuration = transitionDuration
             }
         }
     #else

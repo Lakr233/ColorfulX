@@ -27,12 +27,12 @@ public struct ColorfulView: View {
 
     public var body: some View {
         AnimatedMulticolorGradientViewRepresentable(
-            colors: .init(get: {
+            color: .init(get: {
                 colors.map { RGBColor(CoreColor($0)) }
             }, set: { _ in assertionFailure() }),
-            speedFactor: $speed,
-            colorTransitionDuration: $transitionInterval,
-            noise: $noise
+            speed: $speed,
+            noise: $noise,
+            transitionDuration: $transitionInterval
         )
     }
 }

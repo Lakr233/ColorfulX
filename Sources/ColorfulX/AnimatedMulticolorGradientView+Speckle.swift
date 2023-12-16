@@ -9,7 +9,7 @@ import Foundation
 import SpringInterpolation
 
 public extension AnimatedMulticolorGradientView {
-    struct ColorElement {
+    struct Speckle {
         public var enabled: Bool
 
         public var targetColor: RGBColor
