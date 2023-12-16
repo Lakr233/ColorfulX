@@ -114,6 +114,7 @@ import MetalKit
                 displayLink = nil
             }
 
+            // TODO: DOES NOT WORK
             override open func viewDidMoveToWindow() {
                 super.viewDidMoveToWindow()
 
