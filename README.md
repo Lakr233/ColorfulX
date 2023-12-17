@@ -6,6 +6,9 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.2.4
+    - Switched to LCH color space for animated transition.
+
 - Version 2.2.1
     - API changed and stabilized.
     - Option to configure noise.
