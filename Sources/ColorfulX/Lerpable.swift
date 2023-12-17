@@ -30,26 +30,15 @@ extension Float: Lerpable {
 extension RGBColor: Lerpable {
     func lerp(to: RGBColor, percent delta: Double) -> RGBColor {
         assert(delta >= 0 && delta <= 1)
-
-        let colorFrom = coreColor
-        let colorTo = to.coreColor
-
-        var h: CGFloat = 0
-        var s: CGFloat = 0
-        var b: CGFloat = 0
-        colorFrom.getHue(&h, saturation: &s, brightness: &b, alpha: nil)
-
-        var h2: CGFloat = 0
-        var s2: CGFloat = 0
-        var b2: CGFloat = 0
-        colorTo.getHue(&h2, saturation: &s2, brightness: &b2, alpha: nil)
-
-        let inter = CoreColor(
-            hue: h + (h2 - h) * delta,
-            saturation: s + (s2 - s) * delta,
-            brightness: b + (b2 - b) * delta,
-            alpha: 1
+        if delta <= 0 { return self }
+        if delta >= 1 { return to }
+        let lchFrom = lch
+        let lchTo = to.lch
+        let lerpLch: (l: Float, c: Float, h: Float) = (
+            lchFrom.l + (lchTo.l - lchFrom.l) * Float(delta),
+            lchFrom.c + (lchTo.c - lchFrom.c) * Float(delta),
+            lchFrom.h + (lchTo.h - lchFrom.h) * Float(delta)
         )
-        return .init(inter)
+        return .init(l: lerpLch.l, c: lerpLch.c, h: lerpLch.h)
     }
 }
