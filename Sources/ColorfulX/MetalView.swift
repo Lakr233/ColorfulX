@@ -55,7 +55,7 @@ import MetalKit
         func vsync() {}
 
         override public func layoutSublayers(of _: CALayer) {
-            // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max 
+            // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max
             // native scaleFactor will case a performance issue
             // so we downscale the image to 1x
             let scaleFactor: CGFloat = 1.0

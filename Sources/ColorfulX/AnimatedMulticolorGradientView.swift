@@ -23,6 +23,9 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
 
+    public var frameLimit: Int = 30
+    public private(set) var lastRender: Date = .init(timeIntervalSince1970: 0)
+
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
 
@@ -108,6 +111,10 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
+        guard Date().timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else {
+            return
+        }
+        lastRender = Date()
         updateRenderParameters()
         super.vsync()
     }
