@@ -15,10 +15,6 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
-#if DEBUG
-    var COLOR_TRANSITION_COUNT_MISMATH_WARNING_SHOWN = false
-#endif
-
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var lastUpdate = Date()
     public private(set) var colorElements: [Speckle]
@@ -50,18 +46,11 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
         assert(Thread.isMainThread)
-        #if DEBUG
-            if interpolationEnabled,
-               colors.count != colorElements.filter(\.enabled).count,
-               !COLOR_TRANSITION_COUNT_MISMATH_WARNING_SHOWN
-            {
-                print("[*] AnimatedMulticolorGradientView.setColors with inconsistent color count will result undefined transition")
-                COLOR_TRANSITION_COUNT_MISMATH_WARNING_SHOWN = true
-            }
-        #endif
-
-        for (idx, color) in colors.enumerated() {
+        for idx in 0 ..< COLOR_SLOT {
             var read = colorElements[idx]
+            let color: RGBColor = colors.isEmpty
+                ? RGBColor(r: 0.5, g: 0.5, b: 0.5)
+                : colors[idx % colors.count]
             guard read.targetColor != color else { continue }
             let interpolationEnabled = interpolationEnabled && read.enabled
             let currentColor = read.currentColor
@@ -70,9 +59,6 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             read.previousColor = interpolationEnabled ? currentColor : color
             read.transitionProgress = interpolationEnabled ? 0 : 1
             colorElements[idx] = read
-        }
-        for idx in colors.count ..< colorElements.count {
-            colorElements[idx].enabled = false
         }
     }
 

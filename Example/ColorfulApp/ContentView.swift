@@ -78,7 +78,7 @@ struct ContentView: View {
             HStack {
                 Text("Speed")
                 Spacer()
-                Text("\(speed, specifier: "%.0f")")
+                Text("\(speed, specifier: "%.1f")")
             }
             #if !os(tvOS)
                 Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
