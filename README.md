@@ -6,6 +6,14 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.2.9
+    - Fixed a performance issue caused by vsync receiving more than expected.
+    - Frame Limit is now configured to 60 FPS by default.
+    - Frame Limit is now provided as an option to configure.
+    - Use 1x scale for any kind of view (for better performance).
+
+In this release, a test is performed to see the real-world case of the rendering cost. A full-size view with 1x scale, 430x932, will mostly be rendered within 4ms. As observed, the average is 1.41ms. The test is performed on iPhone 15 Pro Max. We suggest no more than 2x scale and 60 FPS to avoid hurting the device.
+
 - Version 2.2.4
     - Switched to LCH color space for animated transition.
 
