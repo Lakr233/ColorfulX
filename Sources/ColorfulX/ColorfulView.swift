@@ -13,11 +13,14 @@ public struct ColorfulView: View {
     @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
+    let frameLimit: Int = 30
+    
     public init(
         color: Binding<[Color]>,
         speed: Binding<Double> = .constant(1.0),
         noise: Binding<Double> = .constant(0),
-        transitionInterval: Binding<TimeInterval> = .constant(5)
+        transitionInterval: Binding<TimeInterval> = .constant(5),
+        frameLimit: Int = 30
     ) {
         _color = color
         _speed = speed
@@ -32,7 +35,8 @@ public struct ColorfulView: View {
             }, set: { _ in assertionFailure() }),
             speed: $speed,
             noise: $noise,
-            transitionDuration: $transitionInterval
+            transitionDuration: $transitionInterval,
+            frameLimit: frameLimit
         )
     }
 }

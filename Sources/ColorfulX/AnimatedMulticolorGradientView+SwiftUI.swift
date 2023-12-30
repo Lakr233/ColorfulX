@@ -19,7 +19,8 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         color: Binding<[RGBColor]>,
         speed: Binding<Double> = .constant(1),
         noise: Binding<Double> = .constant(0),
-        transitionDuration: Binding<TimeInterval> = .constant(3.25)
+        transitionDuration: Binding<TimeInterval> = .constant(3.25),
+        frameLimit: Int = 30
     ) {
         _color = color
         _speed = speed
@@ -27,6 +28,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         _transitionDuration = transitionDuration
 
         view = AnimatedMulticolorGradientView()
+        view.frameLimit = frameLimit
     }
 }
 
