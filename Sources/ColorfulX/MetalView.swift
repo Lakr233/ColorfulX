@@ -55,11 +55,10 @@ import MetalKit
         func vsync() {}
 
         override public func layoutSublayers(of _: CALayer) {
-            #if os(visionOS)
-                let scaleFactor: CGFloat = 2
-            #else
-                let scaleFactor = window?.screen.scale ?? 1
-            #endif
+            // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max 
+            // native scaleFactor will case a performance issue
+            // so we downscale the image to 1x
+            let scaleFactor: CGFloat = 1.0
             metalLayer.frame = bounds
             var width = bounds.width * scaleFactor
             var height = bounds.height * scaleFactor
@@ -130,7 +129,7 @@ import MetalKit
             public func layoutSublayers(of layer: CALayer) {
                 guard layer == metalLayer else { return }
                 metalLayer.frame = bounds
-                let scaleFactor = window?.backingScaleFactor ?? 1
+                let scaleFactor = 1.0
                 var width = bounds.width * scaleFactor
                 var height = bounds.height * scaleFactor
                 assert(width <= 8192 && height <= 8192, "rendering over 8k is not supported")
