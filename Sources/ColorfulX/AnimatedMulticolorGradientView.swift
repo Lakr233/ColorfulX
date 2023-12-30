@@ -23,7 +23,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
 
-    public var frameLimit: Int = 30
+    public var frameLimit: Int = 60
     public private(set) var lastRender: Date = .init(timeIntervalSince1970: 0)
 
     override public init() {

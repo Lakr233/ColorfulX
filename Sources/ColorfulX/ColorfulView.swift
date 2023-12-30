@@ -13,14 +13,14 @@ public struct ColorfulView: View {
     @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
-    let frameLimit: Int = 30
+    let frameLimit: Int = 60
     
     public init(
         color: Binding<[Color]>,
         speed: Binding<Double> = .constant(1.0),
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5),
-        frameLimit: Int = 30
+        frameLimit: Int = 60
     ) {
         _color = color
         _speed = speed
