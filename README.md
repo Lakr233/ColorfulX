@@ -6,6 +6,9 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.2.12
+    - Delayed vsync to a background thread to avoid magic with SwiftUI.
+
 - Version 2.2.11
     - Fixed rendering task backlog causing lag in rare cases.
 
