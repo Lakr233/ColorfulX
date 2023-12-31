@@ -14,6 +14,7 @@ public class MulticolorGradientView: MetalView {
 
     private var needsRender: Bool = false
     private var computePipelineState: MTLComputePipelineState!
+    private let lock = NSLock()
 
     override public init() {
         super.init()
@@ -33,6 +34,9 @@ public class MulticolorGradientView: MetalView {
 
     override func vsync() {
         super.vsync()
+
+        guard lock.try() else { return }
+        defer { lock.unlock() }
 
         guard let drawable = metalLayer.nextDrawable(),
               let commandBuffer = commandQueue.makeCommandBuffer(),
@@ -96,6 +100,7 @@ public class MulticolorGradientView: MetalView {
         commandBuffer.waitUntilScheduled()
         drawable.present()
 
-        commandBuffer.waitUntilCompleted() // so we release the lock there
+        // so we release the lock there
+        commandBuffer.waitUntilCompleted()
     }
 }
