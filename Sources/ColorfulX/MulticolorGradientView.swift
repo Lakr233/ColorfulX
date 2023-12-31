@@ -95,5 +95,7 @@ public class MulticolorGradientView: MetalView {
         commandBuffer.commit()
         commandBuffer.waitUntilScheduled()
         drawable.present()
+
+        commandBuffer.waitUntilCompleted() // so we release the lock there
     }
 }
