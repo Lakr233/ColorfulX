@@ -6,6 +6,11 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.2.14
+    - Fixed drawable present crashing in rare cases.
+    - Frame limit is relaxed to unlimited by default.
+    - Render will only take place after previous frame complete.
+
 - Version 2.2.12
     - Delayed vsync to a background thread to avoid magic with SwiftUI.
 
@@ -14,7 +19,7 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 - Version 2.2.9
     - Fixed a performance issue caused by vsync receiving more than expected.
-    - Frame Limit is now configured to 60 FPS by default.
+    - ~~Frame Limit is now configured to 60 FPS by default.~~
     - Frame Limit is now provided as an option to configure.
     - Use 1x scale for any kind of view (for better performance).
 
