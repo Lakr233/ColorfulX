@@ -20,7 +20,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         speed: Binding<Double> = .constant(1),
         noise: Binding<Double> = .constant(0),
         transitionDuration: Binding<TimeInterval> = .constant(3.25),
-        frameLimit: Int = 60
+        frameLimit: Int = 0
     ) {
         _color = color
         _speed = speed

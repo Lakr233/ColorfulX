@@ -19,7 +19,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            ColorfulView(color: $colors, speed: $speed, noise: $noise, transitionInterval: $duration, frameLimit: 30)
+            ColorfulView(color: $colors, speed: $speed, noise: $noise, transitionInterval: $duration)
                 .ignoresSafeArea()
 
             VStack {

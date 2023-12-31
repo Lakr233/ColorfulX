@@ -20,7 +20,7 @@ public struct ColorfulView: View {
         speed: Binding<Double> = .constant(1.0),
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5),
-        frameLimit: Int = 60
+        frameLimit: Int = 0
     ) {
         _color = color
         _speed = speed

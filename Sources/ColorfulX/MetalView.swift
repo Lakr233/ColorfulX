@@ -8,6 +8,8 @@
 import Foundation
 import MetalKit
 
+private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .concurrent)
+
 #if canImport(UIKit)
     import UIKit
 
@@ -50,7 +52,9 @@ import MetalKit
 
         deinit { displayLink.invalidate() }
 
-        @objc func displayLinkCall() { vsync() }
+        @objc func displayLinkCall() {
+            delayedVsync.async { self.vsync() }
+        }
 
         func vsync() {}
 
@@ -107,7 +111,7 @@ import MetalKit
                     CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
                         guard let object else { return kCVReturnError }
                         let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
-                        me.vsync()
+                        delayedVsync.async { me.vsync() }
                         return kCVReturnSuccess
                     }, Unmanaged.passUnretained(self).toOpaque())
                     CVDisplayLinkStart(displayLink)

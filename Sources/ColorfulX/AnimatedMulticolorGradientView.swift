@@ -23,7 +23,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
 
-    public var frameLimit: Int = 60
+    public var frameLimit: Int = 0
     public private(set) var lastRender: Date = .init(timeIntervalSince1970: 0)
 
     override public init() {
@@ -111,10 +111,11 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
-        guard Date().timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else {
-            return
+        if frameLimit > 0 {
+            let now = Date()
+            guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
+            lastRender = now
         }
-        lastRender = Date()
         updateRenderParameters()
         super.vsync()
     }
