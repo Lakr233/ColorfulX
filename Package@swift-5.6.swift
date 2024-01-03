@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.6
 
 import PackageDescription
 
@@ -9,7 +9,6 @@ let package = Package(
         .macOS(.v11),
         .macCatalyst(.v14),
         .tvOS(.v14),
-        .visionOS(.v1),
     ],
     products: [
         .library(name: "ColorfulX", targets: ["ColorfulX"]),
