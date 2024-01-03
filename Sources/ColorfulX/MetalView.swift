@@ -107,9 +107,9 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
                 metalLayer.delegate = self
 
                 CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
-                if let displayLink {
+                if let displayLink = displayLink {
                     CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
-                        guard let object else { return kCVReturnError }
+                        guard let object = object else { return kCVReturnError }
                         let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
                         delayedVsync.async { me.vsync() }
                         return kCVReturnSuccess
@@ -124,7 +124,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
             }
 
             deinit {
-                if let displayLink { CVDisplayLinkStop(displayLink) }
+                if let displayLink = displayLink { CVDisplayLinkStop(displayLink) }
                 displayLink = nil
             }
 
