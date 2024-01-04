@@ -116,7 +116,9 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
             lastRender = now
         }
-        updateRenderParameters()
+        DispatchQueue.main.asyncAndWait {
+            self.updateRenderParameters()
+        }
         super.vsync()
     }
 }
