@@ -98,11 +98,14 @@ public class MulticolorGradientView: MetalView {
         commandEncoder.endEncoding()
         commandBuffer.commit()
         commandBuffer.waitUntilScheduled()
-        DispatchQueue.main.async {
+        if Thread.isMainThread {
             drawable.present()
+            commandBuffer.waitUntilCompleted()
+        } else {
+            DispatchQueue.main.asyncAndWait {
+                drawable.present()
+            }
+            commandBuffer.waitUntilCompleted()
         }
-
-        // so we release the lock there
-        commandBuffer.waitUntilCompleted()
     }
 }

@@ -72,8 +72,6 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
             if width > 8192 { width = 8192 }
             if height > 8192 { height = 8192 }
             metalLayer.drawableSize = CGSize(width: width, height: height)
-            
-            delayedVsync.async { self.vsync() }
         }
     }
 #else
@@ -144,8 +142,6 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
                 if width > 8192 { width = 8192 }
                 if height > 8192 { height = 8192 }
                 metalLayer.drawableSize = CGSize(width: width, height: height)
-                
-                delayedVsync.async { self.vsync() }
             }
         }
     #else

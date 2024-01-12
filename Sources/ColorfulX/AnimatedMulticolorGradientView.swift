@@ -110,6 +110,12 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
         )
     }
 
+    override public func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        updateRenderParameters()
+        super.vsync()
+    }
+
     override func vsync() {
         if frameLimit > 0 {
             let now = Date()
