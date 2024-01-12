@@ -6,6 +6,9 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.2.18
+    - Fixed first frame rendering being delayed after a run loop casing a flash.
+
 - Version 2.2.14
     - Fixed drawable present crashing in rare cases.
     - Frame limit is relaxed to unlimited by default.
