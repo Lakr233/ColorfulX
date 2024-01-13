@@ -102,9 +102,9 @@ public class MulticolorGradientView: MetalView {
             drawable.present()
             commandBuffer.waitUntilCompleted()
         } else {
-            DispatchQueue.main.asyncAndWait {
+            DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
                 drawable.present()
-            }
+            })
             commandBuffer.waitUntilCompleted()
         }
     }
