@@ -6,6 +6,9 @@ ColorfulX is an implementation using Metal for crafting multi-colored gradients.
 
 ## What's New
 
+- Version 2.3.0
+    - Fixed a memory leak on UIKit caused by CADisplayLink holding ref to self.
+
 - Version 2.2.18
     - Fixed first frame rendering being delayed after a run loop casing a flash.
 
