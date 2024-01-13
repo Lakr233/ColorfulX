@@ -46,11 +46,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
             fatalError("init(coder:) has not been implemented")
         }
 
-        deinit {
-            debugPrint("MetalView deinit")
-        }
-
-        open override func willMove(toWindow newWindow: UIWindow?) {
+        override open func willMove(toWindow newWindow: UIWindow?) {
             if newWindow != nil {
                 if mDisplayLink == nil {
                     let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall))
