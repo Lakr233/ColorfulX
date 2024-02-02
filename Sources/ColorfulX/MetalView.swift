@@ -19,6 +19,13 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
         let commandQueue: MTLCommandQueue
 
         private weak var mDisplayLink: CADisplayLink?
+        private var hasParentWindow: Bool = false
+
+        public var isPaused: Bool = false {
+            didSet {
+                updateDisplayLink()
+            }
+        }
 
         init() {
             guard let device = MTLCreateSystemDefaultDevice(),
@@ -47,9 +54,15 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
         }
 
         override open func willMove(toWindow newWindow: UIWindow?) {
-            if newWindow != nil {
+            super.willMove(toWindow: newWindow)
+            hasParentWindow = (newWindow != nil)
+            updateDisplayLink()
+        }
+
+        private func updateDisplayLink() {
+            if hasParentWindow && !isPaused {
                 if mDisplayLink == nil {
-                    let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall))
+                    let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall(_:)))
                     displayLink.add(to: .main, forMode: .common)
                     mDisplayLink = displayLink
                 }
@@ -59,7 +72,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
             }
         }
 
-        @objc func displayLinkCall() {
+        @objc func displayLinkCall(_ displaylink: CADisplayLink) {
             delayedVsync.async { [weak self] in
                 self?.vsync()
             }

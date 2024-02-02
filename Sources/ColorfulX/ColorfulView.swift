@@ -13,6 +13,9 @@ public struct ColorfulView: View {
     @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
+    @State var isPaused: Bool = false
+    @Environment(\.scenePhase) var scenePhase
+
     let frameLimit: Int
 
     public init(
@@ -37,7 +40,15 @@ public struct ColorfulView: View {
             speed: $speed,
             noise: $noise,
             transitionDuration: $transitionInterval,
+            isPaused: $isPaused,
             frameLimit: frameLimit
         )
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                isPaused = false
+            } else {
+                isPaused = true
+            }
+        }
     }
 }
