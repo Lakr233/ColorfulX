@@ -20,6 +20,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
 
         private weak var mDisplayLink: CADisplayLink?
         private var hasParentWindow: Bool = false
+        private var hasActiveScene: Bool = true
 
         public var isPaused: Bool = false {
             didSet {
@@ -46,6 +47,24 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
 
             layer.addSublayer(metalLayer)
             backgroundColor = .clear
+
+            NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(applicationwillResignActive(_:)), name: UIApplication.willResignActiveNotification, object: nil)
+        }
+
+        @objc
+        func applicationDidBecomeActive(_: Notification) {
+            hasActiveScene = true
+        }
+
+        @objc
+        func applicationwillResignActive(_: Notification) {
+            hasActiveScene = false
+        }
+
+        deinit {
+            NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
         }
 
         @available(*, unavailable)
@@ -60,7 +79,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
         }
 
         private func updateDisplayLink() {
-            if hasParentWindow && !isPaused {
+            if hasParentWindow && !isPaused && hasActiveScene {
                 if mDisplayLink == nil {
                     let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall(_:)))
                     displayLink.add(to: .main, forMode: .common)
