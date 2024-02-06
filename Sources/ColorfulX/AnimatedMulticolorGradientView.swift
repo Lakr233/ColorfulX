@@ -16,7 +16,7 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
-    public private(set) var lastUpdate = Date()
+    public private(set) var lastUpdate: Double = 0
     public private(set) var colorElements: [Speckle]
 
     public var speed: Double = 1.0
@@ -24,7 +24,7 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var transitionDuration: TimeInterval = 5
 
     public var frameLimit: Int = 0
-    public private(set) var lastRender: Date = .init(timeIntervalSince1970: 0)
+    public private(set) var lastRender: Double = 0
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
@@ -86,8 +86,8 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     private func updateRenderParameters() {
-        let deltaTime = -lastUpdate.timeIntervalSinceNow
-        lastUpdate = Date()
+        let deltaTime = -Date(timeIntervalSince1970: lastUpdate).timeIntervalSinceNow
+        lastUpdate = Date().timeIntervalSince1970
         guard deltaTime > 0 else {
             assertionFailure()
             return
@@ -137,17 +137,15 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
-        withExtendedLifetime(self) {
-            if frameLimit > 0 {
-                let now = Date()
-                guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
-                lastRender = now
-            }
-            // when calling from vsync, MetalView is holding strong reference.
-            DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-                self.updateRenderParameters()
-            })
-            super.vsync()
+        if frameLimit > 0 {
+            let now = Date().timeIntervalSince1970
+            guard now - lastRender > 1.0 / Double(frameLimit) else { return }
+            lastRender = now
         }
+        // when calling from vsync, MetalView is holding strong reference.
+        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
+            self.updateRenderParameters()
+        })
+        super.vsync()
     }
 }

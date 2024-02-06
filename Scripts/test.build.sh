@@ -9,7 +9,13 @@ SCEHEME="ColorfulApp"
 function test_build() {
     DESTINATION=$1
     echo "[*] test build for $DESTINATION"
-    xcodebuild -workspace $WORKSPACE -scheme $SCEHEME -destination "$DESTINATION" | xcbeautify
+    xcodebuild \
+        -workspace "$WORKSPACE" \
+        -scheme "$SCEHEME" \
+        -destination "$DESTINATION" \
+        CODE_SIGN_IDENTITY="" \
+        CODE_SIGNING_ALLOWED=NO \
+        | xcbeautify
     EXIT_CODE=${PIPESTATUS[0]}
     echo "[*] finished with exit code $EXIT_CODE"
     if [ $EXIT_CODE -ne 0 ]; then
