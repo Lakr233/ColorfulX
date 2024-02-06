@@ -137,15 +137,17 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
-        if frameLimit > 0 {
-            let now = Date()
-            guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
-            lastRender = now
+        withExtendedLifetime(self) {
+            if frameLimit > 0 {
+                let now = Date()
+                guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
+                lastRender = now
+            }
+            // when calling from vsync, MetalView is holding strong reference.
+            DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
+                self.updateRenderParameters()
+            })
+            super.vsync()
         }
-        // when calling from vsync, MetalView is holding strong reference.
-        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-            self.updateRenderParameters()
-        })
-        super.vsync()
     }
 }
