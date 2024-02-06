@@ -142,8 +142,9 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             guard now.timeIntervalSince(lastRender) > 1.0 / Double(frameLimit) else { return }
             lastRender = now
         }
-        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem { [weak self] in
-            self?.updateRenderParameters()
+        // when calling from vsync, MetalView is holding strong reference.
+        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
+            self.updateRenderParameters()
         })
         super.vsync()
     }
