@@ -12,10 +12,7 @@ import SwiftUI
 struct ColorfulAppApp: App {
     init() {
         setenv("MTL_HUD_ENABLED", "1", 1)
-
-        DispatchQueue.global().async {
-            leakTest()
-        }
+        DispatchQueue.global().async { leakTest() }
     }
 
     var body: some Scene {
