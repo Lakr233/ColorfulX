@@ -8,12 +8,12 @@
 import Foundation
 import MetalKit
 
-private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .concurrent)
-
 #if canImport(UIKit)
     import UIKit
 
     open class MetalView: UIView {
+        private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync")
+
         let metalDevice: MTLDevice
         let metalLayer: CAMetalLayer
         let commandQueue: MTLCommandQueue
@@ -79,7 +79,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
         }
 
         private func updateDisplayLink() {
-            if hasParentWindow && !isPaused && hasActiveScene {
+            if hasParentWindow, !isPaused, hasActiveScene {
                 if mDisplayLink == nil {
                     let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCall(_:)))
                     displayLink.add(to: .main, forMode: .common)
@@ -91,7 +91,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
             }
         }
 
-        @objc func displayLinkCall(_ displaylink: CADisplayLink) {
+        @objc func displayLinkCall(_: CADisplayLink) {
             delayedVsync.async { [weak self] in
                 self?.vsync()
             }
@@ -120,6 +120,8 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
         import AppKit
 
         open class MetalView: NSView, CALayerDelegate {
+            private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync")
+
             let metalDevice: MTLDevice
             let metalLayer: CAMetalLayer
             let commandQueue: MTLCommandQueue
@@ -152,7 +154,7 @@ private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync", attributes: .c
                     CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
                         guard let object = object else { return kCVReturnError }
                         let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
-                        delayedVsync.async { me.vsync() }
+                        me.delayedVsync.async { me.vsync() }
                         return kCVReturnSuccess
                     }, Unmanaged.passUnretained(self).toOpaque())
                     CVDisplayLinkStart(displayLink)

@@ -39,7 +39,14 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
             colorElements[idx].position.setTarget(.init(x: rand.x, y: rand.y))
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        #if canImport(UIKit)
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(applicationWillEnterForeground(_:)),
+                name: UIApplication.willEnterForegroundNotification,
+                object: nil
+            )
+        #endif
     }
 
     @objc
@@ -48,7 +55,9 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        #if canImport(UIKit)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        #endif
     }
 
     private func randomLocationPair() -> (x: Double, y: Double) {
