@@ -16,14 +16,14 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
-    @Atomic private var lastUpdate: Double = 0
-    @Atomic private(set) var lastRender: Double = 0
-    @Atomic private var colorElements: [Speckle]
+    public private(set) var lastUpdate: Double = 0
+    public private(set) var lastRender: Double = 0
+    private var colorElements: [Speckle]
 
-    @Atomic public var speed: Double = 1.0
-    @Atomic public var noise: Double = 0
-    @Atomic public var transitionDuration: TimeInterval = 5
-    @Atomic public var frameLimit: Int = 0
+    public var speed: Double = 1.0
+    public var noise: Double = 0
+    public var transitionDuration: TimeInterval = 5
+    public var frameLimit: Int = 0
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
@@ -136,13 +136,13 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
-        if frameLimit > 0 {
-            let now = Date().timeIntervalSince1970
-            guard now - lastRender > 1.0 / Double(frameLimit) else { return }
-            lastRender = now
-        }
         // when calling from vsync, MetalView is holding strong reference.
         DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
+            if self.frameLimit > 0 {
+                let now = Date().timeIntervalSince1970
+                guard now - self.lastRender > 1.0 / Double(self.frameLimit) else { return }
+                self.lastRender = now
+            }
             self.updateRenderParameters()
         })
         super.vsync()
