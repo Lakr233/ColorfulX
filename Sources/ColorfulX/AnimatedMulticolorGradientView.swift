@@ -20,10 +20,10 @@ public class AnimatedMulticolorGradientView: MulticolorGradientView {
     @Atomic private(set) var lastRender: Double = 0
     @Atomic private var colorElements: [Speckle]
 
-    public var speed: Double = 1.0
-    public var noise: Double = 0
-    public var transitionDuration: TimeInterval = 5
-    public var frameLimit: Int = 0
+    @Atomic public var speed: Double = 1.0
+    @Atomic public var noise: Double = 0
+    @Atomic public var transitionDuration: TimeInterval = 5
+    @Atomic public var frameLimit: Int = 0
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
