@@ -119,8 +119,72 @@ import MetalKit
     #if canImport(AppKit)
         import AppKit
 
+        private struct WeakBox<T: AnyObject> {
+            weak var object: T?
+        }
+
+        enum MetalViewCVDisplayLinkHelper {
+            private static var referenceHolder: [UUID: WeakBox<MetalView>] = [:]
+            private static var referenceHolderAccessLock: NSLock = .init()
+            fileprivate static func delegate(_ view: MetalView) {
+                referenceHolderAccessLock.lock()
+                defer { referenceHolderAccessLock.unlock() }
+                referenceHolder[view.viewIdentifier] = .init(object: view)
+            }
+
+            fileprivate static func obtainView(_ id: UUID) -> MetalView? {
+                referenceHolderAccessLock.lock()
+                defer { referenceHolderAccessLock.unlock() }
+                return referenceHolder[id]?.object
+            }
+
+            fileprivate static func removeView(_ id: UUID) {
+                referenceHolderAccessLock.lock()
+                defer { referenceHolderAccessLock.unlock() }
+                referenceHolder.removeValue(forKey: id)
+            }
+
+            fileprivate static var displayLink: CVDisplayLink?
+            fileprivate static func startDisplayLink() {
+                guard displayLink == nil else { return }
+                CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
+                if let displayLink = displayLink {
+                    CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, _ -> CVReturn in
+                        let updatedOnce = MetalViewCVDisplayLinkHelper.callAllUpdate()
+                        if !updatedOnce { MetalViewCVDisplayLinkHelper.stopDisplayLink() }
+                        return kCVReturnSuccess
+                    }, nil)
+                    CVDisplayLinkStart(displayLink)
+                } else { assertionFailure() }
+            }
+
+            fileprivate static func callAllUpdate() -> Bool {
+                referenceHolderAccessLock.lock()
+                defer { referenceHolderAccessLock.unlock() }
+                var updatedOnce = false
+                let copy = referenceHolder
+                for (id, weakView) in copy {
+                    if let view = weakView.object {
+                        view.delayedVsync.async { view.vsync() }
+                        updatedOnce = true
+                    } else {
+                        referenceHolder.removeValue(forKey: id)
+                    }
+                }
+                return updatedOnce
+            }
+
+            fileprivate static func stopDisplayLink() {
+                if let displayLink = displayLink {
+                    CVDisplayLinkStop(displayLink)
+                }
+                displayLink = nil
+            }
+        }
+
         open class MetalView: NSView, CALayerDelegate {
-            private let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync")
+            fileprivate let viewIdentifier = UUID()
+            fileprivate let delayedVsync = DispatchQueue(label: "wiki.qaq.vsync")
 
             let metalDevice: MTLDevice
             let metalLayer: CAMetalLayer
@@ -149,16 +213,8 @@ import MetalKit
                 layer = metalLayer
                 metalLayer.delegate = self
 
-                CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
-                if let displayLink = displayLink {
-                    CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, object -> CVReturn in
-                        guard let object = object else { return kCVReturnError }
-                        let me = Unmanaged<MetalView>.fromOpaque(object).takeUnretainedValue()
-                        me.delayedVsync.async { me.vsync() }
-                        return kCVReturnSuccess
-                    }, Unmanaged.passUnretained(self).toOpaque())
-                    CVDisplayLinkStart(displayLink)
-                } else { assertionFailure() }
+                MetalViewCVDisplayLinkHelper.delegate(self)
+                MetalViewCVDisplayLinkHelper.startDisplayLink()
             }
 
             @available(*, unavailable)
@@ -167,8 +223,7 @@ import MetalKit
             }
 
             deinit {
-                if let displayLink = displayLink { CVDisplayLinkStop(displayLink) }
-                displayLink = nil
+                MetalViewCVDisplayLinkHelper.removeView(self.viewIdentifier)
             }
 
             func vsync() {}
