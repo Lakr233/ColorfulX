@@ -16,15 +16,14 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
 public class AnimatedMulticolorGradientView: MulticolorGradientView {
-    public private(set) var lastUpdate: Double = 0
-    public private(set) var colorElements: [Speckle]
+    @Atomic private var lastUpdate: Double = 0
+    @Atomic private(set) var lastRender: Double = 0
+    @Atomic private var colorElements: [Speckle]
 
     public var speed: Double = 1.0
     public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
-
     public var frameLimit: Int = 0
-    public private(set) var lastRender: Double = 0
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
