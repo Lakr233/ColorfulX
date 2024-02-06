@@ -38,9 +38,7 @@ public class MulticolorGradientView: MetalView {
         guard lock.try() else { return }
         defer { lock.unlock() }
 
-        guard frame.width > 0, frame.height > 0,
-              window != nil,
-              let drawable = metalLayer.nextDrawable(),
+        guard let drawable = metalLayer.nextDrawable(),
               let commandBuffer = commandQueue.makeCommandBuffer(),
               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
         else { return }
