@@ -210,7 +210,6 @@ import MetalKit
                 super.init(frame: .zero)
 
                 wantsLayer = true
-                layer = metalLayer
                 metalLayer.delegate = self
 
                 MetalViewCVDisplayLinkHelper.delegate(self)
@@ -224,6 +223,10 @@ import MetalKit
 
             deinit {
                 MetalViewCVDisplayLinkHelper.removeView(self.viewIdentifier)
+            }
+            
+            open override func makeBackingLayer() -> CALayer {
+                metalLayer
             }
 
             func vsync() {}
