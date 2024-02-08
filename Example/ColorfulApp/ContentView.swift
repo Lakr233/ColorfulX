@@ -21,7 +21,6 @@ struct ContentView: View {
         ZStack {
             ColorfulView(color: $colors, speed: $speed, noise: $noise, transitionInterval: $duration)
                 .ignoresSafeArea()
-
             VStack {
                 controlPanel
                 #if os(tvOS)

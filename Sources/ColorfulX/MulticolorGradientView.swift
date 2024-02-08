@@ -16,6 +16,10 @@ public class MulticolorGradientView: MetalView {
     private var computePipelineState: MTLComputePipelineState!
     private let lock = NSLock()
 
+    public private(set) var currentDrawable: CAMetalDrawable? = nil
+    public var currentTexture: MTLTexture? { currentDrawable?.texture }
+    public var captureImage: CGImage? { currentTexture?.capture() }
+
     override public init() {
         super.init()
 
@@ -100,14 +104,66 @@ public class MulticolorGradientView: MetalView {
         commandEncoder.endEncoding()
         commandBuffer.commit()
         commandBuffer.waitUntilScheduled()
+
         if Thread.isMainThread {
             drawable.present()
+            currentDrawable = drawable
             commandBuffer.waitUntilCompleted()
         } else {
             DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
                 drawable.present()
+                self.currentDrawable = drawable
             })
             commandBuffer.waitUntilCompleted()
         }
+    }
+}
+
+private extension MTLTexture {
+    func capture() -> CGImage? {
+        let colorspace = CGColorSpaceCreateDeviceRGB()
+        let bytesPerPixel = 4
+        let bitsPerComponent = 8
+        let rowBytes = width * bytesPerPixel
+
+        let buffer = malloc(width * height * bytesPerPixel)
+        guard let buffer else { return nil }
+        defer { free(buffer) }
+
+        getBytes(
+            buffer,
+            bytesPerRow: width * bytesPerPixel,
+            from: MTLRegionMake2D(0, 0, width, height),
+            mipmapLevel: 0
+        )
+
+        let rawBitmapInfo = 0
+            | CGImageAlphaInfo.noneSkipFirst.rawValue
+            | CGBitmapInfo.byteOrder32Little.rawValue
+        let bitmapInfo = CGBitmapInfo(rawValue: rawBitmapInfo)
+
+        let selftureSize = width * height * bytesPerPixel
+        let releaseMaskImagePixelData: CGDataProviderReleaseDataCallback = { _, _, _ in
+        }
+        guard let provider = CGDataProvider(
+            dataInfo: nil,
+            data: buffer,
+            size: selftureSize,
+            releaseData: releaseMaskImagePixelData
+        ) else { return nil }
+
+        return CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: bitsPerComponent,
+            bitsPerPixel: bitsPerComponent * bytesPerPixel,
+            bytesPerRow: rowBytes,
+            space: colorspace,
+            bitmapInfo: bitmapInfo,
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: true,
+            intent: CGColorRenderingIntent.defaultIntent
+        )
     }
 }
