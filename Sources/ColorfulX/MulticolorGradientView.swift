@@ -7,7 +7,7 @@
 
 import MetalKit
 
-public class MulticolorGradientView: MetalView {
+open class MulticolorGradientView: MetalView {
     public var parameters: Parameters = .init() {
         didSet { if oldValue != parameters { needsRender = true } }
     }

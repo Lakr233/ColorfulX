@@ -15,7 +15,7 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 
-public class AnimatedMulticolorGradientView: MulticolorGradientView {
+open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var lastUpdate: Double = 0
     public private(set) var lastRender: Double = 0
     private var colorElements: [Speckle]
