@@ -99,6 +99,11 @@ import MetalKit
 
         func vsync() {}
 
+        override open func layoutSubviews() {
+            super.layoutSubviews()
+            layoutSublayers(of: metalLayer)
+        }
+
         override public func layoutSublayers(of _: CALayer) {
             // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max
             // native scaleFactor will case a performance issue
@@ -227,6 +232,11 @@ import MetalKit
             }
 
             func vsync() {}
+
+            override open func layout() {
+                super.layout()
+                layoutSublayers(of: metalLayer)
+            }
 
             public func layoutSublayers(of layer: CALayer) {
                 guard layer == metalLayer else { return }
