@@ -67,7 +67,6 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
-        assert(Thread.isMainThread)
         for idx in 0 ..< COLOR_SLOT {
             var read = colorElements[idx]
             let color: RGBColor = colors.isEmpty

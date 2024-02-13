@@ -13,23 +13,18 @@ protocol Lerpable {
 
 extension Double: Lerpable {
     func lerp(to newValue: Self, percent delta: Double) -> Self {
-        assert(delta >= 0 && delta <= 1)
-
-        return self + (newValue - self) * delta
+        self + (newValue - self) * delta
     }
 }
 
 extension Float: Lerpable {
     func lerp(to newValue: Self, percent delta: Double) -> Self {
-        assert(delta >= 0 && delta <= 1)
-
-        return self + (newValue - self) * Float(delta)
+        self + (newValue - self) * Float(delta)
     }
 }
 
 extension RGBColor: Lerpable {
     func lerp(to: RGBColor, percent delta: Double) -> RGBColor {
-        assert(delta >= 0 && delta <= 1)
         if delta <= 0 { return self }
         if delta >= 1 { return to }
         let lchFrom = lch

@@ -36,7 +36,7 @@ public struct ColorfulView: View {
         AnimatedMulticolorGradientViewRepresentable(
             color: .init(get: {
                 color.map { RGBColor(CoreColor($0)) }
-            }, set: { _ in assertionFailure() }),
+            }, set: { _ in }),
             speed: $speed,
             noise: $noise,
             transitionDuration: $transitionInterval,

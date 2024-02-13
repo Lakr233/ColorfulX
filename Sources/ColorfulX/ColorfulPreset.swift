@@ -55,11 +55,7 @@ public enum ColorfulPreset: String, CaseIterable {
     }
 
     private func make(_ r: Int, _ g: Int, _ b: Int, _ a: Int = 255) -> Color {
-        assert((0 ... 255).contains(r))
-        assert((0 ... 255).contains(g))
-        assert((0 ... 255).contains(b))
-        assert((0 ... 255).contains(a))
-        return Color(CoreColor(
+        Color(CoreColor(
             red: Double(r) / 255,
             green: Double(g) / 255,
             blue: Double(b) / 255,

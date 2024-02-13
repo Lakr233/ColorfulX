@@ -28,8 +28,6 @@ struct ColorfulAppApp: App {
 }
 
 func leakTest() {
-    assert(!Thread.isMainThread)
-
     while true {
         var view: AnimatedMulticolorGradientView?
         DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {

@@ -44,7 +44,6 @@ public extension RGBColor {
                   options: nil
               )
         else {
-            assertionFailure()
             self.init(r: 0, g: 0, b: 0)
             return
         }

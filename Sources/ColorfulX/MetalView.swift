@@ -112,7 +112,6 @@ import MetalKit
             metalLayer.frame = bounds
             var width = bounds.width * scaleFactor
             var height = bounds.height * scaleFactor
-            assert(width <= 8192 && height <= 8192, "rendering over 8k is not supported")
             if width <= 0 { width = 1 }
             if height <= 0 { height = 1 }
             if width > 8192 { width = 8192 }
@@ -160,7 +159,7 @@ import MetalKit
                         return kCVReturnSuccess
                     }, nil)
                     CVDisplayLinkStart(displayLink)
-                } else { assertionFailure() }
+                }
             }
 
             fileprivate static func callAllUpdate() -> Bool {
@@ -244,7 +243,6 @@ import MetalKit
                 let scaleFactor = 1.0
                 var width = bounds.width * scaleFactor
                 var height = bounds.height * scaleFactor
-                assert(width <= 8192 && height <= 8192, "rendering over 8k is not supported")
                 if width <= 0 { width = 1 }
                 if height <= 0 { height = 1 }
                 if width > 8192 { width = 8192 }
