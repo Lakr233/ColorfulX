@@ -37,6 +37,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 
 #if canImport(UIKit)
     import UIKit
+
     extension AnimatedMulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> AnimatedMulticolorGradientView {
             view.setColors(color, interpolationEnabled: false)
@@ -58,6 +59,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 #else
     #if canImport(AppKit)
         import AppKit
+
         extension AnimatedMulticolorGradientViewRepresentable: NSViewRepresentable {
             public func makeNSView(context _: Context) -> AnimatedMulticolorGradientView {
                 view.setColors(color, interpolationEnabled: false)

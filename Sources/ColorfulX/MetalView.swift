@@ -91,9 +91,15 @@ import MetalKit
             }
         }
 
-        @objc func displayLinkCall(_: CADisplayLink) {
-            delayedVsync.async { [weak self] in
-                self?.vsync()
+        @objc private func displayLinkCall(_: CADisplayLink) {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                if self.window != nil,
+                   self.frame.width > 0,
+                   self.frame.height > 0,
+                   self.alpha > 0,
+                   !self.isHidden
+                { delayedVsync.async { [weak self] in self?.vsync() } }
             }
         }
 
@@ -169,7 +175,14 @@ import MetalKit
                 let copy = referenceHolder
                 for (id, weakView) in copy {
                     if let view = weakView.object {
-                        view.delayedVsync.async { view.vsync() }
+                        DispatchQueue.main.async {
+                            if view.window != nil,
+                               view.frame.width > 0,
+                               view.frame.height > 0,
+                               view.alphaValue > 0,
+                               !view.isHidden
+                            { view.delayedVsync.async { view.vsync() } }
+                        }
                         updatedOnce = true
                     } else {
                         referenceHolder.removeValue(forKey: id)

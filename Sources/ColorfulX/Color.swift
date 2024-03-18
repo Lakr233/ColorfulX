@@ -21,10 +21,12 @@ public struct RGBColor: Equatable {
 
 #if canImport(UIKit)
     import UIKit
+
     public typealias CoreColor = UIColor
 #else
     #if canImport(AppKit)
         import AppKit
+
         public typealias CoreColor = NSColor
     #else
         #error("unsupported platform")

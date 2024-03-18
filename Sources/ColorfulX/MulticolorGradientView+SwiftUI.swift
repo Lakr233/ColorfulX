@@ -30,6 +30,7 @@ public struct MulticolorGradientViewRepresentable {
 
 #if canImport(UIKit)
     import UIKit
+
     extension MulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> MulticolorGradientView {
             view.parameters = parameters
@@ -43,6 +44,7 @@ public struct MulticolorGradientViewRepresentable {
 #else
     #if canImport(AppKit)
         import AppKit
+
         extension MulticolorGradientViewRepresentable: NSViewRepresentable {
             public func makeNSView(context _: Context) -> MulticolorGradientView {
                 view.parameters = parameters
