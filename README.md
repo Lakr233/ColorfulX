@@ -1,52 +1,23 @@
 # ColorfulX
 
-ColorfulX is an implementation using Metal for crafting multi-colored gradients.
+ColorfulX is a super fast library for crafting multi-colored gradients view with animations.
 
 ![Screenshot](./Example/Screenshot.png)
 
-## What's New
+## Use Case
 
-- Version 2.4.0
-    - Fixed unwanted CADisplayLink call when app is in background.
-    - Fixed reference counting issue on AppKit with CVDisplayLink.
+- [LennonMusic](https://github.com/zhcz/LennonMusic) iOS
+- [QR-Share-Pro)(https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
+- [Reveil](https://github.com/Lessica/Reveil) iOS
+- [Troll Recorder](https://github.com/Lessica/TrollRecorder) iOS
+- [Misaka](https://github.com/straight-tamago/misaka) iOS + tvOS
+- [SimpleLiveTVOS](https://github.com/pcccccc/SimpleLiveTVOS) tvOS
+- [Vibefy](https://github.com/ZhangDo/NeteaseTVDemo) tvOS
+- [Dino](https://apps.apple.com/us/app/dino-%E7%A9%BA%E9%97%B4%E8%BE%93%E5%85%A5%E6%B3%95/id6477793173) xrOS
+- [BBackupp](https://github.com/Lakr233/BBackupp) macOS
+- [Mythic](https://github.com/MythicApp/Mythic) macOS
 
-- Version 2.3.1
-    - Fixed a compilation issue on Xcode 14 and iOS 15
-
-- Version 2.3.0
-    - Fixed a memory leak on UIKit caused by CADisplayLink holding ref to self.
-
-- Version 2.2.18
-    - Fixed first frame rendering being delayed after a run loop casing a flash.
-
-- Version 2.2.14
-    - Fixed drawable present crashing in rare cases.
-    - Frame limit is relaxed to unlimited by default.
-    - Render will only take place after previous frame complete.
-
-- Version 2.2.12
-    - Delayed vsync to a background thread to avoid magic with SwiftUI.
-
-- Version 2.2.11
-    - Fixed rendering task backlog causing lag in rare cases.
-
-- Version 2.2.9
-    - Fixed a performance issue caused by vsync receiving more than expected.
-    - ~~Frame Limit is now configured to 60 FPS by default.~~
-    - Frame Limit is now provided as an option to configure.
-    - Use 1x scale for any kind of view (for better performance).
-
-In this release, a test is performed to see the real-world case of the rendering cost. A full-size view with 1x scale, 430x932, will mostly be rendered within 4ms. As observed, the average is 1.41ms. The test is performed on iPhone 15 Pro Max. We suggest no more than 2x scale and 60 FPS to avoid hurting the device.
-
-- Version 2.2.4
-    - Switched to LCH color space for animated transition.
-
-- Version 2.2.1
-    - API changed and stabilized.
-    - Option to configure noise.
-    - Option to configure fps removed. We are now syncing refresh rate with system.
-    - Animation speed now stabilized.
-    - Demo app downgraded to iOS 15.0. See #1.
+PR for use cases are welcomed.
 
 ## Platform
 
