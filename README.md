@@ -7,7 +7,7 @@ ColorfulX is a super fast library for crafting multi-colored gradients view with
 ## Use Case
 
 - [LennonMusic](https://github.com/zhcz/LennonMusic) iOS
-- [QR-Share-Pro)(https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
+- [QR-Share-Pro](https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
 - [Reveil](https://github.com/Lessica/Reveil) iOS
 - [Troll Recorder](https://github.com/Lessica/TrollRecorder) iOS
 - [Misaka](https://github.com/straight-tamago/misaka) iOS + tvOS
