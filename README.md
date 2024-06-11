@@ -1,6 +1,6 @@
 # ColorfulX
 
-ColorfulX is a super fast library for crafting multi-colored gradients view with animations.A super powerful yet animated replacement with presets to SwiftUI MeshGadient View.
+ColorfulX is a super fast library for crafting multi-colored gradients view with animations. A super powerful yet animated replacement with presets to SwiftUI MeshGadient View.
 
 ![Screenshot](./Example/Screenshot.png)
 
