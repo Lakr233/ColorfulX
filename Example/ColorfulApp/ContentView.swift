@@ -19,8 +19,13 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            ColorfulView(color: $colors, speed: $speed, noise: $noise, transitionInterval: $duration)
-                .ignoresSafeArea()
+            ColorfulView(
+                color: $colors,
+                speed: $speed,
+                noise: $noise,
+                transitionInterval: $duration
+            )
+            .ignoresSafeArea()
             VStack {
                 controlPanel
                 #if os(tvOS)
@@ -104,7 +109,7 @@ struct ContentView: View {
                 }
             #endif
         }
-        .frame(width: 300)
+        .frame(width: 320)
         #if os(macOS)
             .font(.system(size: 12, weight: .semibold, design: .rounded))
         #else
