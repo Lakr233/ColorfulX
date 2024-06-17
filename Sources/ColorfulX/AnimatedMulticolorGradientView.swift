@@ -84,9 +84,13 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     private func updateRenderParameters() {
-        let deltaTime = -Date(timeIntervalSince1970: lastUpdate).timeIntervalSinceNow
+        var deltaTime = -Date(timeIntervalSince1970: lastUpdate).timeIntervalSinceNow
         lastUpdate = Date().timeIntervalSince1970
         guard deltaTime > 0 else { return }
+
+        // when the app goes back from background, deltaTime could be very large
+        let maxDeltaAllowed = 1.0 / Double(frameLimit > 0 ? frameLimit : 30)
+        deltaTime = min(deltaTime, maxDeltaAllowed)
 
         let moveDelta = deltaTime * speed * 0.5 // just slow down
 
