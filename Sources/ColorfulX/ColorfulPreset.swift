@@ -47,8 +47,7 @@ public enum ColorfulPreset: String, CaseIterable {
         case .winter: return [make(190, 212, 240), make(129, 152, 205), make(196, 181, 215), make(243, 243, 243)]
         case .neon: return [make(22, 4, 74), make(240, 54, 248), make(79, 216, 248), make(74, 0, 217)]
         case .aurora: return [make(0, 209, 172), make(0, 150, 150), make(4, 76, 112), make(23, 38, 69)]
-
-        case .appleIntelligence: return [make(239, 176, 76), make(233, 128, 86), make(234, 75, 107), make(230, 97, 165), make(223, 138, 233), make(192, 160, 245), make(100, 181, 245), make(126, 201, 238),]
+        case .appleIntelligence: return [make(239, 176, 76), make(233, 128, 86), make(234, 75, 107), make(230, 97, 165), make(223, 138, 233), make(192, 160, 245), make(100, 181, 245), make(126, 201, 238)]
         }
     }
 

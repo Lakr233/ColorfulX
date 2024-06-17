@@ -14,6 +14,7 @@ struct ContentView: View {
     @AppStorage("preset") var preset: ColorfulPreset = defaultPreset
     @State var colors: [Color] = defaultPreset.colors
     @AppStorage("speed") var speed: Double = 1.0
+    @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
 
@@ -22,6 +23,7 @@ struct ContentView: View {
             ColorfulView(
                 color: $colors,
                 speed: $speed,
+                bias: $bias,
                 noise: $noise,
                 transitionInterval: $duration
             )
@@ -86,6 +88,15 @@ struct ContentView: View {
             }
             #if !os(tvOS)
                 Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
+                }
+            #endif
+            HStack {
+                Text("BIAS")
+                Spacer()
+                Text("\(bias, specifier: "%.5f")")
+            }
+            #if !os(tvOS)
+                Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
                 }
             #endif
             Divider()

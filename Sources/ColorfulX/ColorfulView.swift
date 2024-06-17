@@ -10,6 +10,7 @@ import SwiftUI
 public struct ColorfulView: View {
     @Binding var color: [Color]
     @Binding var speed: Double
+    @Binding var bias: Double
     @Binding var noise: Double
     @Binding var transitionInterval: TimeInterval
 
@@ -21,12 +22,14 @@ public struct ColorfulView: View {
     public init(
         color: Binding<[Color]>,
         speed: Binding<Double> = .constant(1.0),
+        bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5),
         frameLimit: Int = 0
     ) {
         _color = color
         _speed = speed
+        _bias = bias
         _noise = noise
         _transitionInterval = transitionInterval
         self.frameLimit = frameLimit
@@ -38,6 +41,7 @@ public struct ColorfulView: View {
                 color.map { RGBColor(CoreColor($0)) }
             }, set: { _ in }),
             speed: $speed,
+            bias: $bias,
             noise: $noise,
             transitionDuration: $transitionInterval,
             isPaused: $isPaused,

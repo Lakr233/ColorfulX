@@ -21,6 +21,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public private(set) var colorElements: [Speckle]
 
     public var speed: Double = 1.0
+    public var bias: Double = 0.01
     public var noise: Double = 0
     public var transitionDuration: TimeInterval = 5
     public var frameLimit: Int = 0
@@ -125,6 +126,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
                         y: $0.position.y.context.currentPos
                     )
                 ) },
+            bias: Float(bias),
             noise: Float(noise)
         )
     }
