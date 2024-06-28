@@ -108,7 +108,7 @@ private extension Float {
     }
 }
 
-extension RGBColor {
+public extension RGBColor {
     var xyz: (x: Float, y: Float, z: Float) {
         let vr = (r > 0.03928) ? pow((r + 0.055) / 1.055, 2.4) : (r / 12.92)
         let vg = (g > 0.03928) ? pow((g + 0.055) / 1.055, 2.4) : (g / 12.92)
@@ -146,7 +146,7 @@ extension RGBColor {
     }
 
     init(x: Float, y: Float, z: Float) {
-        let vx = x / 100
+        let vx = x / 100.0
         let vy = y / 100.0
         let vz = z / 100.0
 

@@ -25,5 +25,6 @@ let package = Package(
                 .process("Shaders/MulticolorGradientShader.metal"),
             ]
         ),
+        .testTarget(name: "ShaderTest", dependencies: ["ColorfulX"]),
     ]
 )

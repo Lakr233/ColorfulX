@@ -26,10 +26,10 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var transitionDuration: TimeInterval = 5
     public var frameLimit: Int = 0
 
-    override public init() {
+    override public init(interpolationOption: InterpolationOption = .rgb) {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
 
-        super.init()
+        super.init(interpolationOption: interpolationOption)
 
         var rand = randomLocationPair()
         for idx in 0 ..< colorElements.count {

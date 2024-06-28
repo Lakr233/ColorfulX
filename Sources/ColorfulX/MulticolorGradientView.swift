@@ -20,12 +20,17 @@ open class MulticolorGradientView: MetalView {
     public var currentTexture: MTLTexture? { currentDrawable?.texture }
     public var captureImage: CGImage? { currentTexture?.capture() }
 
-    override public init() {
+    public enum InterpolationOption: String, CaseIterable, Codable {
+        case lch = "gradientWithLCH"
+        case rgb = "gradientWithRGB"
+    }
+
+    public init(interpolationOption: InterpolationOption = .rgb) {
         super.init()
 
         let device = metalDevice
-        guard let library = try? device.makeDefaultLibrary(bundle: Bundle.module),
-              let computeProgram = library.makeFunction(name: "gradient"),
+        guard let library = try? device.createColorfulLibrary(),
+              let computeProgram = library.makeFunction(name: interpolationOption.rawValue),
               let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
         else { fatalError("Metal program filed to compile") }
         self.computePipelineState = computePipelineState

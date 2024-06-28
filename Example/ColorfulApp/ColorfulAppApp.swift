@@ -31,7 +31,7 @@ func leakTest() {
     while true {
         var view: AnimatedMulticolorGradientView?
         DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-            view = AnimatedMulticolorGradientView()
+            view = AnimatedMulticolorGradientView(interpolationOption: .lch)
         })
         usleep(500_000)
         DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {

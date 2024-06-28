@@ -17,17 +17,32 @@ struct ContentView: View {
     @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
+    @AppStorage("interpolationOption") var interpolationOption: MulticolorGradientView.InterpolationOption = .rgb
 
     var body: some View {
         ZStack {
-            ColorfulView(
-                color: $colors,
-                speed: $speed,
-                bias: $bias,
-                noise: $noise,
-                transitionInterval: $duration
-            )
-            .ignoresSafeArea()
+            switch interpolationOption {
+            case .lch:
+                ColorfulView(
+                    color: $colors,
+                    speed: $speed,
+                    bias: $bias,
+                    noise: $noise,
+                    transitionInterval: $duration,
+                    interpolationOption: interpolationOption
+                )
+                .ignoresSafeArea()
+            case .rgb:
+                ColorfulView(
+                    color: $colors,
+                    speed: $speed,
+                    bias: $bias,
+                    noise: $noise,
+                    transitionInterval: $duration,
+                    interpolationOption: interpolationOption
+                )
+                .ignoresSafeArea()
+            }
             VStack {
                 controlPanel
                 #if os(tvOS)
@@ -53,72 +68,109 @@ struct ContentView: View {
         .onChange(of: preset) { colors = $0.colors }
     }
 
+    @ViewBuilder
+    var presetPicker: some View {
+        HStack {
+            #if os(tvOS)
+                Text("\(preset.hint)")
+            #else
+                Text("Preset")
+                Picker("", selection: $preset) {
+                    ForEach(ColorfulPreset.allCases, id: \.self) { preset in
+                        Text(preset.hint).tag(preset)
+                    }
+                }
+                .frame(width: 128)
+            #endif
+            Spacer()
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(preset.colors, id: \.self) { color in
+                        Text("8")
+                            .opacity(0)
+                            .overlay(Circle().foregroundColor(color))
+                    }
+                }
+            }
+            .flipsForRightToLeftLayoutDirection(true)
+            .environment(\.layoutDirection, .rightToLeft)
+        }
+    }
+
+    @ViewBuilder
+    var speedPicker: some View {
+        HStack {
+            Text("Speed")
+            Spacer()
+            Text("\(speed, specifier: "%.1f")")
+        }
+        #if !os(tvOS)
+            Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
+            }
+        #endif
+    }
+
+    @ViewBuilder
+    var biasPicker: some View {
+        HStack {
+            Text("BIAS")
+            Spacer()
+            Text("\(bias, specifier: "%.5f")")
+        }
+        #if !os(tvOS)
+            Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
+            }
+        #endif
+    }
+
+    @ViewBuilder
+    var noisePicker: some View {
+        HStack {
+            Text("Noise")
+            Spacer()
+            Text("\(noise, specifier: "%.2f")")
+        }
+        #if !os(tvOS)
+            Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
+            }
+        #endif
+    }
+
+    @ViewBuilder
+    var transitionPicker: some View {
+        HStack {
+            Text("Transition")
+            Spacer()
+            Text("\(duration, specifier: "%.2f")s")
+        }
+        #if !os(tvOS)
+            Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
+            }
+        #endif
+    }
+
+    @ViewBuilder
+    var interpolationPicker: some View {
+        Picker("Interpolation", selection: $interpolationOption) {
+            ForEach(MulticolorGradientView.InterpolationOption.allCases, id: \.self) { option in
+                Text(option.rawValue).tag(option)
+            }
+        }
+    }
+
     var controlPanel: some View {
         VStack(spacing: 8) {
-            HStack {
-                #if os(tvOS)
-                    Text("\(preset.hint)")
-                #else
-                    Text("Preset")
-                    Picker("", selection: $preset) {
-                        ForEach(ColorfulPreset.allCases, id: \.self) { preset in
-                            Text(preset.hint).tag(preset)
-                        }
-                    }
-                    .frame(width: 128)
-                #endif
-                Spacer()
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(preset.colors, id: \.self) { color in
-                            Text("8")
-                                .opacity(0)
-                                .overlay(Circle().foregroundColor(color))
-                        }
-                    }
-                }
-                .flipsForRightToLeftLayoutDirection(true)
-                .environment(\.layoutDirection, .rightToLeft)
-            }
+            presetPicker
             Divider()
-            HStack {
-                Text("Speed")
-                Spacer()
-                Text("\(speed, specifier: "%.1f")")
-            }
-            #if !os(tvOS)
-                Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
-                }
-            #endif
-            HStack {
-                Text("BIAS")
-                Spacer()
-                Text("\(bias, specifier: "%.5f")")
-            }
-            #if !os(tvOS)
-                Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
-                }
-            #endif
+            speedPicker
             Divider()
-            HStack {
-                Text("Noise")
-                Spacer()
-                Text("\(noise, specifier: "%.2f")")
-            }
-            #if !os(tvOS)
-                Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
-                }
-            #endif
+            biasPicker
             Divider()
-            HStack {
-                Text("Transition")
-                Spacer()
-                Text("\(duration, specifier: "%.2f")s")
-            }
-            #if !os(tvOS)
-                Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
-                }
-            #endif
+            noisePicker
+            Divider()
+            transitionPicker
+            Divider()
+            interpolationPicker
         }
         .frame(width: 320)
         #if os(macOS)

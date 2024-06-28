@@ -18,6 +18,7 @@ public struct ColorfulView: View {
     @Environment(\.scenePhase) var scenePhase
 
     let frameLimit: Int
+    let interpolationOption: MulticolorGradientView.InterpolationOption
 
     public init(
         color: Binding<[Color]>,
@@ -25,7 +26,8 @@ public struct ColorfulView: View {
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5),
-        frameLimit: Int = 0
+        frameLimit: Int = 0,
+        interpolationOption: MulticolorGradientView.InterpolationOption = .rgb
     ) {
         _color = color
         _speed = speed
@@ -33,6 +35,7 @@ public struct ColorfulView: View {
         _noise = noise
         _transitionInterval = transitionInterval
         self.frameLimit = frameLimit
+        self.interpolationOption = interpolationOption
     }
 
     public var body: some View {
@@ -45,7 +48,8 @@ public struct ColorfulView: View {
             noise: $noise,
             transitionDuration: $transitionInterval,
             isPaused: $isPaused,
-            frameLimit: frameLimit
+            frameLimit: frameLimit,
+            interpolationOption: interpolationOption
         )
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
