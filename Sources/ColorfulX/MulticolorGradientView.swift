@@ -27,7 +27,11 @@ open class MulticolorGradientView: MetalView {
         case rgb = "gradientWithRGB"
     }
 
+    public let interpolationOption: InterpolationOption
+
     public init(interpolationOption: InterpolationOption = .lab) {
+        self.interpolationOption = interpolationOption
+
         super.init()
 
         let device = metalDevice

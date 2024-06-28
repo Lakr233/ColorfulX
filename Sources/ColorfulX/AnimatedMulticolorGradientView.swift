@@ -75,7 +75,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
                 : colors[idx % colors.count]
             guard read.targetColor != color else { continue }
             let interpolationEnabled = interpolationEnabled && read.enabled
-            let currentColor = read.currentColor
+            let currentColor = computeSpeckleColor(read)
             read.enabled = true
             read.targetColor = color
             read.previousColor = interpolationEnabled ? currentColor : color
@@ -120,7 +120,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
             points: colorElements
                 .filter(\.enabled)
                 .map { .init(
-                    color: $0.currentColor,
+                    color: computeSpeckleColor($0),
                     position: .init(
                         x: $0.position.x.context.currentPos,
                         y: $0.position.y.context.currentPos
@@ -148,5 +148,14 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
             self.updateRenderParameters()
         })
         super.vsync()
+    }
+
+    func computeSpeckleColor(_ speckle: Speckle) -> RGBColor {
+        switch interpolationOption {
+        case .rgb: return speckle.previousColor.lerpWithRGB(to: speckle.targetColor, percent: speckle.transitionProgress)
+        case .xyz: return speckle.previousColor.lerpWithXYZ(to: speckle.targetColor, percent: speckle.transitionProgress)
+        case .lab: return speckle.previousColor.lerpWithLAB(to: speckle.targetColor, percent: speckle.transitionProgress)
+        case .lch: return speckle.previousColor.lerpWithLCH(to: speckle.targetColor, percent: speckle.transitionProgress)
+        }
     }
 }
