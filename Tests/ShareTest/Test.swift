@@ -106,13 +106,13 @@ class ColorConversionTests: XCTestCase {
             output.append("[*] test case \(idx)")
 
             let input = ColorfulX.RGBColor(r: color.x, g: color.y, b: color.z)
-            output.append("  > input:    r: \(color.x), g: \(color.y), b: \(color.z)")
+            output.append("  > input:    r: \(color.x.pretty), g: \(color.y.pretty), b: \(color.z.pretty)")
 
             let mXYZ = convertFromRGB2XYZ(color)
             let eXYZ = input.xyz
             output.append("  === RGB to XYZ ===")
-            output.append("  > expect:   x: \(eXYZ.x), y: \(eXYZ.y), z: \(eXYZ.z)")
-            output.append("  > shader:   x: \(mXYZ.x), y: \(mXYZ.y), z: \(mXYZ.z)")
+            output.append("  > expect:   x: \(eXYZ.x.pretty), y: \(eXYZ.y.pretty), z: \(eXYZ.z.pretty)")
+            output.append("  > shader:   x: \(mXYZ.x.pretty), y: \(mXYZ.y.pretty), z: \(mXYZ.z.pretty)")
 
             XCTAssertEqual(mXYZ.x, eXYZ.x, accuracy: 1)
             XCTAssertEqual(mXYZ.y, eXYZ.y, accuracy: 1)
@@ -121,8 +121,8 @@ class ColorConversionTests: XCTestCase {
             let mLAB = convertFromXYZ2LAB(mXYZ)
             let eLAB = input.lab
             output.append("  === XYZ to LAB ===")
-            output.append("  > expect:   l: \(eLAB.l), a: \(eLAB.a), b: \(eLAB.b)")
-            output.append("  > shader:   l: \(mLAB.x), a: \(mLAB.y), b: \(mLAB.z)")
+            output.append("  > expect:   l: \(eLAB.l.pretty), a: \(eLAB.a.pretty), b: \(eLAB.b.pretty)")
+            output.append("  > shader:   l: \(mLAB.x.pretty), a: \(mLAB.y.pretty), b: \(mLAB.z.pretty)")
 
             XCTAssertEqual(mLAB.x, eLAB.l, accuracy: 1)
             XCTAssertEqual(mLAB.y, eLAB.a, accuracy: 1)
@@ -131,8 +131,8 @@ class ColorConversionTests: XCTestCase {
             let mLCH = convertFromLAB2LCH(mLAB)
             let eLCH = input.lch
             output.append("  === LAB to LCH ===")
-            output.append("  > expect:   l: \(eLCH.l), c: \(eLCH.c), h: \(eLCH.h)")
-            output.append("  > shader:   l: \(mLCH.x), c: \(mLCH.y), h: \(mLCH.z)")
+            output.append("  > expect:   l: \(eLCH.l.pretty), c: \(eLCH.c.pretty), h: \(eLCH.h.pretty)")
+            output.append("  > shader:   l: \(mLCH.x.pretty), c: \(mLCH.y.pretty), h: \(mLCH.z.pretty)")
 
             XCTAssertEqual(mLCH.x, eLCH.l, accuracy: 1)
             XCTAssertEqual(mLCH.y, eLCH.c, accuracy: 1)
@@ -140,14 +140,48 @@ class ColorConversionTests: XCTestCase {
 
             let dLCH = convertFromRGB2LCH(color)
             output.append("  === RGB to LCH ===")
-            output.append("  > expect:   l: \(eLCH.l), c: \(eLCH.c), h: \(eLCH.h)")
-            output.append("  > direct:   l: \(dLCH.x), c: \(dLCH.y), h: \(dLCH.z)")
+            output.append("  > expect:   l: \(eLCH.l.pretty), c: \(eLCH.c.pretty), h: \(eLCH.h.pretty)")
+            output.append("  > direct:   l: \(dLCH.x.pretty), c: \(dLCH.y.pretty), h: \(dLCH.z.pretty)")
 
             XCTAssertEqual(dLCH.x, eLCH.l, accuracy: 1)
             XCTAssertEqual(dLCH.y, eLCH.c, accuracy: 1)
             XCTAssertEqual(dLCH.z, eLCH.h, accuracy: 1)
+            
+            // now convert back
+            let mLAB2 = convertFromLCH2LAB(mLCH)
+            output.append("  === LCH to LAB ===")
+            output.append("  > expect:   l: \(eLAB.l.pretty), a: \(eLAB.a.pretty), b: \(eLAB.b.pretty)")
+            output.append("  > shader:   l: \(mLAB2.x.pretty), a: \(mLAB2.y.pretty), b: \(mLAB2.z.pretty)")
+            
+            XCTAssertEqual(mLAB2.x, eLAB.l, accuracy: 1)
+            XCTAssertEqual(mLAB2.y, eLAB.a, accuracy: 1)
+            XCTAssertEqual(mLAB2.z, eLAB.b, accuracy: 1)
+            
+            let mXYZ2 = convertFromLAB2XYZ(mLAB2)
+            output.append("  === LAB to XYZ ===")
+            output.append("  > expect:   x: \(eXYZ.x.pretty), y: \(eXYZ.y.pretty), z: \(eXYZ.z.pretty)")
+            output.append("  > shader:   x: \(mXYZ2.x.pretty), y: \(mXYZ2.y.pretty), z: \(mXYZ2.z.pretty)")
+            
+            XCTAssertEqual(mXYZ2.x, eXYZ.x, accuracy: 1)
+            XCTAssertEqual(mXYZ2.y, eXYZ.y, accuracy: 1)
+            XCTAssertEqual(mXYZ2.z, eXYZ.z, accuracy: 1)
+            
+            let mRGB = convertFromXYZ2RGB(mXYZ2)
+            output.append("  === XYZ to RGB ===")
+            output.append("  > expect:   r: \(color.x.pretty), g: \(color.y.pretty), b: \(color.z.pretty)")
+            output.append("  > shader:   r: \(mRGB.x.pretty), g: \(mRGB.y.pretty), b: \(mRGB.z.pretty)")
+            
+            XCTAssertEqual(mRGB.x, color.x, accuracy: 0.01)
+            XCTAssertEqual(mRGB.y, color.y, accuracy: 0.01)
+            XCTAssertEqual(mRGB.z, color.z, accuracy: 0.01)
 
             print(output.joined(separator: "\n"))
         }
+    }
+}
+
+extension Float {
+    var pretty: String {
+        String(format: "%.5f", self)
     }
 }
