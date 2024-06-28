@@ -22,10 +22,12 @@ open class MulticolorGradientView: MetalView {
 
     public enum InterpolationOption: String, CaseIterable, Codable {
         case lch = "gradientWithLCH"
+        case lab = "gradientWithLAB"
+        case xyz = "gradientWithXYZ"
         case rgb = "gradientWithRGB"
     }
 
-    public init(interpolationOption: InterpolationOption = .rgb) {
+    public init(interpolationOption: InterpolationOption = .lab) {
         super.init()
 
         let device = metalDevice

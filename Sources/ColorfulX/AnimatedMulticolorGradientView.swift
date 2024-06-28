@@ -26,7 +26,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var transitionDuration: TimeInterval = 5
     public var frameLimit: Int = 0
 
-    override public init(interpolationOption: InterpolationOption = .rgb) {
+    override public init(interpolationOption: InterpolationOption = .lab) {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
 
         super.init(interpolationOption: interpolationOption)

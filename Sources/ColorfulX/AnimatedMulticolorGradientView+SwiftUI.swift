@@ -25,7 +25,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         transitionDuration: Binding<TimeInterval> = .constant(3.25),
         isPaused: Binding<Bool> = .constant(false),
         frameLimit: Int = 0,
-        interpolationOption: MulticolorGradientView.InterpolationOption = .rgb
+        interpolationOption: MulticolorGradientView.InterpolationOption = .lab
     ) {
         _color = color
         _speed = speed

@@ -132,6 +132,20 @@ kernel void computeColorFromLABtoLCH(device Color* input [[buffer(0)]],
     output[id].color = lch;
 }
 
+float3 RGBToLAB(float3 rgb) {
+    float3 xyz = RGBToXYZ(rgb);
+    float3 lab = XYZToLAB(xyz);
+    return lab;
+}
+
+kernel void computeColorFromRGBtoLAB(device Color* input [[buffer(0)]],
+                                     device Color* output [[buffer(1)]],
+                                     uint id [[thread_position_in_grid]]) {
+    float3 rgb = input[id].color;
+    float3 lab = RGBToLAB(rgb);
+    output[id].color = lab;
+}
+
 float3 RGBToLCH(float3 rgb) {
     float3 xyz = RGBToXYZ(rgb);
     float3 lab = XYZToLAB(xyz);
@@ -261,6 +275,20 @@ kernel void computeColorFromLCHtoRGB(device Color* input [[buffer(0)]],
     output[id].color = rgb;
 }
 
+float3 LABToRGB(float3 lab) {
+    float3 xyz = LABToXYZ(lab);
+    float3 rgb = XYZToRGB(xyz);
+    return rgb;
+}
+
+kernel void computeColorFromLABtoRGB(device Color* input [[buffer(0)]],
+                                     device Color* output [[buffer(1)]],
+                                     uint id [[thread_position_in_grid]]) {
+    float3 lab = input[id].color;
+    float3 rgb = LABToRGB(lab);
+    output[id].color = rgb;
+}
+
 kernel void gradientWithRGB(texture2d<float, access::write> output [[texture(4)]],
                      constant Uniforms& uniforms [[buffer(0)]],
                      uint2 gid [[thread_position_in_grid]])
@@ -290,6 +318,78 @@ kernel void gradientWithRGB(texture2d<float, access::write> output [[texture(4)]
         float factor = contribution[i] * inverseContribution;
         col += uniforms.colors[i] * factor;
     }
+
+    float4 color = float4(col, 1.0);
+    output.write(color, gid);
+}
+
+kernel void gradientWithXYZ(texture2d<float, access::write> output [[texture(4)]],
+                     constant Uniforms& uniforms [[buffer(0)]],
+                     uint2 gid [[thread_position_in_grid]])
+{
+    int width = output.get_width();
+    int height = output.get_height();
+    float2 noise = hash23(float3(float2(gid) / float2(width, width), 0));
+    float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
+    
+    float totalContribution = 0.0;
+    float contribution[8];
+
+    for (int i = 0; i < uniforms.pointCount; i++)
+    {
+        float2 pos = uniforms.points[i] * float2(1.0, float(height) / float(width));
+        pos = uv - pos;
+        float dist = length(pos);
+        float c = 1.0 / (uniforms.bias + pow(dist, uniforms.power));
+        contribution[i] = c;
+        totalContribution += c;
+    }
+    
+    float3 col = float3(0, 0, 0);
+    float inverseContribution = 1.0 / totalContribution;
+    for (int i = 0; i < uniforms.pointCount; i++)
+    {
+        float factor = contribution[i] * inverseContribution;
+        col += RGBToXYZ(uniforms.colors[i]) * factor;
+    }
+
+    float4 color = float4(XYZToRGB(col), 1.0);
+    output.write(color, gid);
+}
+
+kernel void gradientWithLAB(texture2d<float, access::write> output [[texture(4)]],
+                     constant Uniforms& uniforms [[buffer(0)]],
+                     uint2 gid [[thread_position_in_grid]])
+{
+    int width = output.get_width();
+    int height = output.get_height();
+    float2 noise = hash23(float3(float2(gid) / float2(width, width), 0));
+    float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
+    
+    float totalContribution = 0.0;
+    float contribution[8];
+
+    for (int i = 0; i < uniforms.pointCount; i++)
+    {
+        float2 pos = uniforms.points[i] * float2(1.0, float(height) / float(width));
+        pos = uv - pos;
+        float dist = length(pos);
+        float c = 1.0 / (uniforms.bias + pow(dist, uniforms.power));
+        contribution[i] = c;
+        totalContribution += c;
+    }
+    
+    // normalize the contribution for k average
+    float3 col = float3(0, 0, 0);
+    float inverseContribution = 1.0 / totalContribution;
+    for (int i = 0; i < uniforms.pointCount; i++)
+    {
+        float factor = contribution[i] * inverseContribution;
+        col += RGBToLAB(uniforms.colors[i]) * factor;
+    }
+    
+    // now back to rgb
+    col = LABToRGB(col);
 
     float4 color = float4(col, 1.0);
     output.write(color, gid);

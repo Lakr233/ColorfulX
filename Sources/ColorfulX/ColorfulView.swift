@@ -27,7 +27,7 @@ public struct ColorfulView: View {
         noise: Binding<Double> = .constant(0),
         transitionInterval: Binding<TimeInterval> = .constant(5),
         frameLimit: Int = 0,
-        interpolationOption: MulticolorGradientView.InterpolationOption = .rgb
+        interpolationOption: MulticolorGradientView.InterpolationOption = .lab
     ) {
         _color = color
         _speed = speed
