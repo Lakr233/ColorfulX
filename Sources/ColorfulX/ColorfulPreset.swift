@@ -28,6 +28,8 @@ public enum ColorfulPreset: String, CaseIterable {
 
     case appleIntelligence
 
+    case colorful
+
     public var colors: [Color] {
         switch self {
         case .sunrise: return [make(186, 143, 181), make(231, 157, 175), make(248, 181, 169), make(254, 227, 169)]
@@ -48,6 +50,7 @@ public enum ColorfulPreset: String, CaseIterable {
         case .neon: return [make(22, 4, 74), make(240, 54, 248), make(79, 216, 248), make(74, 0, 217)]
         case .aurora: return [make(0, 209, 172), make(0, 150, 150), make(4, 76, 112), make(23, 38, 69)]
         case .appleIntelligence: return [make(239, 176, 76), make(233, 128, 86), make(234, 75, 107), make(230, 97, 165), make(223, 138, 233), make(192, 160, 245), make(100, 181, 245), make(126, 201, 238)]
+        case .colorful: return [#colorLiteral(red: 0.9586862922, green: 0.660125792, blue: 0.8447988033, alpha: 1), #colorLiteral(red: 0.8714533448, green: 0.723166883, blue: 0.9342088699, alpha: 1), #colorLiteral(red: 0.7458761334, green: 0.7851135731, blue: 0.9899476171, alpha: 1), #colorLiteral(red: 0.4398113191, green: 0.8953480721, blue: 0.9796616435, alpha: 1), #colorLiteral(red: 0.3484552801, green: 0.933657825, blue: 0.9058339596, alpha: 1), #colorLiteral(red: 0.5567936897, green: 0.9780793786, blue: 0.6893508434, alpha: 1)].map { .init($0) }
         }
     }
 
