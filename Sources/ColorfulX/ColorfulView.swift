@@ -12,7 +12,7 @@ public struct ColorfulView: View {
     @Binding var speed: Double
     @Binding var bias: Double
     @Binding var noise: Double
-    @Binding var transitionInterval: TimeInterval
+    @Binding var transitionSpeed: Double
 
     @State var isPaused: Bool = false
     @Environment(\.scenePhase) var scenePhase
@@ -25,7 +25,7 @@ public struct ColorfulView: View {
         speed: Binding<Double> = .constant(1.0),
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
-        transitionInterval: Binding<TimeInterval> = .constant(5),
+        transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Int = 0,
         interpolationOption: MulticolorGradientView.InterpolationOption = .lab
     ) {
@@ -33,7 +33,7 @@ public struct ColorfulView: View {
         _speed = speed
         _bias = bias
         _noise = noise
-        _transitionInterval = transitionInterval
+        _transitionSpeed = transitionSpeed
         self.frameLimit = frameLimit
         self.interpolationOption = interpolationOption
     }
@@ -46,7 +46,7 @@ public struct ColorfulView: View {
             speed: $speed,
             bias: $bias,
             noise: $noise,
-            transitionDuration: $transitionInterval,
+            transitionSpeed: $transitionSpeed,
             isPaused: $isPaused,
             frameLimit: frameLimit,
             interpolationOption: interpolationOption

@@ -14,7 +14,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var speed: Double
     @Binding var bias: Double
     @Binding var noise: Double
-    @Binding var transitionDuration: TimeInterval
+    @Binding var transitionSpeed: Double
     @Binding var isPaused: Bool
 
     public init(
@@ -22,7 +22,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         speed: Binding<Double> = .constant(1),
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
-        transitionDuration: Binding<TimeInterval> = .constant(3.25),
+        transitionSpeed: Binding<Double> = .constant(3.25),
         isPaused: Binding<Bool> = .constant(false),
         frameLimit: Int = 0,
         interpolationOption: MulticolorGradientView.InterpolationOption = .lab
@@ -31,7 +31,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         _speed = speed
         _bias = bias
         _noise = noise
-        _transitionDuration = transitionDuration
+        _transitionSpeed = transitionSpeed
         _isPaused = isPaused
 
         view = AnimatedMulticolorGradientView(interpolationOption: interpolationOption)
@@ -46,7 +46,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         public func makeUIView(context _: Context) -> AnimatedMulticolorGradientView {
             view.setColors(color, interpolationEnabled: false)
             view.speed = speed
-            view.transitionDuration = transitionDuration
+            view.transitionSpeed = transitionSpeed
             view.bias = bias
             view.noise = noise
             view.isPaused = isPaused
@@ -54,11 +54,11 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         }
 
         public func updateUIView(_ uiView: AnimatedMulticolorGradientView, context _: Context) {
-            uiView.setColors(color, interpolationEnabled: transitionDuration > 0)
+            uiView.setColors(color, interpolationEnabled: transitionSpeed > 0)
             uiView.speed = speed
             uiView.bias = bias
             uiView.noise = noise
-            uiView.transitionDuration = transitionDuration
+            uiView.transitionSpeed = transitionSpeed
             uiView.isPaused = isPaused
         }
     }
@@ -70,18 +70,18 @@ public struct AnimatedMulticolorGradientViewRepresentable {
             public func makeNSView(context _: Context) -> AnimatedMulticolorGradientView {
                 view.setColors(color, interpolationEnabled: false)
                 view.speed = speed
-                view.transitionDuration = transitionDuration
+                view.transitionSpeed = transitionSpeed
                 view.bias = bias
                 view.noise = noise
                 return view
             }
 
             public func updateNSView(_ nsView: AnimatedMulticolorGradientView, context _: Context) {
-                nsView.setColors(color, interpolationEnabled: transitionDuration > 0)
+                nsView.setColors(color, interpolationEnabled: transitionSpeed > 0)
                 nsView.speed = speed
                 nsView.bias = bias
                 nsView.noise = noise
-                nsView.transitionDuration = transitionDuration
+                nsView.transitionSpeed = transitionSpeed
             }
         }
     #else

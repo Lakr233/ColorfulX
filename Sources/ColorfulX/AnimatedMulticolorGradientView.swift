@@ -23,7 +23,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var speed: Double = 1.0
     public var bias: Double = 0.01
     public var noise: Double = 0
-    public var transitionDuration: TimeInterval = 5
+    public var transitionSpeed: Double = 1
     public var frameLimit: Int = 0
 
     override public init(interpolationOption: InterpolationOption = .lab) {
@@ -79,7 +79,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
             read.enabled = true
             read.targetColor = color
             read.previousColor = interpolationEnabled ? currentColor : color
-            read.transitionProgress = interpolationEnabled ? 0 : 1
+            read.transitionProgress.setCurrent(interpolationEnabled ? 0 : 1, 0)
             colorElements[idx] = read
         }
     }
@@ -99,8 +99,8 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
             var inplaceEdit = colorElements[idx]
             defer { colorElements[idx] = inplaceEdit }
 
-            if inplaceEdit.transitionProgress < 1 {
-                inplaceEdit.transitionProgress += deltaTime / transitionDuration
+            if inplaceEdit.transitionProgress.context.currentPos < 1 {
+                inplaceEdit.transitionProgress.update(withDeltaTime: deltaTime * transitionSpeed)
             }
             if moveDelta > 0 {
                 inplaceEdit.position.update(withDeltaTime: moveDelta)
@@ -152,10 +152,22 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     func computeSpeckleColor(_ speckle: Speckle) -> RGBColor {
         switch interpolationOption {
-        case .rgb: return speckle.previousColor.lerpWithRGB(to: speckle.targetColor, percent: speckle.transitionProgress)
-        case .xyz: return speckle.previousColor.lerpWithXYZ(to: speckle.targetColor, percent: speckle.transitionProgress)
-        case .lab: return speckle.previousColor.lerpWithLAB(to: speckle.targetColor, percent: speckle.transitionProgress)
-        case .lch: return speckle.previousColor.lerpWithLCH(to: speckle.targetColor, percent: speckle.transitionProgress)
+        case .rgb: return speckle.previousColor.lerpWithRGB(
+                to: speckle.targetColor,
+                percent: speckle.transitionProgress.context.currentPos
+            )
+        case .xyz: return speckle.previousColor.lerpWithXYZ(
+                to: speckle.targetColor,
+                percent: speckle.transitionProgress.context.currentPos
+            )
+        case .lab: return speckle.previousColor.lerpWithLAB(
+                to: speckle.targetColor,
+                percent: speckle.transitionProgress.context.currentPos
+            )
+        case .lch: return speckle.previousColor.lerpWithLCH(
+                to: speckle.targetColor,
+                percent: speckle.transitionProgress.context.currentPos
+            )
         }
     }
 }

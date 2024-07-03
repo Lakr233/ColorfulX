@@ -14,7 +14,7 @@ public extension AnimatedMulticolorGradientView {
 
         public var targetColor: RGBColor
         public var previousColor: RGBColor
-        public var transitionProgress: Double
+        public var transitionProgress: SpringInterpolation
         public var position: SpringInterpolation2D
 
         public init(
@@ -27,7 +27,14 @@ public extension AnimatedMulticolorGradientView {
             self.enabled = enabled
             self.targetColor = targetColor
             self.previousColor = previousColor
-            self.transitionProgress = transitionProgress
+            self.transitionProgress = .init(
+                config: .init(angularFrequency: 0.5, dampingRatio: 1.0),
+                context: .init(
+                    currentPos: transitionProgress,
+                    currentVel: 0,
+                    targetPos: transitionProgress
+                )
+            )
             self.position = position
         }
     }

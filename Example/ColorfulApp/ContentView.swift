@@ -27,7 +27,7 @@ struct ContentView: View {
                     speed: $speed,
                     bias: $bias,
                     noise: $noise,
-                    transitionInterval: $duration,
+                    transitionSpeed: $duration,
                     interpolationOption: interpolationOption
                 )
                 .ignoresSafeArea()
@@ -130,9 +130,9 @@ struct ContentView: View {
     @ViewBuilder
     var transitionPicker: some View {
         HStack {
-            Text("Transition")
+            Text("Transition Speed")
             Spacer()
-            Text("\(duration, specifier: "%.2f")s")
+            Text("\(duration, specifier: "%.2f")")
         }
         #if !os(tvOS)
             Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
