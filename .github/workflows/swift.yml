@@ -16,5 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Run tests
+    - name: Run Test Build
+      run: ./Scripts/test.build.sh
+    - name: Run Tests
       run: pushd Example && xcodebuild test -workspace ColorfulApp.xcworkspace -scheme ShaderTest && popd
