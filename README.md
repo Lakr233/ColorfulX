@@ -71,14 +71,14 @@ Parameters to control the animation are follow:
 @Binding var colors: [Color]
 @Binding var speed: Double
 @Binding var noise: Double
-@Binding var transitionInterval: TimeInterval
+@Binding var transitionSpeed: Double
 
 ColorfulView(
     color: $colors,
     speed: $speed,
     bias: $bias,
     noise: $noise,
-    transitionInterval: $duration,
+    transitionSpeed: $transitionSpeed,
     interpolationOption: .lch
 )
 ```
