@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import ColorVector
 
 open class MulticolorGradientView: MetalView {
     public var parameters: Parameters = .init() {
@@ -20,23 +21,15 @@ open class MulticolorGradientView: MetalView {
     public var currentTexture: MTLTexture? { currentDrawable?.texture }
     public var captureImage: CGImage? { currentTexture?.capture() }
 
-    public enum InterpolationOption: String, CaseIterable, Codable {
-        case lch = "gradientWithLCH"
-        case lab = "gradientWithLAB"
-        case xyz = "gradientWithXYZ"
-        case rgb = "gradientWithRGB"
-    }
-
-    public let interpolationOption: InterpolationOption
-
-    public init(interpolationOption: InterpolationOption = .lab) {
-        self.interpolationOption = interpolationOption
+    public let colorSpace: ColorSpace
+    public init(colorSpace: ColorSpace = .lab) {
+        self.colorSpace = colorSpace
 
         super.init()
 
         let device = metalDevice
         guard let library = try? device.createColorfulLibrary(),
-              let computeProgram = library.makeFunction(name: interpolationOption.rawValue),
+              let computeProgram = library.makeFunction(name: colorSpace.metalRenderFunctionName),
               let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
         else { fatalError("Metal program filed to compile") }
         self.computePipelineState = computePipelineState
@@ -176,5 +169,16 @@ private extension MTLTexture {
             shouldInterpolate: true,
             intent: CGColorRenderingIntent.defaultIntent
         )
+    }
+}
+
+extension ColorSpace {
+    var metalRenderFunctionName: String {
+        switch self {
+            case .lch: return "gradientWithLCH"
+            case .lab: return "gradientWithLAB"
+            case .xyz: return "gradientWithXYZ"
+            case .rgb: return "gradientWithRGB"
+        }
     }
 }

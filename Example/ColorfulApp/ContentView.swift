@@ -17,23 +17,23 @@ struct ContentView: View {
     @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
-    @AppStorage("interpolationOption") var interpolationOption: MulticolorGradientView.InterpolationOption = .lab
+    @AppStorage("ColorSpace") var colorSpace: ColorSpace = .lab
 
     var body: some View {
         ZStack {
-            ForEach([interpolationOption.rawValue], id: \.self) { _ in
+            ForEach([colorSpace.rawValue], id: \.self) { _ in
                 ColorfulView(
                     color: $colors,
                     speed: $speed,
                     bias: $bias,
                     noise: $noise,
                     transitionSpeed: $duration,
-                    interpolationOption: interpolationOption
+                    colorSpace: colorSpace
                 )
                 .ignoresSafeArea()
                 .transition(.opacity)
             }
-            .animation(.interactiveSpring, value: interpolationOption.rawValue)
+            .animation(.interactiveSpring, value: colorSpace.rawValue)
             VStack {
                 controlPanel
                 #if os(tvOS)
@@ -142,8 +142,8 @@ struct ContentView: View {
 
     @ViewBuilder
     var interpolationPicker: some View {
-        Picker("Interpolation Program", selection: $interpolationOption) {
-            ForEach(MulticolorGradientView.InterpolationOption.allCases, id: \.self) { option in
+        Picker("Interpolation Program", selection: $colorSpace) {
+            ForEach(ColorSpace.allCases, id: \.self) { option in
                 Text(option.rawValue).tag(option)
             }
         }

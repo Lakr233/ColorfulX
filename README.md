@@ -79,7 +79,7 @@ ColorfulView(
     bias: $bias,
     noise: $noise,
     transitionSpeed: $transitionSpeed,
-    interpolationOption: .lch
+    colorSpace: .lch
 )
 ```
 
@@ -113,7 +113,7 @@ For animated colors with default animation, use the following code:
 import MetalKit
 import ColorfulX
 
-let view = AnimatedMulticolorGradientView(interpolationOption: .lch)
+let view = AnimatedMulticolorGradientView(colorSpace: .lch)
 view.setColors(color, interpolationEnabled: false)
 view.speed = speed
 view.transitionDuration = transitionDuration

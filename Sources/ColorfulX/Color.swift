@@ -8,6 +8,8 @@
 import Foundation
 import ColorVector
 
+public typealias ColorSpace = ColorVector.Space
+
 #if canImport(UIKit)
     import UIKit
 
