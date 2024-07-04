@@ -41,6 +41,7 @@ import MetalKit
             metalLayer.device = metalDevice
             metalLayer.pixelFormat = .bgra8Unorm
             metalLayer.framebufferOnly = false
+            metalLayer.isOpaque = false
             self.metalLayer = metalLayer
 
             super.init(frame: .zero)
@@ -222,6 +223,7 @@ import MetalKit
                 metalLayer.device = metalDevice
                 metalLayer.pixelFormat = .bgra8Unorm
                 metalLayer.framebufferOnly = false
+                metalLayer.isOpaque = false
                 self.metalLayer = metalLayer
 
                 super.init(frame: .zero)
