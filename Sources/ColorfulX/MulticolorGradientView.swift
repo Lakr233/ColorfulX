@@ -53,10 +53,10 @@ open class MulticolorGradientView: MetalView {
 
         defer { needsRender = false }
 
-        var shaderPoints: [(simd_float2, simd_float3)] = Array(
+        var shaderPoints: [(simd_float2, simd_float4)] = Array(
             repeating: (
                 simd_float2(0.0, 0.0),
-                simd_float3(0.0, 0.0, 0.0)
+                simd_float4(0.0, 0.0, 0.0, 0.0)
             ),
             count: 8
         )
@@ -67,7 +67,7 @@ open class MulticolorGradientView: MetalView {
             let point = parms.points[i]
             shaderPoints[i] = (
                 simd_float2(Float(point.position.x), Float(point.position.y)),
-                simd_float3(Float(point.color.rgb.r), Float(point.color.rgb.g), Float(point.color.rgb.b))
+                simd_float4(point.color.v)
             )
         }
 

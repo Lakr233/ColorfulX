@@ -23,12 +23,12 @@ struct Uniforms {
     let point6: simd_float2
     let point7: simd_float2
 
-    let color0: simd_float3
-    let color1: simd_float3
-    let color2: simd_float3
-    let color3: simd_float3
-    let color4: simd_float3
-    let color5: simd_float3
-    let color6: simd_float3
-    let color7: simd_float3
+    let color0: simd_float4
+    let color1: simd_float4
+    let color2: simd_float4
+    let color3: simd_float4
+    let color4: simd_float4
+    let color5: simd_float4
+    let color6: simd_float4
+    let color7: simd_float4
 }

@@ -17,7 +17,7 @@ typedef struct {
     float power;
     float noise;
     float2 points[8];
-    float3 colors[8];
+    float4 colors[8];
 } Uniforms;
 
 typedef struct {
@@ -311,15 +311,14 @@ kernel void gradientWithRGB(texture2d<float, access::write> output [[texture(4)]
         totalContribution += c;
     }
     
-    float3 col = float3(0, 0, 0);
+    float4 color = float4(0, 0, 0, 0);
     float inverseContribution = 1.0 / totalContribution;
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float factor = contribution[i] * inverseContribution;
-        col += uniforms.colors[i] * factor;
+        color += uniforms.colors[i] * factor;
     }
 
-    float4 color = float4(col, 1.0);
     output.write(color, gid);
 }
 
@@ -345,15 +344,17 @@ kernel void gradientWithXYZ(texture2d<float, access::write> output [[texture(4)]
         totalContribution += c;
     }
     
-    float3 col = float3(0, 0, 0);
+    float4 col = float4(0, 0, 0, 0);
     float inverseContribution = 1.0 / totalContribution;
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float factor = contribution[i] * inverseContribution;
-        col += RGBToXYZ(uniforms.colors[i]) * factor;
+        float3 color_without_alpha = uniforms.colors[i].xyz;
+        col += float4(RGBToXYZ(color_without_alpha), uniforms.colors[i].w) * factor;
     }
 
-    float4 color = float4(XYZToRGB(col), 1.0);
+    float3 color_with_out_alpha = XYZToRGB(col.xyz);
+    float4 color = float4(color_with_out_alpha, col.w);
     output.write(color, gid);
 }
 
@@ -379,19 +380,17 @@ kernel void gradientWithLAB(texture2d<float, access::write> output [[texture(4)]
         totalContribution += c;
     }
     
-    // normalize the contribution for k average
-    float3 col = float3(0, 0, 0);
+    float4 col = float4(0, 0, 0, 0);
     float inverseContribution = 1.0 / totalContribution;
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float factor = contribution[i] * inverseContribution;
-        col += RGBToLAB(uniforms.colors[i]) * factor;
+        float3 color_without_alpha = uniforms.colors[i].xyz;
+        col += float4(RGBToLAB(color_without_alpha), uniforms.colors[i].w) * factor;
     }
-    
-    // now back to rgb
-    col = LABToRGB(col);
 
-    float4 color = float4(col, 1.0);
+    float3 color_with_out_alpha = LABToRGB(col.xyz);
+    float4 color = float4(color_with_out_alpha, col.w);
     output.write(color, gid);
 }
 
@@ -417,24 +416,16 @@ kernel void gradientWithLCH(texture2d<float, access::write> output [[texture(4)]
         totalContribution += c;
     }
     
-    // normalize the contribution for k average
-    float3 col = float3(0, 0, 0);
+    float4 col = float4(0, 0, 0, 0);
     float inverseContribution = 1.0 / totalContribution;
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float factor = contribution[i] * inverseContribution;
-        col += RGBToLCH(uniforms.colors[i]) * factor;
-        /*
-         example of how to do with LCH color
-         average of   >          5         6         4         2         5 > sum = 22
-         their factor >    0.1       0.2       0.2       0.1       0.5     > sum = 1
-         average      >    0.1 * 5 + 0.2 * 6 + 0.2 * 4 + 0.1 * 2 + 0.5 * 5 > avg = 5.2
-         */
+        float3 color_without_alpha = uniforms.colors[i].xyz;
+        col += float4(RGBToLCH(color_without_alpha), uniforms.colors[i].w) * factor;
     }
-    
-    // now back to rgb
-    col = LCHToRGB(col);
 
-    float4 color = float4(col, 1.0);
+    float3 color_with_out_alpha = LCHToRGB(col.xyz);
+    float4 color = float4(color_with_out_alpha, col.w);
     output.write(color, gid);
 }
