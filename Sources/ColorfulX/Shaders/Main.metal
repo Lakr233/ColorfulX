@@ -236,8 +236,7 @@ kernel void SuperBlender(texture2d<float, access::write> output [[texture(4)]],
     for (int i = 0; i < uniforms.pointCount; i++)
     {
         float factor = contribution[i] * inverseContribution;
-        float3 color_without_alpha = uniforms.colors[i].xyz;
-        col += float4(color_without_alpha, uniforms.colors[i].w) * factor;
+        col += uniforms.colors[i] * factor;
     }
 
     float3 color_with_out_alpha = LABToRGB(col.xyz);
