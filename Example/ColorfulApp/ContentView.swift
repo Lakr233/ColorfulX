@@ -31,7 +31,6 @@ struct ContentView: View {
                     colorSpace: colorSpace
                 )
                 .ignoresSafeArea()
-                .transition(.opacity)
             }
             .animation(.interactiveSpring, value: colorSpace.rawValue)
             VStack {

@@ -26,6 +26,7 @@ public typealias ColorSpace = ColorVector.Space
 
 extension ColorVector {
     init(_ color: ColorElement, usingSpace space: Space = .rgb) {
+        print("color: \(color)")
         let cgColor = color.cgColor
         let color = cgColor.converted(
             to: CGColorSpace(name: CGColorSpace.sRGB)!,

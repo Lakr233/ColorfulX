@@ -12,7 +12,6 @@ import SwiftUI
 struct ColorfulAppApp: App {
     init() {
         setenv("MTL_HUD_ENABLED", "1", 1)
-        DispatchQueue.global().async { leakTest() }
     }
 
     var body: some Scene {
@@ -24,19 +23,5 @@ struct ColorfulAppApp: App {
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
         #endif
-    }
-}
-
-func leakTest() {
-    while true {
-        var view: AnimatedMulticolorGradientView?
-        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-            view = AnimatedMulticolorGradientView(colorSpace: .lch)
-        })
-        usleep(500_000)
-        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-            _ = view
-        })
-        view = nil
     }
 }
