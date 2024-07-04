@@ -48,10 +48,10 @@ struct ContentView: View {
                 .foregroundStyle(.thinMaterial)
             #if os(macOS)
                 .font(.system(size: 8, weight: .semibold, design: .rounded))
+                .onTapGesture { controlPanelVisible.toggle() }
             #else
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
             #endif
-                .onTapGesture { controlPanelVisible.toggle() }
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding()
         }
