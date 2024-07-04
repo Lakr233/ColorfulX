@@ -16,7 +16,7 @@ platforms: [
     .macOS(.v11),
     .macCatalyst(.v14),
     .tvOS(.v14),
-    .visionOS(.v1), // supported from 2.1.0
+    .visionOS(.v1),
 ],
 ```
 
@@ -26,11 +26,11 @@ Add this package into your project.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "2.6.0"),
+    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "4.1.0"),
 ]
 ```
 
-For more detailed information, feel free to explore our example projects. We've provided various presets for your convenience. Each one is identifiable within the demo application. For instance, check out `ColorfulPreset` to find the name, and then use `.constant(preset.colors)` to implement it in `ColorfulView`.
+For more detailed information, feel free to explore our example projects. We've provided various presets for your convenience. Each one is identifiable within the demo application. For instance, check out `ColorfulPreset` to find the name, and then use `.constant(preset.colors)` to load it in `ColorfulView`.
 
 ### SwiftUI
 
