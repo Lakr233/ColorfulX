@@ -13,6 +13,7 @@ struct ColorfulAppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .background(.ultraThinMaterial)
         }
         #if os(macOS)
         .windowResizability(.contentSize)

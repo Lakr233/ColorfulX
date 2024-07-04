@@ -161,35 +161,11 @@ struct ContentView: View {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundStyle(.thickMaterial)
+                    .foregroundStyle(.ultraThinMaterial)
             )
             .padding(6)
         #if os(visionOS)
             .padding(32)
         #endif
-    }
-}
-
-struct ChessboardView: View {
-    let gridSize: CGFloat = 32
-
-    var body: some View {
-        GeometryReader { geometry in
-            let numberOfColumns = Int(geometry.size.width / gridSize)
-            let numberOfRows = Int(geometry.size.height / gridSize)
-
-            Canvas { context, _ in
-                for row in 0 ..< numberOfRows {
-                    for column in 0 ..< numberOfColumns {
-                        let x = CGFloat(column) * gridSize
-                        let y = CGFloat(row) * gridSize
-                        let rect = CGRect(x: x, y: y, width: gridSize, height: gridSize)
-                        context.fill(Path(rect), with: .color(.gray))
-                        context.stroke(Path(rect), with: .color(.black), lineWidth: 0.5)
-                    }
-                }
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height)
-        }
     }
 }

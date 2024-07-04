@@ -41,7 +41,7 @@ public extension ColorVector {
             Double(components[0] * 255),
             Double(components[1] * 255),
             Double(components[2] * 255),
-            Double(components[3] * 255)
+            Double(components[3])
         ), space: .rgb)
         if space == .rgb {
             self = rgbVector
