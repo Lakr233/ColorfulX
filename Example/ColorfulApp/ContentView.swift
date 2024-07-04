@@ -19,6 +19,8 @@ struct ContentView: View {
     @AppStorage("duration") var duration: TimeInterval = 3.5
     @AppStorage("ColorSpace") var colorSpace: ColorSpace = .lab
 
+    @State var controlPanelVisible: Bool = true
+
     var body: some View {
         ZStack {
             ForEach([colorSpace.rawValue], id: \.self) { _ in
@@ -35,6 +37,8 @@ struct ContentView: View {
             .animation(.interactiveSpring, value: colorSpace.rawValue)
             VStack {
                 controlPanel
+                    .opacity(controlPanelVisible ? 1 : 0)
+                    .animation(.spring, value: controlPanelVisible)
                 #if os(tvOS)
                     Button {
                         preset = ColorfulPreset.allCases.randomElement()!
@@ -51,6 +55,7 @@ struct ContentView: View {
             #else
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
             #endif
+                .onTapGesture { controlPanelVisible.toggle() }
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding()
         }

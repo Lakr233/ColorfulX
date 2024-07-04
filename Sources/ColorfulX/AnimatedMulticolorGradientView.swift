@@ -9,7 +9,6 @@ import ColorVector
 import MetalKit
 import SpringInterpolation
 
-private let COLOR_SLOT = 8
 private let SPRING_CONFIG = SpringInterpolation.Configuration(
     angularFrequency: 1.5,
     dampingRatio: 0.2
@@ -28,7 +27,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var frameLimit: Int = 0
 
     override public init(colorSpace: ColorSpace = .lab) {
-        colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: COLOR_SLOT)
+        colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
 
         super.init(colorSpace: colorSpace)
 
@@ -70,17 +69,15 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
         var colors = colors
+        if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
+
         if let targetSpace = colors.first?.space,
            targetSpace != colorSpace
-        {
-            colors = colors.map { $0.color(in: targetSpace) }
-        }
+        { colors = colors.map { $0.color(in: targetSpace) } }
 
-        for idx in 0 ..< COLOR_SLOT {
+        for idx in 0 ..< Uniforms.COLOR_SLOT {
             var read = colorElements[idx]
-            let color: ColorVector = colors.isEmpty
-                ? ColorVector(space: .rgb)
-                : colors[idx % colors.count]
+            let color: ColorVector = colors[idx % colors.count]
             guard read.targetColor != color else { continue }
             let interpolationEnabled = interpolationEnabled && read.enabled
             let currentColor = computeSpeckleColor(read)

@@ -10,10 +10,6 @@ import SwiftUI
 
 @main
 struct ColorfulAppApp: App {
-    init() {
-        setenv("MTL_HUD_ENABLED", "1", 1)
-    }
-
     var body: some Scene {
         WindowGroup {
             ContentView()

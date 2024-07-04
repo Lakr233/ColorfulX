@@ -10,14 +10,15 @@
 using namespace metal;
 
 #define M_PI 3.1415926535897932384626433832795
+#define COLOR_SOLT 8
 
 typedef struct {
     int32_t pointCount;
     float bias;
     float power;
     float noise;
-    float2 points[8];
-    float4 colors[8];
+    float2 points[COLOR_SOLT];
+    float4 colors[COLOR_SOLT];
 } Uniforms;
 
 typedef struct {
@@ -299,7 +300,7 @@ kernel void gradientWithRGB(texture2d<float, access::write> output [[texture(4)]
     float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
     
     float totalContribution = 0.0;
-    float contribution[8];
+    float contribution[COLOR_SOLT];
 
     for (int i = 0; i < uniforms.pointCount; i++)
     {
@@ -332,7 +333,7 @@ kernel void gradientWithXYZ(texture2d<float, access::write> output [[texture(4)]
     float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
     
     float totalContribution = 0.0;
-    float contribution[8];
+    float contribution[COLOR_SOLT];
 
     for (int i = 0; i < uniforms.pointCount; i++)
     {
@@ -368,7 +369,7 @@ kernel void gradientWithLAB(texture2d<float, access::write> output [[texture(4)]
     float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
     
     float totalContribution = 0.0;
-    float contribution[8];
+    float contribution[COLOR_SOLT];
 
     for (int i = 0; i < uniforms.pointCount; i++)
     {
@@ -404,7 +405,7 @@ kernel void gradientWithLCH(texture2d<float, access::write> output [[texture(4)]
     float2 uv = (float2(gid) + float2(sin(noise.x * 2 * M_PI_F), sin(noise.y * 2 * M_PI_F)) * uniforms.noise) / float2(width, width);
     
     float totalContribution = 0.0;
-    float contribution[8];
+    float contribution[COLOR_SOLT];
 
     for (int i = 0; i < uniforms.pointCount; i++)
     {

@@ -24,7 +24,7 @@ public typealias ColorSpace = ColorVector.Space
     #endif
 #endif
 
-extension ColorVector {
+public extension ColorVector {
     init(_ color: ColorElement, usingSpace space: Space = .rgb) {
         let cgColor = color.cgColor
         let color = cgColor.converted(
