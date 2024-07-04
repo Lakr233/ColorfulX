@@ -2,24 +2,9 @@
 
 ColorfulX is a high-performance library designed for creating vibrant, animated gradient views. It offers powerful functionality and preset options as an enhanced alternative to SwiftUI’s MeshGradientView.
 
-🥳 LCH and RGB color models are now supported, enabling smooth animated transitions and seamless color interpolation.
+🥳 LAB color models are now used, enabling smooth animated transitions and seamless color interpolation.
 
 ![Screenshot](./Example/Screenshot.png)
-
-## Use Case
-
-- [LennonMusic](https://github.com/zhcz/LennonMusic) iOS
-- [QR-Share-Pro](https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
-- [Reveil](https://github.com/Lessica/Reveil) iOS
-- [Troll Recorder](https://github.com/Lessica/TrollRecorder) iOS
-- [Misaka](https://github.com/straight-tamago/misaka) iOS + tvOS
-- [SimpleLiveTVOS](https://github.com/pcccccc/SimpleLiveTVOS) tvOS
-- [Vibefy](https://github.com/ZhangDo/NeteaseTVDemo) tvOS
-- [Dino](https://apps.apple.com/us/app/dino-%E7%A9%BA%E9%97%B4%E8%BE%93%E5%85%A5%E6%B3%95/id6477793173) xrOS
-- [BBackupp](https://github.com/Lakr233/BBackupp) macOS
-- [Mythic](https://github.com/MythicApp/Mythic) macOS
-
-Pull requests for use cases are welcome.
 
 ## Platform
 
@@ -78,8 +63,7 @@ ColorfulView(
     speed: $speed,
     bias: $bias,
     noise: $noise,
-    transitionSpeed: $transitionSpeed,
-    colorSpace: .lch
+    transitionSpeed: $transitionSpeed
 )
 ```
 
@@ -113,7 +97,7 @@ For animated colors with default animation, use the following code:
 import MetalKit
 import ColorfulX
 
-let view = AnimatedMulticolorGradientView(colorSpace: .lch)
+let view = AnimatedMulticolorGradientView()
 view.setColors(color, interpolationEnabled: false)
 view.speed = speed
 view.transitionDuration = transitionDuration

@@ -49,8 +49,7 @@ public struct ColorfulView: View {
             noise: $noise,
             transitionSpeed: $transitionSpeed,
             isPaused: $isPaused,
-            frameLimit: frameLimit,
-            colorSpace: colorSpace
+            frameLimit: frameLimit
         )
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {

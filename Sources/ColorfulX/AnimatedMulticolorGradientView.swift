@@ -26,10 +26,10 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public var transitionSpeed: Double = 1
     public var frameLimit: Int = 0
 
-    override public init(colorSpace: ColorSpace = .lab) {
+    override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
 
-        super.init(colorSpace: colorSpace)
+        super.init()
 
         var rand = randomLocationPair()
         for idx in 0 ..< colorElements.count {
@@ -70,10 +70,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
         var colors = colors
         if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
-
-        if let targetSpace = colors.first?.space,
-           targetSpace != colorSpace
-        { colors = colors.map { $0.color(in: targetSpace) } }
+        colors = colors.map { $0.color(in: .lab) }
 
         for idx in 0 ..< Uniforms.COLOR_SLOT {
             var read = colorElements[idx]
