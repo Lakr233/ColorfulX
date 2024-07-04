@@ -152,7 +152,7 @@ struct ContentView: View {
             Divider()
             transitionPicker
         }
-        .frame(width: 320)
+        .frame(width: 328)
         #if os(macOS)
             .font(.system(size: 12, weight: .semibold, design: .rounded))
         #else
@@ -161,7 +161,7 @@ struct ContentView: View {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .foregroundStyle(.ultraThinMaterial)
+                    .foregroundStyle(.regularMaterial)
             )
             .padding(6)
         #if os(visionOS)
