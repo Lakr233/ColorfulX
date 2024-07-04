@@ -74,15 +74,15 @@ open class MulticolorGradientView: MetalView {
             let point = parms.points[i]
             shaderPoints[i] = (
                 simd_float2(Float(point.position.x), Float(point.position.y)),
-                simd_float3(point.color.r, point.color.g, point.color.b)
+                simd_float3(Float(point.color.rgb.r), Float(point.color.rgb.g), Float(point.color.rgb.b))
             )
         }
 
         var uniforms = Uniforms(
             pointCount: simd_int1(parms.points.count),
-            bias: parms.bias,
-            power: parms.power,
-            noise: parms.noise,
+            bias: simd_float1(parms.bias),
+            power: simd_float1(parms.power),
+            noise: simd_float1(parms.noise),
             point0: shaderPoints[0].0,
             point1: shaderPoints[1].0,
             point2: shaderPoints[2].0,

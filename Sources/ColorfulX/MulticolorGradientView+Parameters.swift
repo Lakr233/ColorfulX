@@ -7,19 +7,20 @@
 
 import CoreGraphics
 import Foundation
+import ColorVector
 
 public extension MulticolorGradientView {
     struct Parameters: Equatable {
         public var points: [ColorStop]
-        public var bias: Float
-        public var power: Float
-        public var noise: Float
+        public var bias: Double
+        public var power: Double
+        public var noise: Double
 
         public init(
             points: [ColorStop] = [],
-            bias: Float = 0.01,
-            power: Float = 4,
-            noise: Float = 0
+            bias: Double = 0.01,
+            power: Double = 4,
+            noise: Double = 0
         ) {
             self.points = points
             self.bias = bias
@@ -31,10 +32,10 @@ public extension MulticolorGradientView {
 
 public extension MulticolorGradientView.Parameters {
     struct ColorStop: Equatable {
-        public let color: RGBColor
+        public let color: ColorVector
         public let position: CoordinateVec2D
 
-        public init(color: RGBColor, position: CoordinateVec2D) {
+        public init(color: ColorVector, position: CoordinateVec2D) {
             self.color = color
             self.position = position
         }

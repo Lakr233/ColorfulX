@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ColorVector
 
 public struct ColorfulView: View {
     @Binding var color: [Color]
@@ -41,7 +42,7 @@ public struct ColorfulView: View {
     public var body: some View {
         AnimatedMulticolorGradientViewRepresentable(
             color: .init(get: {
-                color.map { RGBColor(CoreColor($0)) }
+                color.map { ColorVector(ColorElement($0)) }
             }, set: { _ in }),
             speed: $speed,
             bias: $bias,

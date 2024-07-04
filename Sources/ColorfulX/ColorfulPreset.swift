@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ColorVector
 
 public enum ColorfulPreset: String, CaseIterable {
     case sunrise
@@ -62,7 +63,7 @@ public enum ColorfulPreset: String, CaseIterable {
     }
 
     private func make(_ r: Int, _ g: Int, _ b: Int, _ a: Int = 255) -> Color {
-        Color(CoreColor(
+        Color(ColorElement(
             red: Double(r) / 255,
             green: Double(g) / 255,
             blue: Double(b) / 255,

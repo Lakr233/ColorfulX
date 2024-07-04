@@ -14,11 +14,11 @@ class ColorConversionTests: XCTestCase {
         library = try! device.createColorfulLibrary()
     }
 
-    typealias ColorSIMD = SIMD3<Float>
+    typealias ColorSIMD = SIMD3<Double>
 
     private func computeColorWith(_ colorInput: ColorSIMD, program: MTLComputePipelineState) -> ColorSIMD {
         var colorSIMD = colorInput
-        let buffer = device.makeBuffer(bytes: &colorSIMD, length: MemoryLayout<SIMD3<Float>>.stride, options: [])!
+        let buffer = device.makeBuffer(bytes: &colorSIMD, length: MemoryLayout<SIMD3<Double>>.stride, options: [])!
         defer { buffer.setPurgeableState(.empty) }
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
@@ -57,8 +57,8 @@ class ColorConversionTests: XCTestCase {
         return computeColorWith(colorInput, program: computePipelineStateForFunctionRGB2LCH)
     }
 
-    private func convertFromRGB2XYZ(_ rgbColor: ColorSIMD) -> ColorSIMD {
-        computeColorWith(rgbColor, program: .computeColorFromRGBtoXYZ)
+    private func convertFromRGB2XYZ(_ ColorVector: ColorSIMD) -> ColorSIMD {
+        computeColorWith(ColorVector, program: .computeColorFromRGBtoXYZ)
     }
 
     private func convertFromXYZ2LAB(_ xyzColor: ColorSIMD) -> ColorSIMD {
@@ -69,8 +69,8 @@ class ColorConversionTests: XCTestCase {
         computeColorWith(labColor, program: .computeColorFromLABtoLCH)
     }
 
-    private func convertFromRGB2LCH(_ rgbColor: ColorSIMD) -> ColorSIMD {
-        computeColorWith(rgbColor, program: .computeColorFromRGBtoLCH)
+    private func convertFromRGB2LCH(_ ColorVector: ColorSIMD) -> ColorSIMD {
+        computeColorWith(ColorVector, program: .computeColorFromRGBtoLCH)
     }
 
     private func convertFromLCH2LAB(_ lchColor: ColorSIMD) -> ColorSIMD {
@@ -90,22 +90,22 @@ class ColorConversionTests: XCTestCase {
     }
 
     func testColorConversion() {
-        var colors = [SIMD3<Float>]()
+        var colors = [SIMD3<Double>]()
 
         for preset in ColorfulX.ColorfulPreset.allCases {
             let input = preset.colors
-                .map { RGBColor(CoreColor($0)) }
-                .map { SIMD3<Float>($0.r, $0.g, $0.b) }
+                .map { ColorVector(CoreColor($0)) }
+                .map { SIMD3<Double>($0.r, $0.g, $0.b) }
             colors.append(contentsOf: input)
         }
 
-        colors.insert(SIMD3<Float>(0.9529412, 0.9529412, 0.9529412), at: 0)
+        colors.insert(SIMD3<Double>(0.9529412, 0.9529412, 0.9529412), at: 0)
 
         for (idx, color) in colors.enumerated() {
             var output = [String]()
             output.append("[*] test case \(idx)")
 
-            let input = ColorfulX.RGBColor(r: color.x, g: color.y, b: color.z)
+            let input = ColorfulX.ColorVector(r: color.x, g: color.y, b: color.z)
             output.append("  > input:    r: \(color.x.pretty), g: \(color.y.pretty), b: \(color.z.pretty)")
 
             let mXYZ = convertFromRGB2XYZ(color)
@@ -180,7 +180,7 @@ class ColorConversionTests: XCTestCase {
     }
 }
 
-extension Float {
+extension Double {
     var pretty: String {
         String(format: "%.5f", self)
     }

@@ -7,6 +7,7 @@
 
 import MetalKit
 import SpringInterpolation
+import ColorVector
 
 private let COLOR_SLOT = 8
 private let SPRING_CONFIG = SpringInterpolation.Configuration(
@@ -67,11 +68,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         )
     }
 
-    public func setColors(_ colors: [RGBColor], interpolationEnabled: Bool = true) {
+    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
         for idx in 0 ..< COLOR_SLOT {
             var read = colorElements[idx]
-            let color: RGBColor = colors.isEmpty
-                ? RGBColor(r: 0.5, g: 0.5, b: 0.5)
+            let color: ColorVector = colors.isEmpty
+                ? ColorVector(space: .rgb)
                 : colors[idx % colors.count]
             guard read.targetColor != color else { continue }
             let interpolationEnabled = interpolationEnabled && read.enabled
@@ -126,8 +127,8 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
                         y: $0.position.y.context.currentPos
                     )
                 ) },
-            bias: Float(bias),
-            noise: Float(noise)
+            bias: bias,
+            noise: noise
         )
     }
 
@@ -150,24 +151,8 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         super.vsync()
     }
 
-    func computeSpeckleColor(_ speckle: Speckle) -> RGBColor {
-        switch interpolationOption {
-        case .rgb: return speckle.previousColor.lerpWithRGB(
-                to: speckle.targetColor,
-                percent: speckle.transitionProgress.context.currentPos
-            )
-        case .xyz: return speckle.previousColor.lerpWithXYZ(
-                to: speckle.targetColor,
-                percent: speckle.transitionProgress.context.currentPos
-            )
-        case .lab: return speckle.previousColor.lerpWithLAB(
-                to: speckle.targetColor,
-                percent: speckle.transitionProgress.context.currentPos
-            )
-        case .lch: return speckle.previousColor.lerpWithLCH(
-                to: speckle.targetColor,
-                percent: speckle.transitionProgress.context.currentPos
-            )
-        }
+    func computeSpeckleColor(_ speckle: Speckle) -> ColorVector {
+        let progress = speckle.transitionProgress.context.currentPos
+        return speckle.previousColor.lerp(to: speckle.targetColor, percent: progress)
     }
 }

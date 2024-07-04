@@ -14,14 +14,18 @@ let package = Package(
         .library(name: "ColorfulX", targets: ["ColorfulX"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/Lakr233/ColorVector.git", from: "1.0.3"),
         .package(url: "https://github.com/Lakr233/SpringInterpolation.git", from: "1.1.2"),
     ],
     targets: [
         .target(
             name: "ColorfulX",
-            dependencies: ["SpringInterpolation"],
+            dependencies: [
+                "ColorVector",
+                "SpringInterpolation",
+            ],
             resources: [
-                .process("Shaders/MulticolorGradientShader.metal"),
+                .process("Shaders/Main.metal"),
             ]
         ),
     ]

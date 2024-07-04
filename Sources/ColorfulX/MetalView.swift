@@ -114,7 +114,7 @@ import MetalKit
             // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max
             // native scaleFactor will case a performance issue
             // so we downscale the image to 1x
-            let scaleFactor: CGFloat = 1.0
+            let scaleFactor: CGDouble = 1.0
             metalLayer.frame = bounds
             var width = bounds.width * scaleFactor
             var height = bounds.height * scaleFactor

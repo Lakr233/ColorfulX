@@ -7,20 +7,21 @@
 
 import Foundation
 import SpringInterpolation
+import ColorVector
 
 public extension AnimatedMulticolorGradientView {
     struct Speckle {
         public var enabled: Bool
 
-        public var targetColor: RGBColor
-        public var previousColor: RGBColor
+        public var targetColor: ColorVector
+        public var previousColor: ColorVector
         public var transitionProgress: SpringInterpolation
         public var position: SpringInterpolation2D
 
         public init(
             enabled: Bool = false,
-            targetColor: RGBColor = .init(r: 0.5, g: 0.5, b: 0.5),
-            previousColor: RGBColor = .init(r: 0.5, g: 0.5, b: 0.5),
+            targetColor: ColorVector = .init(space: .rgb),
+            previousColor: ColorVector = .init(space: .rgb),
             transitionProgress: Double = 1,
             position: SpringInterpolation2D = .init()
         ) {

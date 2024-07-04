@@ -180,20 +180,3 @@ struct ContentView: View {
         #endif
     }
 }
-
-struct StaticView: View {
-    var body: some View {
-        MulticolorGradient(
-            parameters: .constant(.init(
-                points: [
-                    .init(color: .init(.init(Color.red)), position: .init(x: 0, y: 0)),
-                    .init(color: .init(.init(Color.blue)), position: .init(x: 1, y: 0)),
-                    .init(color: .init(.init(Color.green)), position: .init(x: 0, y: 1)),
-                    .init(color: .init(.init(Color.yellow)), position: .init(x: 1, y: 1)),
-                ],
-                bias: 0.01,
-                power: 4,
-                noise: 32
-            )))
-    }
-}

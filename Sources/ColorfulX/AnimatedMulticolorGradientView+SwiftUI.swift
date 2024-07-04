@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import ColorVector
 
 public struct AnimatedMulticolorGradientViewRepresentable {
     let view: AnimatedMulticolorGradientView
 
-    @Binding var color: [RGBColor]
+    @Binding var color: [ColorVector]
     @Binding var speed: Double
     @Binding var bias: Double
     @Binding var noise: Double
@@ -18,7 +19,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var isPaused: Bool
 
     public init(
-        color: Binding<[RGBColor]>,
+        color: Binding<[ColorVector]>,
         speed: Binding<Double> = .constant(1),
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
