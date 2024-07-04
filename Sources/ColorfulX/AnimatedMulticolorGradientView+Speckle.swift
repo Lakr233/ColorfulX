@@ -5,9 +5,9 @@
 //  Created by QAQ on 2023/12/3.
 //
 
+import ColorVector
 import Foundation
 import SpringInterpolation
-import ColorVector
 
 public extension AnimatedMulticolorGradientView {
     struct Speckle {

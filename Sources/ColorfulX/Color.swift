@@ -5,8 +5,8 @@
 //  Created by QAQ on 2023/12/3.
 //
 
-import Foundation
 import ColorVector
+import Foundation
 
 public typealias ColorSpace = ColorVector.Space
 

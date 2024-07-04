@@ -5,8 +5,8 @@
 //  Created by QAQ on 2023/12/3.
 //
 
-import MetalKit
 import ColorVector
+import MetalKit
 
 protocol Lerpable {
     func lerp(to newValue: Self, percent delta: Double) -> Self
@@ -26,10 +26,10 @@ extension Double: Lerpable {
 
 extension ColorVector: Lerpable {
     func lerp(to: ColorVector, percent delta: Double) -> ColorVector {
-        assert(self.space == to.space)
+        assert(space == to.space)
         if delta <= 0 { return self }
         if delta >= 1 { return to }
-        let fromValue = self.v
+        let fromValue = v
         let toValue = to.v
         var result = SIMD4<Double>()
         for i in 0 ..< 4 {

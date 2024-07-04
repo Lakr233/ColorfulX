@@ -5,8 +5,8 @@
 //  Created by QAQ on 2023/12/3.
 //
 
-import MetalKit
 import ColorVector
+import MetalKit
 
 open class MulticolorGradientView: MetalView {
     public var parameters: Parameters = .init() {
@@ -175,10 +175,10 @@ private extension MTLTexture {
 extension ColorSpace {
     var metalRenderFunctionName: String {
         switch self {
-            case .lch: return "gradientWithLCH"
-            case .lab: return "gradientWithLAB"
-            case .xyz: return "gradientWithXYZ"
-            case .rgb: return "gradientWithRGB"
+        case .lch: return "gradientWithLCH"
+        case .lab: return "gradientWithLAB"
+        case .xyz: return "gradientWithXYZ"
+        case .rgb: return "gradientWithRGB"
         }
     }
 }

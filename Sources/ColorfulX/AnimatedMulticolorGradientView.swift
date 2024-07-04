@@ -5,9 +5,9 @@
 //  Created by QAQ on 2023/12/3.
 //
 
+import ColorVector
 import MetalKit
 import SpringInterpolation
-import ColorVector
 
 private let COLOR_SLOT = 8
 private let SPRING_CONFIG = SpringInterpolation.Configuration(
@@ -71,11 +71,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
         var colors = colors
         if let targetSpace = colors.first?.space,
-           targetSpace != self.colorSpace
+           targetSpace != colorSpace
         {
             colors = colors.map { $0.color(in: targetSpace) }
         }
-        
+
         for idx in 0 ..< COLOR_SLOT {
             var read = colorElements[idx]
             let color: ColorVector = colors.isEmpty

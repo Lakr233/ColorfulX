@@ -5,9 +5,9 @@
 //  Created by QAQ on 2023/12/3.
 //
 
+import ColorVector
 import CoreGraphics
 import Foundation
-import ColorVector
 
 public extension MulticolorGradientView {
     struct Parameters: Equatable {
