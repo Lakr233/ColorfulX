@@ -17,9 +17,9 @@ struct ContentView: View {
     @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
-    
+
     @State var controlPanelVisible: Bool = true
-    
+
     var body: some View {
         ZStack {
             ColorfulView(
@@ -29,27 +29,28 @@ struct ContentView: View {
                 noise: $noise,
                 transitionSpeed: $duration
             )
+            .background(ChessboardView())
             .ignoresSafeArea()
             VStack {
                 controlPanel
                     .opacity(controlPanelVisible ? 1 : 0)
                     .animation(.spring, value: controlPanelVisible)
-#if os(tvOS)
-                Button {
-                    preset = ColorfulPreset.allCases.randomElement()!
-                } label: {
-                    Image(systemName: "wind")
-                }
-#endif
+                #if os(tvOS)
+                    Button {
+                        preset = ColorfulPreset.allCases.randomElement()!
+                    } label: {
+                        Image(systemName: "wind")
+                    }
+                #endif
             }
-            
+
             Text("Made with love by @Lakr233")
                 .foregroundStyle(.thinMaterial)
-#if os(macOS)
+            #if os(macOS)
                 .font(.system(size: 8, weight: .semibold, design: .rounded))
-#else
+            #else
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
-#endif
+            #endif
                 .onTapGesture { controlPanelVisible.toggle() }
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding()
@@ -57,21 +58,21 @@ struct ContentView: View {
         .onAppear { colors = preset.colors }
         .onChange(of: preset) { colors = $0.colors }
     }
-    
+
     @ViewBuilder
     var presetPicker: some View {
         HStack {
-#if os(tvOS)
-            Text("\(preset.hint)")
-#else
-            Text("Preset")
-            Picker("", selection: $preset) {
-                ForEach(ColorfulPreset.allCases, id: \.self) { preset in
-                    Text(preset.hint).tag(preset)
+            #if os(tvOS)
+                Text("\(preset.hint)")
+            #else
+                Text("Preset")
+                Picker("", selection: $preset) {
+                    ForEach(ColorfulPreset.allCases, id: \.self) { preset in
+                        Text(preset.hint).tag(preset)
+                    }
                 }
-            }
-            .frame(width: 128)
-#endif
+                .frame(width: 128)
+            #endif
             Spacer()
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -86,7 +87,7 @@ struct ContentView: View {
             .environment(\.layoutDirection, .rightToLeft)
         }
     }
-    
+
     @ViewBuilder
     var speedPicker: some View {
         HStack {
@@ -94,12 +95,12 @@ struct ContentView: View {
             Spacer()
             Text("\(speed, specifier: "%.1f")")
         }
-#if !os(tvOS)
-        Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
-        }
-#endif
+        #if !os(tvOS)
+            Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
+            }
+        #endif
     }
-    
+
     @ViewBuilder
     var biasPicker: some View {
         HStack {
@@ -107,12 +108,12 @@ struct ContentView: View {
             Spacer()
             Text("\(bias, specifier: "%.5f")")
         }
-#if !os(tvOS)
-        Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
-        }
-#endif
+        #if !os(tvOS)
+            Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
+            }
+        #endif
     }
-    
+
     @ViewBuilder
     var noisePicker: some View {
         HStack {
@@ -120,12 +121,12 @@ struct ContentView: View {
             Spacer()
             Text("\(noise, specifier: "%.2f")")
         }
-#if !os(tvOS)
-        Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
-        }
-#endif
+        #if !os(tvOS)
+            Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
+            }
+        #endif
     }
-    
+
     @ViewBuilder
     var transitionPicker: some View {
         HStack {
@@ -133,12 +134,12 @@ struct ContentView: View {
             Spacer()
             Text("\(duration, specifier: "%.2f")")
         }
-#if !os(tvOS)
-        Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
-        }
-#endif
+        #if !os(tvOS)
+            Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
+            }
+        #endif
     }
-    
+
     var controlPanel: some View {
         VStack(spacing: 8) {
             presetPicker
@@ -152,19 +153,43 @@ struct ContentView: View {
             transitionPicker
         }
         .frame(width: 320)
-#if os(macOS)
-        .font(.system(size: 12, weight: .semibold, design: .rounded))
-#else
-        .font(.system(size: 16, weight: .semibold, design: .rounded))
-#endif
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundStyle(.thickMaterial)
-        )
-        .padding(6)
-#if os(visionOS)
-        .padding(32)
-#endif
+        #if os(macOS)
+            .font(.system(size: 12, weight: .semibold, design: .rounded))
+        #else
+            .font(.system(size: 16, weight: .semibold, design: .rounded))
+        #endif
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .foregroundStyle(.thickMaterial)
+            )
+            .padding(6)
+        #if os(visionOS)
+            .padding(32)
+        #endif
+    }
+}
+
+struct ChessboardView: View {
+    let gridSize: CGFloat = 32
+
+    var body: some View {
+        GeometryReader { geometry in
+            let numberOfColumns = Int(geometry.size.width / gridSize)
+            let numberOfRows = Int(geometry.size.height / gridSize)
+
+            Canvas { context, _ in
+                for row in 0 ..< numberOfRows {
+                    for column in 0 ..< numberOfColumns {
+                        let x = CGFloat(column) * gridSize
+                        let y = CGFloat(row) * gridSize
+                        let rect = CGRect(x: x, y: y, width: gridSize, height: gridSize)
+                        context.fill(Path(rect), with: .color(.gray))
+                        context.stroke(Path(rect), with: .color(.black), lineWidth: 0.5)
+                    }
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+        }
     }
 }

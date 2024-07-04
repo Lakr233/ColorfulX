@@ -135,6 +135,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 The shader code originates from [this source](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient). Consequently, the name of the original author has been credited in the license file.
 
+## Use Case
+
+- [LennonMusic](https://github.com/zhcz/LennonMusic) iOS
+- [QR-Share-Pro](https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
+- [Reveil](https://github.com/Lessica/Reveil) iOS
+- [Troll Recorder](https://github.com/Lessica/TrollRecorder) iOS
+- [Misaka](https://github.com/straight-tamago/misaka) iOS + tvOS
+- [SimpleLiveTVOS](https://github.com/pcccccc/SimpleLiveTVOS) tvOS
+- [Vibefy](https://github.com/ZhangDo/NeteaseTVDemo) tvOS
+- [Dino](https://apps.apple.com/us/app/dino-%E7%A9%BA%E9%97%B4%E8%BE%93%E5%85%A5%E6%B3%95/id6477793173) xrOS
+- [BBackupp](https://github.com/Lakr233/BBackupp) macOS
+- [Mythic](https://github.com/MythicApp/Mythic) macOS
+
+Pull requests for use cases are welcome.
+
 ---
 
 Copyright © 2023 Lakr Aream. All Rights Reserved.

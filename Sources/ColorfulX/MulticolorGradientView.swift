@@ -21,7 +21,7 @@ open class MulticolorGradientView: MetalView {
     public var currentTexture: MTLTexture? { currentDrawable?.texture }
     public var captureImage: CGImage? { currentTexture?.capture() }
 
-    public override init() {
+    override public init() {
         super.init()
 
         let device = metalDevice
