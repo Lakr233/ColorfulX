@@ -29,10 +29,16 @@ open class MulticolorGradientView: MetalView {
 
         let device = metalDevice
         guard let library = try? device.createColorfulLibrary(),
-              let computeProgram = library.makeFunction(name: colorSpace.metalRenderFunctionName),
-              let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
+              let computeProgram = library.makeFunction(name: colorSpace.metalRenderFunctionName)
         else { fatalError("Metal program filed to compile") }
-        self.computePipelineState = computePipelineState
+
+        let pipelineDescriptor = MTLComputePipelineDescriptor()
+        pipelineDescriptor.computeFunction = computeProgram
+
+        guard let computePipelineState = try? device.makeComputePipelineState(descriptor: pipelineDescriptor, options: [])
+        else { fatalError("Metal program filed to compile") }
+
+        self.computePipelineState = computePipelineState.0
     }
 
     override public func layoutSublayers(of layer: CALayer) {
@@ -67,7 +73,7 @@ open class MulticolorGradientView: MetalView {
             let point = parms.points[i]
             shaderPoints[i] = (
                 simd_float2(Float(point.position.x), Float(point.position.y)),
-                simd_float4(point.color.v)
+                simd_float4(point.color.v / 255)
             )
         }
 

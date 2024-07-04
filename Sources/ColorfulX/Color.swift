@@ -38,10 +38,10 @@ extension ColorVector {
             return
         }
         let rgbVector = ColorVector(v: .init(
-            Double(components[0]),
-            Double(components[1]),
-            Double(components[2]),
-            Double(components[3])
+            Double(components[0] * 255),
+            Double(components[1] * 255),
+            Double(components[2] * 255),
+            Double(components[3] * 255)
         ), space: .rgb)
         if space == .rgb {
             self = rgbVector
