@@ -39,7 +39,6 @@ import MetalKit
 
             let metalLayer = CAMetalLayer()
             metalLayer.device = metalDevice
-            metalLayer.pixelFormat = .bgra8Unorm
             metalLayer.framebufferOnly = false
             metalLayer.isOpaque = false
             self.metalLayer = metalLayer
@@ -221,7 +220,6 @@ import MetalKit
 
                 let metalLayer = CAMetalLayer()
                 metalLayer.device = metalDevice
-                metalLayer.pixelFormat = .bgra8Unorm
                 metalLayer.framebufferOnly = false
                 metalLayer.isOpaque = false
                 self.metalLayer = metalLayer

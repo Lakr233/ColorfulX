@@ -25,17 +25,12 @@ open class MulticolorGradientView: MetalView {
         super.init()
 
         let device = metalDevice
+
         guard let library = try? device.createColorfulLibrary(),
-              let computeProgram = library.makeFunction(name: "SuperBlender")
+              let computeProgram = library.makeFunction(name: "blend_colors"),
+              let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
         else { fatalError("Metal program filed to compile") }
-
-        let pipelineDescriptor = MTLComputePipelineDescriptor()
-        pipelineDescriptor.computeFunction = computeProgram
-
-        guard let computePipelineState = try? device.makeComputePipelineState(descriptor: pipelineDescriptor, options: [])
-        else { fatalError("Metal program filed to compile") }
-
-        self.computePipelineState = computePipelineState.0
+        self.computePipelineState = computePipelineState
     }
 
     override public func layoutSublayers(of layer: CALayer) {
@@ -103,6 +98,7 @@ open class MulticolorGradientView: MetalView {
         commandEncoder.setComputePipelineState(computePipelineState)
         commandEncoder.setBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
         commandEncoder.setTexture(drawable.texture, index: 4)
+
         let threadGroupCount = MTLSizeMake(1, 1, 1)
         let threadGroups = MTLSizeMake(
             drawable.texture.width / threadGroupCount.width,
