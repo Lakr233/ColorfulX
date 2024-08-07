@@ -24,9 +24,6 @@ let package = Package(
             dependencies: [
                 "ColorVector",
                 "SpringInterpolation",
-            ],
-            resources: [
-                .process("Shaders/Main.metal"),
             ]
         ),
     ]
