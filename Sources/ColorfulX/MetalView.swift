@@ -18,6 +18,8 @@ import MetalKit
         let metalLayer: CAMetalLayer
         let commandQueue: MTLCommandQueue
 
+        var scaleFactor: Double = 1.0
+
         private weak var mDisplayLink: CADisplayLink?
         private var hasParentWindow: Bool = false
         private var hasActiveScene: Bool = true
@@ -114,7 +116,6 @@ import MetalKit
             // 15.79ms for a 1290x2796 image on iPhone 15 Pro Max
             // native scaleFactor will case a performance issue
             // so we downscale the image to 1x
-            let scaleFactor = 1.0
             metalLayer.frame = bounds
             var width = bounds.width * scaleFactor
             var height = bounds.height * scaleFactor
@@ -208,6 +209,7 @@ import MetalKit
             let commandQueue: MTLCommandQueue
 
             var displayLink: CVDisplayLink?
+            var scaleFactor: Double = 1.0
 
             init() {
                 guard let device = MTLCreateSystemDefaultDevice(),
@@ -253,7 +255,6 @@ import MetalKit
             public func layoutSublayers(of layer: CALayer) {
                 guard layer == metalLayer else { return }
                 metalLayer.frame = bounds
-                let scaleFactor = 1.0
                 var width = bounds.width * scaleFactor
                 var height = bounds.height * scaleFactor
                 if width <= 0 { width = 1 }

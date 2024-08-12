@@ -44,12 +44,13 @@ open class MulticolorGradientView: MetalView {
         guard lock.try() else { return }
         defer { lock.unlock() }
 
+        guard needsRender else { return }
+        defer { needsRender = false }
+
         guard let drawable = metalLayer.nextDrawable(),
               let commandBuffer = commandQueue.makeCommandBuffer(),
               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
         else { return }
-
-        defer { needsRender = false }
 
         var shaderPoints: [(simd_float2, simd_float4)] = Array(
             repeating: (
