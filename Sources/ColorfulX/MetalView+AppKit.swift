@@ -11,7 +11,7 @@ import Foundation
 
     import AppKit
 
-    open class MetalView: NSView, CALayerDelegate {
+    open class NSMetalView: NSView, CALayerDelegate {
         var metalLink: MetalLink? = try? .init()
         var qualifiedForUpdate: Bool = true
 

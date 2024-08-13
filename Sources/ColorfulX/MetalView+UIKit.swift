@@ -8,7 +8,7 @@
 #if canImport(UIKit)
     import UIKit
 
-    open class MetalView: UIView {
+    open class UIMetalView: UIView {
         var metalLink: MetalLink? = try? .init()
         var qualifiedForUpdate: Bool = true
 
@@ -36,7 +36,6 @@
         private func updateQualificationCheck() {
             qualifiedForUpdate = [
                 window != nil,
-                scene?.activationState == .foregroundActive,
                 frame.width > 0,
                 frame.height > 0,
                 alpha > 0,

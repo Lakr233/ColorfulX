@@ -118,17 +118,9 @@ open class MulticolorGradientView: MetalView {
         commandBuffer.commit()
         commandBuffer.waitUntilScheduled()
 
-        if Thread.isMainThread {
-            drawable.present()
-            currentDrawable = drawable
-            commandBuffer.waitUntilCompleted()
-        } else {
-            DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-                drawable.present()
-                self.currentDrawable = drawable
-            })
-            commandBuffer.waitUntilCompleted()
-        }
+        drawable.present()
+        currentDrawable = drawable
+        commandBuffer.waitUntilCompleted()
     }
 }
 

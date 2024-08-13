@@ -6,6 +6,7 @@
 //
 
 import ColorVector
+import CoreFoundation
 import MetalKit
 import SpringInterpolation
 
@@ -46,18 +47,18 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
-
         super.init()
-
         initializeRenderParameters()
     }
 
-    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
+    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true, fillColorsIfNeeded: Bool = true) {
         var colors = colors
         if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
         colors = colors.map { $0.color(in: .lab) }
 
-        for idx in 0 ..< Uniforms.COLOR_SLOT {
+        let endingIndex = fillColorsIfNeeded ? Uniforms.COLOR_SLOT : min(colors.count, Uniforms.COLOR_SLOT)
+        guard endingIndex > 0 else { return }
+        for idx in 0 ..< endingIndex {
             var read = colorElements[idx]
             let color: ColorVector = colors[idx % colors.count]
             guard read.targetColor != color else { continue }
@@ -81,15 +82,15 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     override func vsync() {
         defer { super.vsync() }
         guard needsUpdateRenderParameters || speed > 0 else { return }
-        // when calling from vsync, MetalView is holding strong reference.
-        DispatchQueue.main.asyncAndWait(execute: DispatchWorkItem {
-            if self.frameLimit > 0 {
-                let now = Date().timeIntervalSince1970
-                guard now - self.lastRender > 1.0 / Double(self.frameLimit) else { return }
-                self.lastRender = now
-            }
-            self.updateRenderParameters()
-        })
+        defer { self.updateRenderParameters() }
+        guard frameLimit > 0 else { return }
+
+        var decisionFrameRate = frameLimit - 1
+        if decisionFrameRate < 1 { decisionFrameRate = 1 }
+        let wantedDeltaTime = 1.0 / Double(decisionFrameRate)
+        let now = CACurrentMediaTime()
+        guard now - lastUpdate >= wantedDeltaTime else { return }
+        lastRender = now
     }
 
     func computeSpeckleColor(_ speckle: Speckle) -> ColorVector {
