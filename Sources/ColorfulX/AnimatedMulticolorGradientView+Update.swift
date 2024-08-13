@@ -35,7 +35,9 @@ extension AnimatedMulticolorGradientView {
             var inplaceEdit = colorElements[idx]
             defer { colorElements[idx] = inplaceEdit }
 
-            if inplaceEdit.transitionProgress.context.currentPos < 1 {
+            if speed <= 0 {
+                inplaceEdit.transitionProgress.setCurrent(1)
+            } else if inplaceEdit.transitionProgress.context.currentPos < 1 {
                 inplaceEdit.transitionProgress.update(withDeltaTime: deltaTime * transitionSpeed)
             }
             if moveDelta > 0 {

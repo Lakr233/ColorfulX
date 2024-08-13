@@ -63,6 +63,9 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
         colors = colors.map { $0.color(in: .lab) }
 
+        var interpolationEnabled = interpolationEnabled
+        if speed <= 0 { interpolationEnabled = false }
+
         let endingIndex = repeatToFillColorSlots ? Uniforms.COLOR_SLOT : min(colors.count, Uniforms.COLOR_SLOT)
         guard endingIndex > 0 else { return }
         for idx in 0 ..< endingIndex {
