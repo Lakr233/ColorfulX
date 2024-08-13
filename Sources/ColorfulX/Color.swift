@@ -14,14 +14,12 @@ public typealias ColorSpace = ColorVector.Space
     import UIKit
 
     public typealias ColorElement = UIColor
-#else
-    #if canImport(AppKit)
-        import AppKit
+#endif
 
-        public typealias ColorElement = NSColor
-    #else
-        #error("unsupported platform")
-    #endif
+#if !canImport(UIKit) && canImport(AppKit)
+    import AppKit
+
+    public typealias ColorElement = NSColor
 #endif
 
 public extension ColorVector {

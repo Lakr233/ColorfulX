@@ -27,25 +27,16 @@ import Foundation
                 name: UIApplication.didBecomeActiveNotification,
                 object: nil
             )
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(applicationwillResignActive(_:)),
-                name: UIApplication.willResignActiveNotification,
-                object: nil
-            )
 
             updateDisplayLink()
         }
 
         deinit {
+            displayLink?.invalidate()
+            self.displayLink = nil
             NotificationCenter.default.removeObserver(
                 self,
                 name: UIApplication.didBecomeActiveNotification,
-                object: nil
-            )
-            NotificationCenter.default.removeObserver(
-                self,
-                name: UIApplication.willResignActiveNotification,
                 object: nil
             )
         }
@@ -68,12 +59,8 @@ import Foundation
             updateDisplayLink()
         }
 
-        @objc
-        func applicationwillResignActive(_: Notification) {
-            updateDisplayLink()
-        }
-
         @objc private func displayLinkCall(_: CADisplayLink) {
+            updateDisplayLink()
             synchronizationSubject.send()
         }
     }

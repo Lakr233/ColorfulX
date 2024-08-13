@@ -9,7 +9,7 @@ import ColorfulX
 import SwiftUI
 
 @main
-struct ColorfulAppApp: App {
+struct App: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             ContentView().background(Color.white)
