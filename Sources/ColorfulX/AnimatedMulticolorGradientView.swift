@@ -51,12 +51,12 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         initializeRenderParameters()
     }
 
-    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true, fillColorsIfNeeded: Bool = true) {
+    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true, repeatToFillColorSlots: Bool = true) {
         var colors = colors
         if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
         colors = colors.map { $0.color(in: .lab) }
 
-        let endingIndex = fillColorsIfNeeded ? Uniforms.COLOR_SLOT : min(colors.count, Uniforms.COLOR_SLOT)
+        let endingIndex = repeatToFillColorSlots ? Uniforms.COLOR_SLOT : min(colors.count, Uniforms.COLOR_SLOT)
         guard endingIndex > 0 else { return }
         for idx in 0 ..< endingIndex {
             var read = colorElements[idx]
