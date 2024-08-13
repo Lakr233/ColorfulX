@@ -56,8 +56,8 @@ class MetalLink: DisplayLinkDelegate {
         let bounds = metalLayer.bounds
         var width = bounds.width * scaleFactor
         var height = bounds.height * scaleFactor
-        if width <= 0 { width = 1 }
-        if height <= 0 { height = 1 }
+        if width <= 1 { width = 1 }
+        if height <= 1 { height = 1 }
         if width > 8192 { width = 8192 }
         if height > 8192 { height = 8192 }
         metalLayer.drawableSize = CGSize(width: width, height: height)
