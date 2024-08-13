@@ -14,7 +14,7 @@ open class MulticolorGradientView: MetalView {
     }
 
     private var needsRender: Bool = false
-    private var computePipelineState: MTLComputePipelineState!
+    private var computePipelineState: MTLComputePipelineState?
     private let lock = NSLock()
 
     public private(set) var currentDrawable: CAMetalDrawable? = nil
@@ -24,13 +24,15 @@ open class MulticolorGradientView: MetalView {
     override public init() {
         super.init()
 
-        let device = metalDevice
-
-        guard let library = try? device.createColorfulLibrary(),
-              let computeProgram = library.makeFunction(name: "blend_colors"),
-              let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
-        else { fatalError("Metal program filed to compile") }
-        self.computePipelineState = computePipelineState
+        if let device = metalLink?.metalDevice,
+           let library = try? device.createColorfulLibrary(),
+           let computeProgram = library.makeFunction(name: "blend_colors"),
+           let computePipelineState = try? device.makeComputePipelineState(function: computeProgram)
+        {
+            self.computePipelineState = computePipelineState
+        } else {
+            computePipelineState = nil
+        }
     }
 
     override public func layoutSublayers(of layer: CALayer) {
@@ -47,8 +49,12 @@ open class MulticolorGradientView: MetalView {
         guard needsRender else { return }
         defer { needsRender = false }
 
-        guard let drawable = metalLayer.nextDrawable(),
-              let commandBuffer = commandQueue.makeCommandBuffer(),
+        guard let metalLink,
+              let computePipelineState
+        else { return }
+
+        guard let drawable = metalLink.metalLayer.nextDrawable(),
+              let commandBuffer = metalLink.commandQueue.makeCommandBuffer(),
               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
         else { return }
 

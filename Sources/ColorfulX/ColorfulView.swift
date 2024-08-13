@@ -48,7 +48,6 @@ public struct ColorfulView: View {
             bias: $bias,
             noise: $noise,
             transitionSpeed: $transitionSpeed,
-            isPaused: $isPaused,
             frameLimit: frameLimit
         )
         .onChange(of: scenePhase) { newPhase in

@@ -12,8 +12,7 @@ import SwiftUI
 struct ColorfulAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .background(.ultraThinMaterial)
+            ContentView().background(Color.white)
         }
         #if os(macOS)
         .windowResizability(.contentSize)

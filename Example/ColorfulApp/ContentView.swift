@@ -29,7 +29,7 @@ struct ContentView: View {
                 noise: $noise,
                 transitionSpeed: $duration
             )
-            .background(ChessboardView())
+            .background(ChessboardView().opacity(0.25))
             .ignoresSafeArea()
             VStack {
                 controlPanel
