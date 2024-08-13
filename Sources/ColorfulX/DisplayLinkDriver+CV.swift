@@ -74,7 +74,7 @@ import Foundation
             CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
             guard let displayLink else { return }
             CVDisplayLinkSetOutputCallback(displayLink, { _, _, _, _, _, _ -> CVReturn in
-                CVDisplayLinkDriverHelper.dispatchUpdate()
+                autoreleasepool { CVDisplayLinkDriverHelper.dispatchUpdate() }
                 return kCVReturnSuccess
             }, nil)
             CVDisplayLinkStart(displayLink)

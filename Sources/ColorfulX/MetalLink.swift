@@ -18,7 +18,7 @@ class MetalLink: DisplayLinkDelegate {
     var onSynchronizationUpdate: SynchornizationUpdate?
 
     var scaleFactor: Double = 1.0 {
-        didSet { updateDrawableSize(withBounds: metalLayer.bounds) }
+        didSet { updateDrawableSizeFromFrame() }
     }
 
     enum MetalError: Error {
@@ -48,7 +48,12 @@ class MetalLink: DisplayLinkDelegate {
     }
 
     func updateDrawableSize(withBounds bounds: CGRect) {
+        guard metalLayer.frame != bounds else { return }
         metalLayer.frame = bounds
+    }
+
+    func updateDrawableSizeFromFrame() {
+        let bounds = metalLayer.bounds
         var width = bounds.width * scaleFactor
         var height = bounds.height * scaleFactor
         if width <= 0 { width = 1 }

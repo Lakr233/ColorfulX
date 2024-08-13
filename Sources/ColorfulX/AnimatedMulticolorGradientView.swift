@@ -15,35 +15,42 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
     dampingRatio: 0.2
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
+private let defaultFrameRate: Int = 60
 
 open class AnimatedMulticolorGradientView: MulticolorGradientView {
-    public var lastUpdate: Double = 0
-    public var lastRender: Double = 0
-    public var needsUpdateRenderParameters: Bool = false
+    // MARK: - PROPERTY
+
+    public private(set) var lastRenderParametersUpdate: Double = 0
+    public private(set) var lastRenderExecution: Double = 0
+    public var renderInputWasModified: Bool = false {
+        didSet { lastRenderParametersUpdate = obtainCurrentTimestamp() }
+    }
 
     public internal(set) var colorElements: [Speckle] {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
 
     public var speed: Double = 1.0 {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
 
     public var bias: Double = 0.01 {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
 
     public var noise: Double = 0 {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
 
     public var transitionSpeed: Double = 1 {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
 
     public var frameLimit: Int = 0 {
-        didSet { needsUpdateRenderParameters = true }
+        didSet { renderInputWasModified = true }
     }
+
+    // MARK: - FUNCTION
 
     override public init() {
         colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
@@ -72,25 +79,77 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         }
     }
 
+    // MARK: - GETTER
+
+    @inline(__always)
+    func obtainCurrentTimestamp() -> Double { CACurrentMediaTime() }
+
+    @inline(__always)
+    func frameLimiterShouldScheduleNextFrame() -> Bool {
+        guard frameLimit > 0 else { return true }
+
+        let currentTime = obtainCurrentTimestamp()
+        let deltaTime = currentTime - lastRenderExecution
+        let requiredDeltaTime = 1.0 / Double(frameLimit)
+
+        let nextTierFrameRate = Double(frameLimit * 2)
+        let nextTierDeltaTime = 1.0 / nextTierFrameRate
+
+        let decisionDeltaTime = requiredDeltaTime - nextTierDeltaTime
+
+        return deltaTime >= decisionDeltaTime
+
+        /*
+         we are not dead loop here so vsync already delays for 16ms in 60hz display
+         if we give and one frame each time, there would be 30 fps to actually draw on display
+
+         based on this fact, frame limit can be 7, 15, 30, 60, 120...
+         requiredDeltaTime needs to shift in order to comply with our goal
+         */
+    }
+
+    @inline(__always)
+    private func deltaTimeForRenderParametersUpdate() -> Double {
+        let currentTime = obtainCurrentTimestamp()
+        let realDeltaTime = currentTime - lastRenderParametersUpdate
+        var frameRate = frameLimit
+        if frameRate < 1 { frameRate = defaultFrameRate }
+        let maxAllowedDeltaTime = 1.0 / Double(frameRate)
+        if realDeltaTime > maxAllowedDeltaTime { return maxAllowedDeltaTime }
+        return realDeltaTime
+    }
+
+    // MARK: - RENDER LIFE CYCLE
+
     override public func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
-        needsUpdateRenderParameters = true
-        updateRenderParameters()
-        super.vsync()
+
+        // skip any vsync check and force an update
+        renderInputWasModified = true
+        updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
+        renderIfNeeded()
+    }
+
+    override func renderIfNeeded() {
+        super.renderIfNeeded()
+    }
+
+    override func render() {
+        super.render()
+        lastRenderExecution = obtainCurrentTimestamp()
     }
 
     override func vsync() {
-        defer { super.vsync() }
-        guard needsUpdateRenderParameters || speed > 0 else { return }
-        defer { self.updateRenderParameters() }
-        guard frameLimit > 0 else { return }
+        // check if we should render
+        guard frameLimiterShouldScheduleNextFrame() else { return }
 
-        var decisionFrameRate = frameLimit - 1
-        if decisionFrameRate < 1 { decisionFrameRate = 1 }
-        let wantedDeltaTime = 1.0 / Double(decisionFrameRate)
-        let now = CACurrentMediaTime()
-        guard now - lastUpdate >= wantedDeltaTime else { return }
-        lastRender = now
+        // check if we need to update the render parameter
+        // the underlying MulticolorGradientView will only render if parameter was modified
+        guard speed > 0 || renderInputWasModified else { return }
+        updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
+
+        // sine the render parameters were updated, we call super.vsync to render
+        super.vsync()
     }
 
     func computeSpeckleColor(_ speckle: Speckle) -> ColorVector {

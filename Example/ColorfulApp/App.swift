@@ -1,5 +1,5 @@
 //
-//  ColorfulAppApp.swift
+//  App.swift
 //  ColorfulApp
 //
 //  Created by QAQ on 2023/12/1.

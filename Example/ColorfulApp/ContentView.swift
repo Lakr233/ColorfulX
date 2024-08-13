@@ -29,6 +29,7 @@ struct ContentView: View {
                 bias: $bias,
                 noise: $noise,
                 transitionSpeed: $duration,
+                frameLimit: 45,
                 renderScale: .init(scale)
             )
             .background(ChessboardView().opacity(0.25))
@@ -97,7 +98,7 @@ struct ContentView: View {
             Spacer()
             Text("\(speed, specifier: "%.1f")")
         }
-        #if !os(tvOS)
+        #if os(iOS)
             Slider(value: $speed, in: 0.0 ... 10.0, step: 0.1) { _ in
             }
         #endif
@@ -110,7 +111,7 @@ struct ContentView: View {
             Spacer()
             Text("\(bias, specifier: "%.5f")")
         }
-        #if !os(tvOS)
+        #if os(iOS)
             Slider(value: $bias, in: 0.00001 ... 0.01, step: 0.00001) { _ in
             }
         #endif
@@ -123,7 +124,7 @@ struct ContentView: View {
             Spacer()
             Text("\(noise, specifier: "%.2f")")
         }
-        #if !os(tvOS)
+        #if os(iOS)
             Slider(value: $noise, in: 0 ... 64, step: 1) { _ in
             }
         #endif
@@ -136,7 +137,7 @@ struct ContentView: View {
             Spacer()
             Text("\(duration, specifier: "%.2f")")
         }
-        #if !os(tvOS)
+        #if os(iOS)
             Slider(value: $duration, in: 0.0 ... 10.0, step: 0.1) { _ in
             }
         #endif
@@ -149,8 +150,8 @@ struct ContentView: View {
             Spacer()
             Text("\(scale, specifier: "%.4f")")
         }
-        #if !os(tvOS)
-            Slider(value: $scale, in: 0.0001 ... 2.0, step: 0.0001) { _ in
+        #if os(iOS)
+            Slider(value: $scale, in: 0.001 ... 2.0, step: 0.001) { _ in
             }
         #endif
     }

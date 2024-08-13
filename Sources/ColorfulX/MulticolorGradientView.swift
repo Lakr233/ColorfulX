@@ -42,12 +42,18 @@ open class MulticolorGradientView: MetalView {
 
     override func vsync() {
         super.vsync()
+        renderIfNeeded()
+    }
 
-        guard lock.try() else { return }
-        defer { lock.unlock() }
-
+    func renderIfNeeded() {
         guard needsRender else { return }
         defer { needsRender = false }
+        render()
+    }
+
+    func render() {
+        guard lock.try() else { return }
+        defer { lock.unlock() }
 
         guard let metalLink,
               let computePipelineState
