@@ -14,10 +14,10 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var bias: Double
     @Binding var noise: Double
     @Binding var transitionSpeed: Double
+    @Binding var frameLimit: Int
+    @Binding var renderScale: Double
 
-    let frameLimit: Int
     let repeatToFillColorSlots: Bool
-    let renderScale: CGFloat
 
     public init(
         color: Binding<[ColorVector]>,
@@ -25,19 +25,19 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
         transitionSpeed: Binding<Double> = .constant(3.25),
-        frameLimit: Int = 0,
-        repeatToFillColorSlots: Bool = true,
-        renderScale: CGFloat = 1.0
+        frameLimit: Binding<Int> = .constant(0),
+        renderScale: Binding<Double> = .constant(1),
+        repeatToFillColorSlots: Bool = true
     ) {
         _color = color
         _speed = speed
         _bias = bias
         _noise = noise
         _transitionSpeed = transitionSpeed
+        _frameLimit = frameLimit
+        _renderScale = renderScale
 
-        self.frameLimit = frameLimit
         self.repeatToFillColorSlots = repeatToFillColorSlots
-        self.renderScale = renderScale
     }
 
     public func updatePropertyToView(_ view: AnimatedMulticolorGradientView) {

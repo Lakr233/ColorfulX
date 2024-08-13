@@ -18,6 +18,7 @@ struct ContentView: View {
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
     @AppStorage("scale") var scale: Double = 1
+    @AppStorage("frame") var frame: Int = 30
 
     @State var controlPanelVisible: Bool = true
 
@@ -29,8 +30,8 @@ struct ContentView: View {
                 bias: $bias,
                 noise: $noise,
                 transitionSpeed: $duration,
-                frameLimit: 45,
-                renderScale: .init(scale)
+                frameLimit: $frame,
+                renderScale: $scale
             )
             .background(ChessboardView().opacity(0.25))
             .ignoresSafeArea()
@@ -144,6 +145,23 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    var framePicker: some View {
+        HStack {
+            Text("Frame Limit")
+            Spacer()
+            Text("\(frame)")
+        }
+        #if os(iOS)
+            Picker("", selection: $frame) {
+                ForEach([0, 15, 30, 60, 120], id: \.self) { frame in
+                    Text("\(frame)").tag(frame)
+                }
+            }
+            .pickerStyle(.segmented)
+        #endif
+    }
+
+    @ViewBuilder
     var scalePicker: some View {
         HStack {
             Text("Scale")
@@ -169,6 +187,8 @@ struct ContentView: View {
             transitionPicker
             Divider()
             scalePicker
+            Divider()
+            framePicker
         }
         .frame(width: 328)
         #if os(macOS)

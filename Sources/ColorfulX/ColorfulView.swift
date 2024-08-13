@@ -14,10 +14,10 @@ public struct ColorfulView: View {
     @Binding var bias: Double
     @Binding var noise: Double
     @Binding var transitionSpeed: Double
+    @Binding var frameLimit: Int
+    @Binding var renderScale: Double
 
-    let frameLimit: Int
     let repeatToFillColorSlots: Bool
-    let renderScale: CGFloat
 
     public init(
         color: Binding<[Color]>,
@@ -25,18 +25,19 @@ public struct ColorfulView: View {
         bias: Binding<Double> = .constant(0.01),
         noise: Binding<Double> = .constant(0),
         transitionSpeed: Binding<Double> = .constant(5),
-        frameLimit: Int = 0,
-        repeatToFillColorSlots: Bool = true,
-        renderScale: CGFloat = 1
+        frameLimit: Binding<Int> = .constant(0),
+        renderScale: Binding<Double> = .constant(1.0),
+        repeatToFillColorSlots: Bool = true
     ) {
         _color = color
         _speed = speed
         _bias = bias
         _noise = noise
         _transitionSpeed = transitionSpeed
-        self.frameLimit = frameLimit
+        _frameLimit = frameLimit
+        _renderScale = renderScale
+
         self.repeatToFillColorSlots = repeatToFillColorSlots
-        self.renderScale = renderScale
     }
 
     public var body: some View {
@@ -48,9 +49,9 @@ public struct ColorfulView: View {
             bias: $bias,
             noise: $noise,
             transitionSpeed: $transitionSpeed,
-            frameLimit: frameLimit,
-            repeatToFillColorSlots: repeatToFillColorSlots,
-            renderScale: renderScale
+            frameLimit: $frameLimit,
+            renderScale: $renderScale,
+            repeatToFillColorSlots: repeatToFillColorSlots
         )
     }
 }
