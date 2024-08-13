@@ -17,6 +17,7 @@ struct ContentView: View {
     @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
+    @AppStorage("scale") var scale: Double = 1
 
     @State var controlPanelVisible: Bool = true
 
@@ -27,7 +28,8 @@ struct ContentView: View {
                 speed: $speed,
                 bias: $bias,
                 noise: $noise,
-                transitionSpeed: $duration
+                transitionSpeed: $duration,
+                renderScale: .init(scale)
             )
             .background(ChessboardView().opacity(0.25))
             .ignoresSafeArea()
@@ -140,6 +142,19 @@ struct ContentView: View {
         #endif
     }
 
+    @ViewBuilder
+    var scalePicker: some View {
+        HStack {
+            Text("Scale")
+            Spacer()
+            Text("\(scale, specifier: "%.4f")")
+        }
+        #if !os(tvOS)
+            Slider(value: $scale, in: 0.0001 ... 2.0, step: 0.0001) { _ in
+            }
+        #endif
+    }
+
     var controlPanel: some View {
         VStack(spacing: 8) {
             presetPicker
@@ -151,6 +166,8 @@ struct ContentView: View {
             noisePicker
             Divider()
             transitionPicker
+            Divider()
+            scalePicker
         }
         .frame(width: 328)
         #if os(macOS)

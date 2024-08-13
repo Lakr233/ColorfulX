@@ -16,8 +16,8 @@ public struct ColorfulView: View {
     @Binding var transitionSpeed: Double
 
     let frameLimit: Int
-    let colorSpace: ColorSpace
     let repeatToFillColorSlots: Bool
+    let renderScale: CGFloat
 
     public init(
         color: Binding<[Color]>,
@@ -26,8 +26,8 @@ public struct ColorfulView: View {
         noise: Binding<Double> = .constant(0),
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Int = 0,
-        colorSpace: ColorSpace = .lab,
-        repeatToFillColorSlots: Bool = true
+        repeatToFillColorSlots: Bool = true,
+        renderScale: CGFloat = 1
     ) {
         _color = color
         _speed = speed
@@ -35,8 +35,8 @@ public struct ColorfulView: View {
         _noise = noise
         _transitionSpeed = transitionSpeed
         self.frameLimit = frameLimit
-        self.colorSpace = colorSpace
         self.repeatToFillColorSlots = repeatToFillColorSlots
+        self.renderScale = renderScale
     }
 
     public var body: some View {
@@ -49,7 +49,8 @@ public struct ColorfulView: View {
             noise: $noise,
             transitionSpeed: $transitionSpeed,
             frameLimit: frameLimit,
-            repeatToFillColorSlots: repeatToFillColorSlots
+            repeatToFillColorSlots: repeatToFillColorSlots,
+            renderScale: renderScale
         )
     }
 }

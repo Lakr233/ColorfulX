@@ -17,6 +17,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 
     let frameLimit: Int
     let repeatToFillColorSlots: Bool
+    let renderScale: CGFloat
 
     public init(
         color: Binding<[ColorVector]>,
@@ -25,7 +26,8 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         noise: Binding<Double> = .constant(0),
         transitionSpeed: Binding<Double> = .constant(3.25),
         frameLimit: Int = 0,
-        repeatToFillColorSlots: Bool = true
+        repeatToFillColorSlots: Bool = true,
+        renderScale: CGFloat = 1.0
     ) {
         _color = color
         _speed = speed
@@ -35,9 +37,13 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 
         self.frameLimit = frameLimit
         self.repeatToFillColorSlots = repeatToFillColorSlots
+        self.renderScale = renderScale
     }
 
     public func updatePropertyToView(_ view: AnimatedMulticolorGradientView) {
+        view.frameLimit = frameLimit
+        view.metalLink?.scaleFactor = renderScale
+
         view.setColors(
             color,
             interpolationEnabled: transitionSpeed > 0,
