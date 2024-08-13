@@ -50,33 +50,6 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         super.init()
 
         initializeRenderParameters()
-
-        #if canImport(UIKit)
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(applicationWillEnterForeground(_:)),
-                name: UIApplication.willEnterForegroundNotification,
-                object: nil
-            )
-        #endif
-    }
-
-    #if canImport(UIKit)
-        @objc
-        func applicationWillEnterForeground(_: Notification) {
-            lastRender = .init()
-            needsUpdateRenderParameters = true
-        }
-    #endif
-
-    deinit {
-        #if canImport(UIKit)
-            NotificationCenter.default.removeObserver(
-                self,
-                name: UIApplication.willEnterForegroundNotification,
-                object: nil
-            )
-        #endif
     }
 
     public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true) {
