@@ -12,7 +12,9 @@ import SpringInterpolation
 
 private let SPRING_CONFIG = SpringInterpolation.Configuration(
     angularFrequency: 1.5,
-    dampingRatio: 0.2
+    dampingRatio: 0.2,
+    threshold: 0.001,
+    stopWhenHitTarget: true
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 private let defaultFrameRate: Int = 60
@@ -119,6 +121,22 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         return realDeltaTime
     }
 
+    @inline(__always)
+    func isColorTransitionCompleted() -> Bool {
+        colorElements
+            .filter(\.enabled)
+            .allSatisfy { $0.transitionProgress.context.currentPos >= 1 }
+    }
+
+    @inline(__always)
+    public func shouldRenderNextFrameWithinSynchornization() -> Bool {
+        // if transition not completed, keep ticking until complete
+        if !isColorTransitionCompleted() { return true }
+        guard frameLimiterShouldScheduleNextFrame() else { return false }
+        guard speed > 0 || renderInputWasModified else { return false }
+        return true
+    }
+
     // MARK: - RENDER LIFE CYCLE
 
     override public func layoutSublayers(of layer: CALayer) {
@@ -140,14 +158,8 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func vsync() {
-        // check if we should render
-        guard frameLimiterShouldScheduleNextFrame() else { return }
-
-        // check if we need to update the render parameter
-        // the underlying MulticolorGradientView will only render if parameter was modified
-        guard speed > 0 || renderInputWasModified else { return }
+        guard shouldRenderNextFrameWithinSynchornization() else { return }
         updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-
         // sine the render parameters were updated, we call super.vsync to render
         super.vsync()
     }

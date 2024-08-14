@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Lakr233/ColorVector.git", from: "1.0.3"),
-        .package(url: "https://github.com/Lakr233/SpringInterpolation.git", from: "1.1.2"),
+        .package(url: "https://github.com/Lakr233/SpringInterpolation.git", from: "1.2.2"),
     ],
     targets: [
         .target(
