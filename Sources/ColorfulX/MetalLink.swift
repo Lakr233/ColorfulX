@@ -7,6 +7,7 @@
 
 import Foundation
 import MetalKit
+import MSDisplayLink
 
 class MetalLink: DisplayLinkDelegate {
     let metalDevice: MTLDevice
