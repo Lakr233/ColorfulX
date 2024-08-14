@@ -50,6 +50,7 @@ class MetalLink: DisplayLinkDelegate {
     func updateDrawableSize(withBounds bounds: CGRect) {
         guard metalLayer.frame != bounds else { return }
         metalLayer.frame = bounds
+        updateDrawableSizeFromFrame()
     }
 
     func updateDrawableSizeFromFrame() {
