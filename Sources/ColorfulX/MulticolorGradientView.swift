@@ -21,6 +21,13 @@ open class MulticolorGradientView: MetalView {
     public var currentTexture: MTLTexture? { currentDrawable?.texture }
     public var captureImage: CGImage? { currentTexture?.capture() }
 
+    public enum RenderExecutionStatus {
+        case normal
+        case temporaryStopped
+    }
+
+    public var renderExecutionStatus: RenderExecutionStatus = .normal
+
     override public init() {
         super.init()
 
@@ -54,6 +61,10 @@ open class MulticolorGradientView: MetalView {
     func render() {
         guard lock.try() else { return }
         defer { lock.unlock() }
+
+        if renderExecutionStatus == .temporaryStopped {
+            return
+        }
 
         guard let metalLink,
               let computePipelineState

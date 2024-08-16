@@ -14,6 +14,7 @@ class MetalLink: DisplayLinkDelegate {
     let metalLayer: CAMetalLayer
     let commandQueue: MTLCommandQueue
     let displayLink: DisplayLink = .init()
+    let disableLayerAnimationDelegate = CALayerAnimationsDisablingDelegate()
 
     typealias SynchornizationUpdate = () -> Void
     var onSynchronizationUpdate: SynchornizationUpdate?
@@ -39,6 +40,11 @@ class MetalLink: DisplayLinkDelegate {
         metalLayer.device = metalDevice
         metalLayer.framebufferOnly = false
         metalLayer.isOpaque = false
+        metalLayer.actions = [
+            "sublayers": NSNull(),
+            "content": NSNull(),
+        ]
+        metalLayer.delegate = disableLayerAnimationDelegate
         self.metalLayer = metalLayer
 
         displayLink.delegatingObject(self)
@@ -65,5 +71,7 @@ class MetalLink: DisplayLinkDelegate {
         metalLayer.drawableSize = CGSize(width: width, height: height)
     }
 
-    func synchronization() { onSynchronizationUpdate?() }
+    func synchronization() {
+        onSynchronizationUpdate?()
+    }
 }
