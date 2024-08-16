@@ -17,51 +17,55 @@ extension AnimatedMulticolorGradientView {
 
     func initializeRenderParameters() {
         var rand = randomLocationPair()
-        for idx in 0 ..< colorElements.count {
+        for idx in 0 ..< speckles.count {
             rand = randomLocationPair()
-            colorElements[idx].position.setCurrent(.init(x: rand.x, y: rand.y))
-            rand = randomLocationPair()
-            colorElements[idx].position.setTarget(.init(x: rand.x, y: rand.y))
+            alteringSpeckles { speckles in
+                speckles[idx].position.setCurrent(.init(x: rand.x, y: rand.y))
+                rand = randomLocationPair()
+                speckles[idx].position.setTarget(.init(x: rand.x, y: rand.y))
+            }
         }
     }
 
     func updateRenderParameters(deltaTime: Double) {
-        // clear the flag
         defer { renderInputWasModified = false }
 
         let moveDelta = deltaTime * speed * 0.5 // just slow down
 
-        for idx in 0 ..< colorElements.count where colorElements[idx].enabled {
-            var inplaceEdit = colorElements[idx]
-            defer { colorElements[idx] = inplaceEdit }
+        var points: [MulticolorGradientView.Parameters.ColorStop]?
+        alteringSpeckles { speckles in
+            for idx in 0 ..< speckles.count where speckles[idx].enabled {
+                if speckles[idx].transitionProgress.context.currentPos < 1 {
+                    speckles[idx].transitionProgress.update(withDeltaTime: deltaTime * transitionSpeed)
+                }
+                if moveDelta > 0 {
+                    speckles[idx].position.update(withDeltaTime: moveDelta)
 
-            if inplaceEdit.transitionProgress.context.currentPos < 1 {
-                inplaceEdit.transitionProgress.update(withDeltaTime: deltaTime * transitionSpeed)
-            }
-            if moveDelta > 0 {
-                inplaceEdit.position.update(withDeltaTime: moveDelta)
-
-                let pos_x = inplaceEdit.position.x.context.currentPos
-                let tar_x = inplaceEdit.position.x.context.targetPos
-                let pos_y = inplaceEdit.position.y.context.currentPos
-                let tar_y = inplaceEdit.position.y.context.targetPos
-                if abs(pos_x - tar_x) < 0.125 || abs(pos_y - tar_y) < 0.125 {
-                    let rand = randomLocationPair()
-                    inplaceEdit.position.setTarget(.init(x: rand.x, y: rand.y))
+                    let pos_x = speckles[idx].position.x.context.currentPos
+                    let tar_x = speckles[idx].position.x.context.targetPos
+                    let pos_y = speckles[idx].position.y.context.currentPos
+                    let tar_y = speckles[idx].position.y.context.targetPos
+                    if abs(pos_x - tar_x) < 0.125 || abs(pos_y - tar_y) < 0.125 {
+                        let rand = randomLocationPair()
+                        speckles[idx].position.setTarget(.init(x: rand.x, y: rand.y))
+                    }
                 }
             }
-        }
 
-        parameters = .init(
-            points: colorElements
+            points = speckles
                 .filter(\.enabled)
                 .map { .init(
-                    color: computeSpeckleColor($0),
+                    color: $0.colorVector,
                     position: .init(
                         x: $0.position.x.context.currentPos,
                         y: $0.position.y.context.currentPos
                     )
-                ) },
+                ) }
+        }
+        guard let points else { return }
+
+        parameters = .init(
+            points: points,
             bias: bias,
             noise: noise
         )

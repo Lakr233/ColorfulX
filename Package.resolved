@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "msdisplaylink",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Lakr233/MSDisplayLink.git",
+      "state" : {
+        "revision" : "08ad21d886e2e3f990ccbc6813eb6cdad8c427cd",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "springinterpolation",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/SpringInterpolation.git",

@@ -28,9 +28,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         didSet { lastRenderParametersUpdate = obtainCurrentTimestamp() }
     }
 
-    public internal(set) var colorElements: [Speckle] {
+    public private(set) var speckles: [Speckle] {
         didSet { renderInputWasModified = true }
     }
+
+    private let specklesAccessLock = NSLock()
 
     public var speed: Double = 1.0 {
         didSet { renderInputWasModified = true }
@@ -55,30 +57,9 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     // MARK: - FUNCTION
 
     override public init() {
-        colorElements = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
+        speckles = .init(repeating: .init(position: SPRING_ENGINE), count: Uniforms.COLOR_SLOT)
         super.init()
         initializeRenderParameters()
-    }
-
-    public func setColors(_ colors: [ColorVector], interpolationEnabled: Bool = true, repeatToFillColorSlots: Bool = true) {
-        var colors = colors
-        if colors.isEmpty { colors.append(.init(v: .zero, space: .rgb)) }
-        colors = colors.map { $0.color(in: .lab) }
-
-        let endingIndex = repeatToFillColorSlots ? Uniforms.COLOR_SLOT : min(colors.count, Uniforms.COLOR_SLOT)
-        guard endingIndex > 0 else { return }
-        for idx in 0 ..< endingIndex {
-            var read = colorElements[idx]
-            let color: ColorVector = colors[idx % colors.count]
-            guard read.targetColor != color else { continue }
-            let interpolationEnabled = interpolationEnabled && read.enabled
-            let currentColor = computeSpeckleColor(read)
-            read.enabled = true
-            read.targetColor = color
-            read.previousColor = interpolationEnabled ? currentColor : color
-            read.transitionProgress.setCurrent(interpolationEnabled ? 0 : 1, 0)
-            colorElements[idx] = read
-        }
     }
 
     // MARK: - GETTER
@@ -123,7 +104,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     @inline(__always)
     func isColorTransitionCompleted() -> Bool {
-        colorElements
+        speckles
             .filter(\.enabled)
             .allSatisfy { $0.transitionProgress.context.currentPos >= 1 }
     }
@@ -139,16 +120,9 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     // MARK: - RENDER LIFE CYCLE
 
-    private let updateParametersLock = NSLock()
-
     override public func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
-
-        updateParametersLock.lock()
-        renderInputWasModified = true
         updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-        updateParametersLock.unlock()
-
         renderIfNeeded()
     }
 
@@ -159,17 +133,13 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     override func vsync() {
         guard shouldRenderNextFrameWithinSynchornization() else { return }
-
-        updateParametersLock.lock()
         updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-        updateParametersLock.unlock()
-
-        // sine the render parameters were updated, we call super.vsync to render
         super.vsync()
     }
 
-    func computeSpeckleColor(_ speckle: Speckle) -> ColorVector {
-        let progress = speckle.transitionProgress.context.currentPos
-        return speckle.previousColor.lerp(to: speckle.targetColor, percent: progress)
+    func alteringSpeckles(_ callback: (inout [Speckle]) -> Void) {
+        specklesAccessLock.lock()
+        callback(&speckles)
+        specklesAccessLock.unlock()
     }
 }
