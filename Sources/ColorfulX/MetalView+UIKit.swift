@@ -20,7 +20,6 @@
 
             isUserInteractionEnabled = false
             layer.addSublayer(metalLink.metalLayer)
-            assert(metalLink.metalLayer.delegate == nil)
             metalLink.onSynchronizationUpdate = { [weak self] in
                 self?.vsyncCheckQualificationAndSend()
             }

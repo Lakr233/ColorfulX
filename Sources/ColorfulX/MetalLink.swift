@@ -45,6 +45,7 @@ class MetalLink: DisplayLinkDelegate {
             "content": NSNull(),
         ]
         metalLayer.delegate = disableLayerAnimationDelegate
+        metalLayer.presentsWithTransaction = false
         self.metalLayer = metalLayer
 
         displayLink.delegatingObject(self)
