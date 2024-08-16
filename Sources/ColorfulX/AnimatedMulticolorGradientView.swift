@@ -139,17 +139,17 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     // MARK: - RENDER LIFE CYCLE
 
+    private let updateParametersLock = NSLock()
+
     override public func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
 
-        // skip any vsync check and force an update
+        updateParametersLock.lock()
         renderInputWasModified = true
         updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-        renderIfNeeded()
-    }
+        updateParametersLock.unlock()
 
-    override func renderIfNeeded() {
-        super.renderIfNeeded()
+        renderIfNeeded()
     }
 
     override func render() {
@@ -159,7 +159,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     override func vsync() {
         guard shouldRenderNextFrameWithinSynchornization() else { return }
+
+        updateParametersLock.lock()
         updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
+        updateParametersLock.unlock()
+
         // sine the render parameters were updated, we call super.vsync to render
         super.vsync()
     }
