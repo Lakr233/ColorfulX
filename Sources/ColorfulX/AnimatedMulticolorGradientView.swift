@@ -13,8 +13,8 @@ import SpringInterpolation
 private let SPRING_CONFIG = SpringInterpolation.Configuration(
     angularFrequency: 1.5,
     dampingRatio: 0.2,
-    threshold: 0.001,
-    stopWhenHitTarget: false
+    threshold: 0.0001,
+    stopWhenHitTarget: true
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 private let defaultFrameRate: Int = 60

@@ -38,7 +38,15 @@ extension AnimatedMulticolorGradientView {
                 speckle.position.update(withDeltaTime: moveDelta)
             }
 
-            if speckle.position.distanceToTarget < 50 {
+            let pos_x = speckle.position.x.context.currentPos
+            let tar_x = speckle.position.x.context.targetPos
+            let pos_y = speckle.position.y.context.currentPos
+            let tar_y = speckle.position.y.context.targetPos
+            let shouldUpdateLocation = false
+                || abs(pos_x - tar_x) < 0.125
+                || abs(pos_y - tar_y) < 0.125
+
+            if shouldUpdateLocation {
                 let rand = randomLocationPair()
                 speckle.position.setTarget(.init(x: rand.x, y: rand.y))
             }

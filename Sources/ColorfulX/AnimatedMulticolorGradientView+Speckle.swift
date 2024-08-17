@@ -92,11 +92,3 @@ public extension AnimatedMulticolorGradientView {
         }
     }
 }
-
-extension SpringInterpolation2D {
-    var distanceToTarget: CGFloat {
-        let dx = x.context.currentPos - x.context.targetPos
-        let dy = y.context.currentPos - y.context.targetPos
-        return sqrt(dx * dx + dy * dy)
-    }
-}
