@@ -25,8 +25,6 @@ extension AnimatedMulticolorGradientView {
     }
 
     func updateRenderParameters(deltaTime: Double) {
-        print("[*] render parameter update at \(obtainCurrentTimestamp())")
-
         defer { renderInputWasModified = false }
 
         let moveDelta = deltaTime * speed * 0.5 // just slow down

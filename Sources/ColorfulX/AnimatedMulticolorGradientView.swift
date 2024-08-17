@@ -127,7 +127,6 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func render() {
-        print("[*] render at \(obtainCurrentTimestamp())")
         super.render()
         lastRenderExecution = obtainCurrentTimestamp()
     }
