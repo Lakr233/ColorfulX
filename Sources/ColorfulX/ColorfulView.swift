@@ -18,7 +18,7 @@ public struct ColorfulView: View {
     @Binding var renderScale: Double
     @Binding var pauseRender: Bool
 
-    let repeatToFillColorSlots: Bool
+    let repeats: Bool
 
     public init(
         color: Binding<[Color]>,
@@ -29,7 +29,7 @@ public struct ColorfulView: View {
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
         pauseRender: Binding<Bool> = .constant(false),
-        repeatToFillColorSlots: Bool = true
+        repeats: Bool = true
     ) {
         _color = color
         _speed = speed
@@ -40,7 +40,7 @@ public struct ColorfulView: View {
         _renderScale = renderScale
         _pauseRender = pauseRender
 
-        self.repeatToFillColorSlots = repeatToFillColorSlots
+        self.repeats = repeats
     }
 
     public var body: some View {
@@ -55,7 +55,7 @@ public struct ColorfulView: View {
             frameLimit: $frameLimit,
             renderScale: $renderScale,
             pauseRender: $pauseRender,
-            repeatToFillColorSlots: repeatToFillColorSlots
+            repeats: repeats
         )
     }
 }

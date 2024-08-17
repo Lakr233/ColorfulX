@@ -14,7 +14,7 @@ private let SPRING_CONFIG = SpringInterpolation.Configuration(
     angularFrequency: 1.5,
     dampingRatio: 0.2,
     threshold: 0.001,
-    stopWhenHitTarget: true
+    stopWhenHitTarget: false
 )
 private let SPRING_ENGINE = SpringInterpolation2D(SPRING_CONFIG)
 private let defaultFrameRate: Int = 60
@@ -106,7 +106,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     func isColorTransitionCompleted() -> Bool {
         speckles
             .filter(\.enabled)
-            .allSatisfy { $0.transitionProgress.context.currentPos >= 1 }
+            .allSatisfy(\.isTransitionCompleted)
     }
 
     @inline(__always)
@@ -127,6 +127,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     override func render() {
+        print("[*] render at \(obtainCurrentTimestamp())")
         super.render()
         lastRenderExecution = obtainCurrentTimestamp()
     }
@@ -140,6 +141,18 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     func alteringSpeckles(_ callback: (inout [Speckle]) -> Void) {
         specklesAccessLock.lock()
         callback(&speckles)
+        specklesAccessLock.unlock()
+    }
+
+    func alteringSpeckleByIteratingValues(_ callback: (inout Speckle) -> Void) {
+        alteringSpeckleByIteratingValues { speckle, _ in callback(&speckle) }
+    }
+
+    func alteringSpeckleByIteratingValues(_ callback: (inout Speckle, _ idx: Int) -> Void) {
+        specklesAccessLock.lock()
+        for idx in 0 ..< speckles.count {
+            callback(&speckles[idx], idx)
+        }
         specklesAccessLock.unlock()
     }
 }

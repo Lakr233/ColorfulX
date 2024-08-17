@@ -98,7 +98,7 @@ import MetalKit
 import ColorfulX
 
 let view = AnimatedMulticolorGradientView()
-view.setColors(color, interpolationEnabled: false)
+view.setColors(color, animated: false)
 view.speed = speed
 view.transitionDuration = transitionDuration
 view.noise = noise

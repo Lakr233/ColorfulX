@@ -18,7 +18,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var renderScale: Double
     @Binding var pauseRender: Bool
 
-    let repeatToFillColorSlots: Bool
+    let repeats: Bool
 
     public init(
         color: Binding<[ColorVector]>,
@@ -29,7 +29,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1),
         pauseRender: Binding<Bool> = .constant(false),
-        repeatToFillColorSlots: Bool = true
+        repeats: Bool = true
     ) {
         _color = color
         _speed = speed
@@ -40,17 +40,17 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         _renderScale = renderScale
         _pauseRender = pauseRender
 
-        self.repeatToFillColorSlots = repeatToFillColorSlots
+        self.repeats = repeats
     }
 
-    public func updatePropertyToView(_ view: AnimatedMulticolorGradientView) {
+    public func updatePropertyToView(_ view: AnimatedMulticolorGradientView, initialSetup: Bool) {
         view.frameLimit = frameLimit
         view.metalLink?.scaleFactor = renderScale
 
         view.setColors(
             color,
-            interpolationEnabled: transitionSpeed > 0,
-            repeatToFillColorSlots: repeatToFillColorSlots
+            animated: transitionSpeed > 0 && !initialSetup,
+            repeats: repeats
         )
         view.speed = speed
         view.bias = bias
@@ -66,12 +66,12 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     extension AnimatedMulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> AnimatedMulticolorGradientView {
             let view = AnimatedMulticolorGradientView()
-            updatePropertyToView(view)
+            updatePropertyToView(view, initialSetup: true)
             return view
         }
 
         public func updateUIView(_ uiView: AnimatedMulticolorGradientView, context _: Context) {
-            updatePropertyToView(uiView)
+            updatePropertyToView(uiView, initialSetup: false)
         }
     }
 #endif
@@ -82,12 +82,12 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     extension AnimatedMulticolorGradientViewRepresentable: NSViewRepresentable {
         public func makeNSView(context _: Context) -> AnimatedMulticolorGradientView {
             let view = AnimatedMulticolorGradientView()
-            updatePropertyToView(view)
+            updatePropertyToView(view, initialSetup: true)
             return view
         }
 
         public func updateNSView(_ nsView: AnimatedMulticolorGradientView, context _: Context) {
-            updatePropertyToView(nsView)
+            updatePropertyToView(nsView, initialSetup: false)
         }
     }
 #endif
