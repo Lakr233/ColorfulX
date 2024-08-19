@@ -111,9 +111,9 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     @inline(__always)
     public func shouldRenderNextFrameWithinSynchornization() -> Bool {
+        guard frameLimiterShouldScheduleNextFrame() else { return false }
         // if transition not completed, keep ticking until complete
         if !isColorTransitionCompleted() { return true }
-        guard frameLimiterShouldScheduleNextFrame() else { return false }
         guard speed > 0 || renderInputWasModified else { return false }
         return true
     }
