@@ -54,6 +54,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
         didSet { renderInputWasModified = true }
     }
 
+    public var renderScale: Double {
+        get { metalLink?.scaleFactor ?? 1 }
+        set { metalLink?.scaleFactor = newValue }
+    }
+
     // MARK: - FUNCTION
 
     override public init() {

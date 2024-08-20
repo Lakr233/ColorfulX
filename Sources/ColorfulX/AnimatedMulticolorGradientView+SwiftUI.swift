@@ -45,7 +45,7 @@ public struct AnimatedMulticolorGradientViewRepresentable {
 
     public func updatePropertyToView(_ view: AnimatedMulticolorGradientView, initialSetup: Bool) {
         view.frameLimit = frameLimit
-        view.metalLink?.scaleFactor = renderScale
+        view.renderScale = renderScale
 
         view.setColors(
             color,
