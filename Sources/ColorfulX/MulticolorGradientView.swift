@@ -28,6 +28,11 @@ open class MulticolorGradientView: MetalView {
 
     public var renderExecutionStatus: RenderExecutionStatus = .normal
 
+    public var renderScale: Double {
+        get { metalLink?.scaleFactor ?? 1 }
+        set { metalLink?.scaleFactor = newValue }
+    }
+
     override public init() {
         super.init()
 
