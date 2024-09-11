@@ -60,12 +60,6 @@ public extension AnimatedMulticolorGradientView {
 }
 
 public extension AnimatedMulticolorGradientView {
-    func setColors(_ preset: ColorfulPreset, animated: Bool = true, repeats: Bool = true) {
-        setColors(preset.colors.map { ColorVector(ColorElement($0)) },
-                  animated: animated,
-                  repeats: repeats)
-    }
-
     func setColors(_ colors: [ColorVector], animated: Bool = true, repeats: Bool = true) {
         var colors = colors
         if colors.isEmpty { colors.append(.init(v: .zero, space: .lab)) }
@@ -96,5 +90,31 @@ public extension AnimatedMulticolorGradientView {
                 speckle.transitionProgress.setCurrent(1)
             }
         }
+    }
+}
+
+public extension AnimatedMulticolorGradientView {
+    func setColors(_ preset: ColorfulPreset, animated: Bool = true, repeats: Bool = true) {
+        setColors(
+            preset.colors.map { ColorVector($0) },
+            animated: animated,
+            repeats: repeats
+        )
+    }
+
+    func setColors(_ preset: ColorfulColors, animated: Bool = true, repeats: Bool = true) {
+        setColors(
+            preset.colors.map { ColorVector($0) },
+            animated: animated,
+            repeats: repeats
+        )
+    }
+
+    func setColors(_ colors: [ColorElement], animated: Bool = true, repeats: Bool = true) {
+        setColors(
+            colors.map { ColorVector($0) },
+            animated: animated,
+            repeats: repeats
+        )
     }
 }

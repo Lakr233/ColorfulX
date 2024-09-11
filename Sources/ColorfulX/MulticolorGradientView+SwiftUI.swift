@@ -20,11 +20,14 @@ public struct MulticolorGradient: View {
 }
 
 public struct MulticolorGradientViewRepresentable {
-    let view = MulticolorGradientView()
     @Binding var parameters: MulticolorGradientView.Parameters
 
     public init(parameters: Binding<MulticolorGradientView.Parameters>) {
         _parameters = parameters
+    }
+
+    public func updatePropertyToView(_ view: MulticolorGradientView) {
+        view.parameters = parameters
     }
 }
 
@@ -33,12 +36,13 @@ public struct MulticolorGradientViewRepresentable {
 
     extension MulticolorGradientViewRepresentable: UIViewRepresentable {
         public func makeUIView(context _: Context) -> MulticolorGradientView {
-            view.parameters = parameters
+            let view = MulticolorGradientView()
+            updatePropertyToView(view)
             return view
         }
 
-        public func updateUIView(_: MulticolorGradientView, context _: Context) {
-            view.parameters = parameters
+        public func updateUIView(_ view: MulticolorGradientView, context _: Context) {
+            updatePropertyToView(view)
         }
     }
 #else
@@ -47,12 +51,13 @@ public struct MulticolorGradientViewRepresentable {
 
         extension MulticolorGradientViewRepresentable: NSViewRepresentable {
             public func makeNSView(context _: Context) -> MulticolorGradientView {
-                view.parameters = parameters
+                let view = MulticolorGradientView()
+                updatePropertyToView(view)
                 return view
             }
 
-            public func updateNSView(_: MulticolorGradientView, context _: Context) {
-                view.parameters = parameters
+            public func updateNSView(_ view: MulticolorGradientView, context _: Context) {
+                updatePropertyToView(view)
             }
         }
     #else

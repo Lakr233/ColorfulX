@@ -12,7 +12,6 @@ let defaultPreset: ColorfulPreset = .aurora
 
 struct ContentView: View {
     @AppStorage("preset") var preset: ColorfulPreset = defaultPreset
-    @State var colors: [Color] = defaultPreset.colors
     @AppStorage("speed") var speed: Double = 1.0
     @AppStorage("bias") var bias: Double = 0.01
     @AppStorage("noise") var noise: Double = 1
@@ -25,7 +24,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             ColorfulView(
-                color: $colors,
+                color: $preset,
                 speed: $speed,
                 bias: $bias,
                 noise: $noise,
@@ -59,8 +58,6 @@ struct ContentView: View {
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .padding()
         }
-        .onAppear { colors = preset.colors }
-        .onChange(of: preset) { colors = $0.colors }
     }
 
     @ViewBuilder
@@ -83,7 +80,7 @@ struct ContentView: View {
                     ForEach(preset.colors, id: \.self) { color in
                         Text("8")
                             .opacity(0)
-                            .overlay(Circle().foregroundColor(color))
+                            .overlay(Circle().foregroundColor(.init(color)))
                     }
                 }
             }
