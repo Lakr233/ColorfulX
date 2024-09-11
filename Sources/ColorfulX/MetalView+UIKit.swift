@@ -85,6 +85,7 @@
 
         override open func layoutSubviews() {
             super.layoutSubviews()
+            updateQualificationCheck()
             metalLink?.updateDrawableSize(withBounds: bounds)
         }
     }
