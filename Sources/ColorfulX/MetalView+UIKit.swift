@@ -89,31 +89,4 @@
             metalLink?.updateDrawableSize(withBounds: bounds)
         }
     }
-
-    extension UIResponder {
-        @objc var scene: UIScene? { nil }
-    }
-
-    extension UIScene {
-        @objc override var scene: UIScene? { self }
-    }
-
-    extension UIView {
-        @objc override var scene: UIScene? {
-            if let window {
-                window.windowScene
-            } else {
-                next?.scene
-            }
-        }
-    }
-
-    extension UIViewController {
-        @objc override var scene: UIScene? {
-            var res = next?.scene
-            if res == nil { res = parent?.scene }
-            if res == nil { res = presentingViewController?.scene }
-            return res
-        }
-    }
 #endif
