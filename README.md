@@ -1,6 +1,6 @@
 # ColorfulX
 
-ColorfulX is a high-performance library designed for creating vibrant, animated gradient views. It offers powerful functionality and preset options as an enhanced alternative to SwiftUI’s MeshGradientView.
+ColorfulX is a high-performance library designed for creating vibrant, animated mesh like gradient views. It offers powerful functionality and preset options as an enhanced alternative to SwiftUI’s MeshGradientView.
 
 🥳 LAB color models are now used, enabling smooth animated transitions and seamless color interpolation.
 
@@ -26,7 +26,7 @@ Add this package into your project.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "4.1.0"),
+    .package(url: "https://github.com/Lakr233/ColorfulX.git", from: "5.5.1"),
 ]
 ```
 
@@ -119,15 +119,39 @@ view.parameters = .init(points: [
 ], bias: 0.01, power: 2, noise: 32)
 ```
 
+### Customized Preset
+
+Starting from ColorfulX 5.5.0, we offer a new way to define presets. See the following example:
+
+```swift
+enum MyPresets: ColorfulColors {
+    case white
+
+    var colors: [ColorElement] {
+        [
+            make(255, 255, 255),
+            make(244, 244, 244),
+            make(233, 233, 233),
+            make(222, 222, 222),
+        ]
+    }
+}
+
+// SwiftUI
+ColorfulView(color: MyPresets.white)
+
+// UIKit or AppKit
+let view = AnimatedMulticolorGradientView()
+view.setColors(MyPresets.white)
+```
+
 ## Performance
 
-There's no feasible way to create these types of gradients without incurring some costs. Yet, by utilizing Metal and GPU, we can attain a performance level that's quite satisfactory. The render process will only take place when draw parameters changed.
+The performance of ColorfulX is truly outstanding! Developers are reportedly incorporating ColorfulX into their applications, and we have received no complaints regarding performance issues. It functions seamlessly even within UITableViewCell and UICollectionViewCell.
 
-After all, the energy impact of this approach is classified as 'Low'.
+Additionally, we have developed a [dynamic wallpaper tweak](https://havoc.app/package/colorfulx) for jailbroken users and have rigorously tested our power-saving mechanism. You can rest assured that there is no battery drain, no overheating, and absolutely no degradation in performance.
 
-From my perspective, it would be advisable to implement a single view per application and opt for a static gradient whenever possible, as this could offer a more efficient solution. Just set the `speed` to `0`.
-
-![PerformanceDemo](./Example/Performance.png)
+We take great pride in this accomplishment.
 
 ## License
 
@@ -135,21 +159,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 The shader code originates from [this source](https://github.com/ArthurGuibert/SwiftUI-MulticolorGradient). Consequently, the name of the original author has been credited in the license file.
 
-## Use Case
-
-- [LennonMusic](https://github.com/zhcz/LennonMusic) iOS
-- [QR-Share-Pro](https://github.com/Visual-Studio-Coder/QR-Share-Pro) iOS
-- [Reveil](https://github.com/Lessica/Reveil) iOS
-- [Troll Recorder](https://github.com/Lessica/TrollRecorder) iOS
-- [Misaka](https://github.com/straight-tamago/misaka) iOS + tvOS
-- [SimpleLiveTVOS](https://github.com/pcccccc/SimpleLiveTVOS) tvOS
-- [Vibefy](https://github.com/ZhangDo/NeteaseTVDemo) tvOS
-- [Dino](https://apps.apple.com/us/app/dino-%E7%A9%BA%E9%97%B4%E8%BE%93%E5%85%A5%E6%B3%95/id6477793173) xrOS
-- [BBackupp](https://github.com/Lakr233/BBackupp) macOS
-- [Mythic](https://github.com/MythicApp/Mythic) macOS
-
-Pull requests for use cases are welcome.
-
 ---
 
-Copyright © 2023 Lakr Aream. All Rights Reserved.
+Copyright © 2024 Lakr Aream. All Rights Reserved.
