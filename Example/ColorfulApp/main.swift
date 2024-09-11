@@ -37,5 +37,7 @@ enum CompilerCheck {
         let view = AnimatedMulticolorGradientView()
         view.setColors(.appleIntelligence)
         view.setColors(MyPresets.white)
+
+        _ = MulticolorGradientView()
     }
 }

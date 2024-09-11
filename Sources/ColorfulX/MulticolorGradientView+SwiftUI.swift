@@ -14,6 +14,14 @@ public struct MulticolorGradient: View {
         _parameters = parameters
     }
 
+    public init(parameters: MulticolorGradientView.Parameters) {
+        self.init(parameters: .init(get: {
+            parameters
+        }, set: { _ in
+            assertionFailure()
+        }))
+    }
+
     public var body: some View {
         MulticolorGradientViewRepresentable(parameters: $parameters)
     }
