@@ -39,7 +39,7 @@
                 frame.height > 0,
                 alpha > 0,
                 !isHidden,
-            ].allSatisfy { $0 }
+            ].allSatisfy(\.self)
         }
 
         override open var frame: CGRect {

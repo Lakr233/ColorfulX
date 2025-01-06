@@ -72,7 +72,7 @@ class MetalLink: DisplayLinkDelegate {
         metalLayer.drawableSize = CGSize(width: width, height: height)
     }
 
-    func synchronization() {
+    func synchronization(context _: DisplayLinkCallbackContext) {
         onSynchronizationUpdate?()
     }
 }

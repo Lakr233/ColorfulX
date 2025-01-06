@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/MSDisplayLink.git",
       "state" : {
-        "revision" : "89e224c797de6d2ec6552a568f62ef9ba016def0",
-        "version" : "1.1.0"
+        "revision" : "6e92b5513e3473e064685e64056c4ac46470e7b0",
+        "version" : "2.0.3"
       }
     },
     {
