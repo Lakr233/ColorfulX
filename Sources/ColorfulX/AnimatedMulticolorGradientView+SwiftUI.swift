@@ -16,7 +16,6 @@ public struct AnimatedMulticolorGradientViewRepresentable {
     @Binding var transitionSpeed: Double
     @Binding var frameLimit: Int
     @Binding var renderScale: Double
-    @Binding var pauseRender: Bool
 
     let repeats: Bool
 
@@ -28,7 +27,6 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         transitionSpeed: Binding<Double> = .constant(3.25),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         _color = color
@@ -38,7 +36,6 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         _transitionSpeed = transitionSpeed
         _frameLimit = frameLimit
         _renderScale = renderScale
-        _pauseRender = pauseRender
 
         self.repeats = repeats
     }
@@ -56,7 +53,6 @@ public struct AnimatedMulticolorGradientViewRepresentable {
         view.bias = bias
         view.noise = noise
         view.transitionSpeed = transitionSpeed
-        view.renderExecutionStatus = pauseRender ? .temporaryStopped : .normal
     }
 }
 

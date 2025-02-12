@@ -16,7 +16,6 @@ public struct ColorfulView: View {
     @Binding var transitionSpeed: Double
     @Binding var frameLimit: Int
     @Binding var renderScale: Double
-    @Binding var pauseRender: Bool
 
     let repeats: Bool
 
@@ -29,7 +28,6 @@ public struct ColorfulView: View {
     ///   - transitionSpeed: how long it tooks to animate when colors changed
     ///   - frameLimit: limit frames per seconds, rounded to vsync (only skip frames, not reschedule)
     ///   - renderScale: similar to view scale, you can set to a very low value if you do not use noise
-    ///   - pauseRender: stop render temporarily
     ///   - repeats: repeat colors to fill 8 slot for rendering, can be false if your number of colors will stay the same
     public init(
         color: Binding<[Color]>,
@@ -39,7 +37,6 @@ public struct ColorfulView: View {
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         _color = color
@@ -49,7 +46,6 @@ public struct ColorfulView: View {
         _transitionSpeed = transitionSpeed
         _frameLimit = frameLimit
         _renderScale = renderScale
-        _pauseRender = pauseRender
 
         self.repeats = repeats
     }
@@ -65,7 +61,6 @@ public struct ColorfulView: View {
             transitionSpeed: $transitionSpeed,
             frameLimit: $frameLimit,
             renderScale: $renderScale,
-            pauseRender: $pauseRender,
             repeats: repeats
         )
     }
@@ -81,7 +76,6 @@ public extension ColorfulView {
     ///   - transitionSpeed: how long it tooks to animate when colors changed
     ///   - frameLimit: limit frames per seconds, rounded to vsync (only skip frames, not reschedule)
     ///   - renderScale: similar to view scale, you can set to a very low value if you do not use noise
-    ///   - pauseRender: stop render temporarily
     ///   - repeats: repeat colors to fill 8 slot for rendering, can be false if your number of colors will stay the same
     init(
         color: [Color],
@@ -91,7 +85,6 @@ public extension ColorfulView {
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         let colorBinding = Binding<[Color]>(get: {
@@ -107,7 +100,6 @@ public extension ColorfulView {
             transitionSpeed: transitionSpeed,
             frameLimit: frameLimit,
             renderScale: renderScale,
-            pauseRender: pauseRender,
             repeats: repeats
         )
     }
@@ -121,7 +113,6 @@ public extension ColorfulView {
     ///   - transitionSpeed: how long it tooks to animate when colors changed
     ///   - frameLimit: limit frames per seconds, rounded to vsync (only skip frames, not reschedule)
     ///   - renderScale: similar to view scale, you can set to a very low value if you do not use noise
-    ///   - pauseRender: stop render temporarily
     ///   - repeats: repeat colors to fill 8 slot for rendering, can be false if your number of colors will stay the same
     init(
         color: Binding<ColorfulPreset>,
@@ -131,7 +122,6 @@ public extension ColorfulView {
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         let colorBinding = Binding<[Color]>(get: {
@@ -147,7 +137,6 @@ public extension ColorfulView {
             transitionSpeed: transitionSpeed,
             frameLimit: frameLimit,
             renderScale: renderScale,
-            pauseRender: pauseRender,
             repeats: repeats
         )
     }
@@ -161,7 +150,6 @@ public extension ColorfulView {
     ///   - transitionSpeed: how long it tooks to animate when colors changed
     ///   - frameLimit: limit frames per seconds, rounded to vsync (only skip frames, not reschedule)
     ///   - renderScale: similar to view scale, you can set to a very low value if you do not use noise
-    ///   - pauseRender: stop render temporarily
     ///   - repeats: repeat colors to fill 8 slot for rendering, can be false if your number of colors will stay the same
     init(
         color: ColorfulPreset,
@@ -171,7 +159,6 @@ public extension ColorfulView {
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         self.init(
@@ -182,7 +169,6 @@ public extension ColorfulView {
             transitionSpeed: transitionSpeed,
             frameLimit: frameLimit,
             renderScale: renderScale,
-            pauseRender: pauseRender,
             repeats: repeats
         )
     }
@@ -196,7 +182,6 @@ public extension ColorfulView {
     ///   - transitionSpeed: how long it tooks to animate when colors changed
     ///   - frameLimit: limit frames per seconds, rounded to vsync (only skip frames, not reschedule)
     ///   - renderScale: similar to view scale, you can set to a very low value if you do not use noise
-    ///   - pauseRender: stop render temporarily
     ///   - repeats: repeat colors to fill 8 slot for rendering, can be false if your number of colors will stay the same
     init(
         color: ColorfulColors,
@@ -206,7 +191,6 @@ public extension ColorfulView {
         transitionSpeed: Binding<Double> = .constant(5),
         frameLimit: Binding<Int> = .constant(0),
         renderScale: Binding<Double> = .constant(1.0),
-        pauseRender: Binding<Bool> = .constant(false),
         repeats: Bool = true
     ) {
         let colorBinding = Binding<[Color]>(get: {
@@ -222,7 +206,6 @@ public extension ColorfulView {
             transitionSpeed: transitionSpeed,
             frameLimit: frameLimit,
             renderScale: renderScale,
-            pauseRender: pauseRender,
             repeats: repeats
         )
     }

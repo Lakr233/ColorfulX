@@ -120,11 +120,14 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     // MARK: - RENDER LIFE CYCLE
 
-    override public func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-        renderIfNeeded()
-    }
+    #if !canImport(UIKit) && canImport(AppKit)
+        override open func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            layoutSubtreeIfNeeded()
+            updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
+            renderIfNeeded()
+        }
+    #endif
 
     override func render() {
         super.render()
