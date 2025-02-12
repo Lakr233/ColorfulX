@@ -120,6 +120,15 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
 
     // MARK: - RENDER LIFE CYCLE
 
+    #if canImport(UIKit)
+        override open func didMoveToWindow() {
+            super.didMoveToWindow()
+            layoutIfNeeded()
+            updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
+            renderIfNeeded()
+        }
+    #endif
+
     #if !canImport(UIKit) && canImport(AppKit)
         override open func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
