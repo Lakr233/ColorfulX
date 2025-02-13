@@ -17,7 +17,7 @@ struct ContentView: View {
     @AppStorage("noise") var noise: Double = 1
     @AppStorage("duration") var duration: TimeInterval = 3.5
     @AppStorage("scale") var scale: Double = 1
-    @AppStorage("frame") var frame: Int = 30
+    @AppStorage("frame") var frame: Int = 60
 
     @State var controlPanelVisible: Bool = true
 

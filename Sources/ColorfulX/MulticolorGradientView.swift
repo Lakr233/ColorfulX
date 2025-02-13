@@ -44,19 +44,27 @@ open class MulticolorGradientView: MetalView {
     func renderIfNeeded() {
         guard needsRender else { return }
         defer { needsRender = false }
-        render()
+        DispatchQueue.global().async {
+            self.render()
+        }
     }
 
     func render() {
+        let lock = lock
         guard lock.try() else { return }
-        defer { lock.unlock() }
 
-        guard let metalLink, let computePipelineState else { return }
-
-        guard let drawable = metalLink.metalLayer.nextDrawable(),
+        guard let metalLink,
+              let computePipelineState,
+              let drawable = metalLink.metalLayer.nextDrawable(),
               let commandBuffer = metalLink.commandQueue.makeCommandBuffer(),
               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
-        else { return }
+        else {
+            lock.unlock()
+            return
+        }
+        drawable.addPresentedHandler { _ in
+            lock.unlock()
+        }
 
         var shaderPoints: [(simd_float2, simd_float4)] = Array(
             repeating: (
