@@ -62,7 +62,7 @@ open class MulticolorGradientView: MetalView {
             lock.unlock()
             return
         }
-        drawable.addPresentedHandler { _ in
+        commandBuffer.addCompletedHandler { _ in
             lock.unlock()
         }
 
