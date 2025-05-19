@@ -81,8 +81,6 @@ private extension Color {
         }
     }
 
-    @available(iOS 13.0, macCatalyst 13.0, tvOS 13.0, *)
-    @available(macOS, unavailable)
     private func transform() -> ColorElement {
         // reset of the world supports UIKit (eg: iOS 13 + macCatalyst 13 + tvOS 13)
         let components = components()
