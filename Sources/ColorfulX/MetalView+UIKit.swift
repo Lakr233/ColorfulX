@@ -19,6 +19,14 @@
             guard let metalLink else { return }
 
             isUserInteractionEnabled = false
+            
+            layer.actions = [
+                "position": NSNull(),
+                "bounds": NSNull(),
+                "frame": NSNull(),
+                "transform": NSNull(),
+                "sublayerTransform": NSNull()
+            ]
             layer.addSublayer(metalLink.metalLayer)
             metalLink.onSynchronizationUpdate = { [weak self] in
                 self?.vsyncCheckQualificationAndSend()
@@ -45,8 +53,34 @@
         override open var frame: CGRect {
             get { super.frame }
             set {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+
                 super.frame = newValue
+                CATransaction.commit()
                 updateQualificationCheck()
+            }
+        }
+
+        override open var bounds: CGRect {
+            get { super.bounds }
+            set {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+
+                super.bounds = newValue
+                CATransaction.commit()
+            }
+        }
+        
+        override open var center: CGPoint {
+            get { super.center }
+            set {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+
+                super.center = newValue
+                CATransaction.commit()
             }
         }
 
@@ -84,9 +118,14 @@
         func vsync() {}
 
         override open func layoutSubviews() {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            
             super.layoutSubviews()
             updateQualificationCheck()
             metalLink?.updateDrawableSize(withBounds: bounds)
+            
+            CATransaction.commit()
         }
     }
 #endif

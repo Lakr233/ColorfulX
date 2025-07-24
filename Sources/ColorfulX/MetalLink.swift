@@ -40,6 +40,17 @@ class MetalLink: DisplayLinkDelegate {
         metalLayer.framebufferOnly = false
         metalLayer.isOpaque = false
         metalLayer.presentsWithTransaction = false
+        metalLayer.actions = [
+            "position": NSNull(),
+            "bounds": NSNull(),
+            "frame": NSNull(),
+            "transform": NSNull(),
+            "sublayerTransform": NSNull(),
+            "contents": NSNull(),
+            "contentsRect": NSNull(),
+            "contentsCenter": NSNull()
+        ]
+
         self.metalLayer = metalLayer
 
         displayLink.delegatingObject(self)
@@ -50,12 +61,25 @@ class MetalLink: DisplayLinkDelegate {
     }
 
     func updateDrawableSize(withBounds bounds: CGRect) {
-        guard metalLayer.frame != bounds else { return }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        CATransaction.setAnimationDuration(0)
+        
+        guard metalLayer.frame != bounds else {
+            CATransaction.commit()
+            return
+        }
+        
         metalLayer.frame = bounds
         updateDrawableSizeFromFrame()
+        CATransaction.commit()
     }
 
     func updateDrawableSizeFromFrame() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        CATransaction.setAnimationDuration(0)
+
         let bounds = metalLayer.bounds
         var width = bounds.width * scaleFactor
         var height = bounds.height * scaleFactor
@@ -64,6 +88,7 @@ class MetalLink: DisplayLinkDelegate {
         if width > 8192 { width = 8192 }
         if height > 8192 { height = 8192 }
         metalLayer.drawableSize = CGSize(width: width, height: height)
+        CATransaction.commit()
     }
 
     func synchronization(context _: DisplayLinkCallbackContext) {

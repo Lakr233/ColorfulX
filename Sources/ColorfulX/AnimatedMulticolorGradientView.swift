@@ -123,9 +123,16 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     #if canImport(UIKit)
         override open func didMoveToWindow() {
             super.didMoveToWindow()
-            layoutIfNeeded()
-            updateRenderParameters(deltaTime: deltaTimeForRenderParametersUpdate())
-            renderIfNeeded()
+            if window != nil {
+                // Use CATransaction to ensure execution in the next run loop
+                CATransaction.begin()
+                CATransaction.setCompletionBlock { [weak self] in
+                    self?.layoutIfNeeded()
+                    self?.updateRenderParameters(deltaTime: 0) // No animation needed during initialization
+                    self?.renderIfNeeded()
+                }
+                CATransaction.commit()
+            }
         }
     #endif
 
