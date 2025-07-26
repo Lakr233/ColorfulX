@@ -19,13 +19,13 @@
             guard let metalLink else { return }
 
             isUserInteractionEnabled = false
-            
+
             layer.actions = [
                 "position": NSNull(),
                 "bounds": NSNull(),
                 "frame": NSNull(),
                 "transform": NSNull(),
-                "sublayerTransform": NSNull()
+                "sublayerTransform": NSNull(),
             ]
             layer.addSublayer(metalLink.metalLayer)
             metalLink.onSynchronizationUpdate = { [weak self] in
@@ -72,7 +72,7 @@
                 CATransaction.commit()
             }
         }
-        
+
         override open var center: CGPoint {
             get { super.center }
             set {
@@ -120,11 +120,11 @@
         override open func layoutSubviews() {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            
+
             super.layoutSubviews()
             updateQualificationCheck()
             metalLink?.updateDrawableSize(withBounds: bounds)
-            
+
             CATransaction.commit()
         }
     }

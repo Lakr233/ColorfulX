@@ -57,7 +57,7 @@ open class MulticolorGradientView: MetalView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         CATransaction.setAnimationDuration(0)
-        
+
         let lock = lock
         guard lock.try() else {
             CATransaction.commit()
@@ -135,7 +135,7 @@ open class MulticolorGradientView: MetalView {
 
         commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
         commandEncoder.endEncoding()
-        
+
         let metalLayer = metalLink.metalLayer
         let originalValue = metalLayer.presentsWithTransaction
         metalLayer.presentsWithTransaction = true
@@ -143,7 +143,7 @@ open class MulticolorGradientView: MetalView {
         commandBuffer.waitUntilScheduled()
         drawable.present()
         metalLayer.presentsWithTransaction = originalValue
-        
+
         CATransaction.commit()
     }
 }

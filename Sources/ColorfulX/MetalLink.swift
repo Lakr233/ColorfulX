@@ -64,12 +64,12 @@ class MetalLink: DisplayLinkDelegate {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         CATransaction.setAnimationDuration(0)
-        
+
         guard metalLayer.frame != bounds else {
             CATransaction.commit()
             return
         }
-        
+
         metalLayer.frame = bounds
         updateDrawableSizeFromFrame()
         CATransaction.commit()
