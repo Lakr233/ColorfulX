@@ -8,9 +8,9 @@
 import Foundation
 
 #if canImport(UIKit)
-    public typealias MetalView = UIMetalView
+  public typealias MetalView = UIMetalView
 #endif
 
 #if !canImport(UIKit) && canImport(AppKit)
-    public typealias MetalView = NSMetalView
+  public typealias MetalView = NSMetalView
 #endif

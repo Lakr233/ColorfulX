@@ -8,5 +8,5 @@
 import Foundation
 
 #if !canImport(UIKit) && !canImport(AppKit)
-    #error("Unsupported Platform")
+  #error("Unsupported Platform")
 #endif

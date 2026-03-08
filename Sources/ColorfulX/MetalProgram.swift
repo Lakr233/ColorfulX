@@ -9,7 +9,7 @@ import Foundation
 import MetalKit
 
 private enum MetalProgram: String {
-    case colorful = """
+  case colorful = """
     #include <metal_stdlib>
 
     using namespace metal;
@@ -165,8 +165,8 @@ private enum MetalProgram: String {
     """
 }
 
-public extension MTLDevice {
-    func createColorfulLibrary() throws -> MTLLibrary {
-        try makeLibrary(source: MetalProgram.colorful.rawValue, options: nil)
-    }
+extension MTLDevice {
+  public func createColorfulLibrary() throws -> MTLLibrary {
+    try makeLibrary(source: MetalProgram.colorful.rawValue, options: nil)
+  }
 }

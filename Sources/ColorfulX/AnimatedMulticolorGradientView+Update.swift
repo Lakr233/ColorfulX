@@ -8,12 +8,12 @@
 import Foundation
 
 extension AnimatedMulticolorGradientView {
-    func initializeRenderParameters() {
-        animationDirector.initialize()
-    }
+  func initializeRenderParameters() {
+    animationDirector.initialize()
+  }
 
-    func updateRenderParameters(deltaTime: Double) {
-        defer { renderInputWasModified = false }
-        animationDirector.update(deltaTime: deltaTime)
-    }
+  func updateRenderParameters(deltaTime: Double) {
+    defer { renderInputWasModified = false }
+    animationDirector.update(deltaTime: deltaTime)
+  }
 }
