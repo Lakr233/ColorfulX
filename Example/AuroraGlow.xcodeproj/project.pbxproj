@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5097BFEE2E9CB877008E9F0C /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 5097BFED2E9CB877008E9F0C /* ColorfulX */; };
+		CCB8669C500051996366FB07 /* LookInsideServer in Frameworks */ = {isa = PBXBuildFile; productRef = 052B13E1C750303DE00487BA /* LookInsideServer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +18,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5097BFDD2E9CB83C008E9F0C /* AuroraGlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = AuroraGlow;
 			sourceTree = "<group>";
 		};
@@ -28,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5097BFEE2E9CB877008E9F0C /* ColorfulX in Frameworks */,
+				CCB8669C500051996366FB07 /* LookInsideServer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,7 @@
 			name = AuroraGlow;
 			packageProductDependencies = (
 				5097BFED2E9CB877008E9F0C /* ColorfulX */,
+				052B13E1C750303DE00487BA /* LookInsideServer */,
 			);
 			productName = AuroraGlow;
 			productReference = 5097BFDB2E9CB83C008E9F0C /* AuroraGlow.app */;
@@ -102,6 +107,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5097BFEC2E9CB877008E9F0C /* XCRemoteSwiftPackageReference "ColorfulX" */,
+				87E8F135AB4C13D51FD1531D /* XCRemoteSwiftPackageReference "LookInside-Release" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5097BFDC2E9CB83C008E9F0C /* Products */;
@@ -299,6 +305,10 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"$(inherited)",
+					"LookInsideServer*",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -352,9 +362,22 @@
 				minimumVersion = 6.0.1;
 			};
 		};
+		87E8F135AB4C13D51FD1531D /* XCRemoteSwiftPackageReference "LookInside-Release" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LookInsideApp/LookInside-Release.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		052B13E1C750303DE00487BA /* LookInsideServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87E8F135AB4C13D51FD1531D /* XCRemoteSwiftPackageReference "LookInside-Release" */;
+			productName = LookInsideServer;
+		};
 		5097BFED2E9CB877008E9F0C /* ColorfulX */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5097BFEC2E9CB877008E9F0C /* XCRemoteSwiftPackageReference "ColorfulX" */;
