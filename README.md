@@ -218,6 +218,7 @@ Bug reports and pull requests are welcome on GitHub issues. When contributing:
 ## License
 
 ColorfulX is released under the MIT License. See [LICENSE](LICENSE).
+
 ## Sponsor
 
 [LookInside](https://lookinside-app.com/) helps you inspect a running iOS or macOS app UI from your Mac.
