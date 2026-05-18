@@ -17,6 +17,7 @@
 		50C6638A2B19B04800AF7053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C663892B19B04800AF7053 /* ContentView.swift */; };
 		50C6638C2B19B04900AF7053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C6638B2B19B04900AF7053 /* Assets.xcassets */; };
 		50C663982B19B07B00AF7053 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 50C663972B19B07B00AF7053 /* ColorfulX */; };
+		AB635E33E1363BB06A46CBC7 /* LookInsideServer in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA5607E41469997D6F0C8F9 /* LookInsideServer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C663982B19B07B00AF7053 /* ColorfulX in Frameworks */,
+				AB635E33E1363BB06A46CBC7 /* LookInsideServer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +106,7 @@
 			name = ColorfulApp;
 			packageProductDependencies = (
 				50C663972B19B07B00AF7053 /* ColorfulX */,
+				5FA5607E41469997D6F0C8F9 /* LookInsideServer */,
 			);
 			productName = ColorfulApp;
 			productReference = 50C663842B19B04800AF7053 /* ColorfulApp.app */;
@@ -133,6 +136,9 @@
 				Base,
 			);
 			mainGroup = 50C6637B2B19B04800AF7053;
+			packageReferences = (
+				42EDFA54E4C4296DDEB9A902 /* XCRemoteSwiftPackageReference "LookInside-Release" */,
+			);
 			productRefGroup = 50C663852B19B04800AF7053 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -349,6 +355,10 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = NO;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"$(inherited)",
+					"LookInsideServer*",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Colorful;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -403,10 +413,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		42EDFA54E4C4296DDEB9A902 /* XCRemoteSwiftPackageReference "LookInside-Release" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LookInsideApp/LookInside-Release.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		50C663972B19B07B00AF7053 /* ColorfulX */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ColorfulX;
+		};
+		5FA5607E41469997D6F0C8F9 /* LookInsideServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42EDFA54E4C4296DDEB9A902 /* XCRemoteSwiftPackageReference "LookInside-Release" */;
+			productName = LookInsideServer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
