@@ -17,7 +17,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/Lakr233/ColorVector.git", from: "1.0.4"),
     .package(url: "https://github.com/Lakr233/SpringInterpolation.git", from: "1.3.1"),
-    .package(url: "https://github.com/Lakr233/MSDisplayLink.git", from: "2.0.8"),
+    .package(url: "https://github.com/Lakr233/DisplayLink.git", from: "3.0.0"),
   ],
   targets: [
     .target(
@@ -25,7 +25,7 @@ let package = Package(
       dependencies: [
         "ColorVector",
         "SpringInterpolation",
-        "MSDisplayLink",
+        "DisplayLink",
       ],
       swiftSettings: [
         .swiftLanguageMode(.v6)

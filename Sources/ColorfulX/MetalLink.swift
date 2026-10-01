@@ -7,7 +7,7 @@
 
 import CoreGraphics
 import Foundation
-import MSDisplayLink
+import DisplayLink
 import MetalKit
 
 @MainActor
@@ -59,7 +59,7 @@ class MetalLink: DisplayLinkDelegate {
 
     self.metalLayer = metalLayer
 
-    displayLink.delegatingObject(self)
+    displayLink.delegate = self
   }
 
   deinit {
@@ -99,9 +99,7 @@ class MetalLink: DisplayLinkDelegate {
     CATransaction.commit()
   }
 
-  nonisolated func synchronization(context _: DisplayLinkCallbackContext) {
-    MainActor.assumeIsolated {
-      onSynchronizationUpdate?()
-    }
+  func displayLink(_: DisplayLink, didUpdate _: DisplayLinkFrame) {
+    onSynchronizationUpdate?()
   }
 }

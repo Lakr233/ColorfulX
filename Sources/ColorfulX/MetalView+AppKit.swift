@@ -23,6 +23,7 @@ import Foundation
         layer.isOpaque = false
         layer.backgroundColor = NSColor.clear.cgColor
         layer.addSublayer(metalLink.metalLayer)
+        metalLink.displayLink.context = .view(self)
         metalLink.onSynchronizationUpdate = { [weak self] in
           self?.vsyncCheckQualificationAndSend()
         }

@@ -30,6 +30,7 @@
         "sublayerTransform": NSNull(),
       ]
       layer.addSublayer(metalLink.metalLayer)
+      metalLink.displayLink.context = .view(self)
       metalLink.onSynchronizationUpdate = { [weak self] in
         self?.vsyncCheckQualificationAndSend()
       }
