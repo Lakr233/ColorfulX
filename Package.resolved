@@ -1,13 +1,13 @@
 {
-  "originHash" : "ed5cbee60acb8e940f2aa66a4e3d3914ac52dc661554f7bc3e0d41dd80006db0",
+  "originHash" : "d4bde1c4e2ad04621d786a9887d44ddbbfd4e70218bf453f91a219e93748628c",
   "pins" : [
     {
       "identity" : "colorvector",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/ColorVector.git",
       "state" : {
-        "revision" : "0cd0169f1487d7371ee3fd7fe93f1e918fd93d00",
-        "version" : "1.0.5"
+        "revision" : "6dc3839b6060b835aed8dc82d2d620cc3b4ebe33",
+        "version" : "2.0.0"
       }
     },
     {
