@@ -14,8 +14,8 @@ ColorfulX is a Metal-backed gradient renderer for Apple platforms. It combines L
 
 ## Requirements
 
-- Swift 5.9 or later (`// swift-tools-version: 5.9` in `Package.swift`).
-- iOS 13+, macOS 11+, macCatalyst 13+, tvOS 13+, visionOS 1+ (see `Package.swift`).
+- Swift 6.2 or later (`// swift-tools-version: 6.2` in `Package.swift`).
+- iOS 15+, macOS 12+, macCatalyst 15+, tvOS 15+, visionOS 1+ (see `Package.swift`).
 - A device or simulator with Metal support.
 
 ## Installation (Swift Package Manager)
