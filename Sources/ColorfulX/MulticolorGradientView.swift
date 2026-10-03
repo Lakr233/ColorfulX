@@ -19,7 +19,9 @@ open class MulticolorGradientView: MetalView {
 
     private var needsRender: Bool = false
     private var computePipelineState: MTLComputePipelineState?
-    private let lock = NSLock()
+    /// Lets one frame be in flight at a time. Taken on the main thread and
+    /// returned from Metal's completion thread, which an NSLock does not allow.
+    private let frameInFlight = DispatchSemaphore(value: 1)
 
     public var renderScale: Double {
         get { metalLink?.scaleFactor ?? 1 }
@@ -56,8 +58,8 @@ open class MulticolorGradientView: MetalView {
         CATransaction.setDisableActions(true)
         CATransaction.setAnimationDuration(0)
 
-        let lock = lock
-        guard lock.try() else {
+        let frameInFlight = frameInFlight
+        guard frameInFlight.wait(timeout: .now()) == .success else {
             CATransaction.commit()
             return
         }
@@ -68,12 +70,12 @@ open class MulticolorGradientView: MetalView {
               let commandBuffer = metalLink.commandQueue.makeCommandBuffer(),
               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
         else {
-            lock.unlock()
+            frameInFlight.signal()
             CATransaction.commit()
             return
         }
         commandBuffer.addCompletedHandler { _ in
-            lock.unlock()
+            frameInFlight.signal()
         }
 
         var shaderPoints: [(simd_float2, simd_float4)] = Array(
@@ -134,9 +136,8 @@ open class MulticolorGradientView: MetalView {
         commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
         commandEncoder.endEncoding()
 
+        commandBuffer.present(drawable)
         commandBuffer.commit()
-        commandBuffer.waitUntilScheduled()
-        drawable.present()
 
         CATransaction.commit()
     }

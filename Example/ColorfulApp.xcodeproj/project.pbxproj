@@ -17,7 +17,7 @@
 		50C6638A2B19B04800AF7053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C663892B19B04800AF7053 /* ContentView.swift */; };
 		50C6638C2B19B04900AF7053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C6638B2B19B04900AF7053 /* Assets.xcassets */; };
 		50C663982B19B07B00AF7053 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 50C663972B19B07B00AF7053 /* ColorfulX */; };
-		AB635E33E1363BB06A46CBC7 /* LookInsideServer in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA5607E41469997D6F0C8F9 /* LookInsideServer */; };
+		AB635E33E1363BB06A46CBC7 /* LookInsideServer in Frameworks */ = {isa = PBXBuildFile; platformFilters = (ios, maccatalyst, macos, ); productRef = 5FA5607E41469997D6F0C8F9 /* LookInsideServer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */

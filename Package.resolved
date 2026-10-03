@@ -1,13 +1,13 @@
 {
-  "originHash" : "bd16be361a9b319b694afff82def90d38268dedf9e1770d6e109a2f993da40ab",
+  "originHash" : "ed5cbee60acb8e940f2aa66a4e3d3914ac52dc661554f7bc3e0d41dd80006db0",
   "pins" : [
     {
       "identity" : "colorvector",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/ColorVector.git",
       "state" : {
-        "revision" : "6da8726bf38d68eb943d0f2139ac2a1fac70e65b",
-        "version" : "1.0.4"
+        "revision" : "0cd0169f1487d7371ee3fd7fe93f1e918fd93d00",
+        "version" : "1.0.5"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lakr233/DisplayLink.git",
       "state" : {
-        "revision" : "110051a86f2f074105c1502301d687c4c9597a1c",
-        "version" : "3.0.0"
+        "revision" : "41bea2661e04bebcb1c4f15fc0b6197850100fdd",
+        "version" : "3.0.1"
       }
     },
     {

@@ -15,9 +15,9 @@ let package = Package(
         .library(name: "ColorfulX", targets: ["ColorfulX"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Lakr233/ColorVector.git", from: "1.0.4"),
+        .package(url: "https://github.com/Lakr233/ColorVector.git", from: "1.0.5"),
         .package(url: "https://github.com/Lakr233/SpringInterpolation.git", from: "3.0.1"),
-        .package(url: "https://github.com/Lakr233/DisplayLink.git", from: "3.0.0"),
+        .package(url: "https://github.com/Lakr233/DisplayLink.git", from: "3.0.1"),
     ],
     targets: [
         .target(

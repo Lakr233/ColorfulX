@@ -5,7 +5,7 @@
 //  Created by QAQ on 2023/12/3.
 //
 
-@preconcurrency import ColorVector
+import ColorVector
 import CoreGraphics
 import Foundation
 

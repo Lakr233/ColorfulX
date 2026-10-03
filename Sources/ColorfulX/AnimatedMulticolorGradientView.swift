@@ -5,7 +5,7 @@
 //  Created by QAQ on 2023/12/3.
 //
 
-@preconcurrency import ColorVector
+import ColorVector
 import CoreFoundation
 import MetalKit
 import SpringInterpolation
@@ -33,8 +33,6 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     public let animationDirector: SpeckleAnimationDirector
-
-    private let specklesAccessLock = NSLock()
 
     public var speed: Double = 1.0 {
         didSet { renderInputWasModified = true }
@@ -182,9 +180,7 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     func alteringSpeckles(_ callback: (inout [Speckle]) -> Void) {
-        specklesAccessLock.lock()
         callback(&speckles)
-        specklesAccessLock.unlock()
     }
 
     func alteringSpeckleByIteratingValues(_ callback: (inout Speckle) -> Void) {
@@ -192,10 +188,11 @@ open class AnimatedMulticolorGradientView: MulticolorGradientView {
     }
 
     func alteringSpeckleByIteratingValues(_ callback: (inout Speckle, _ idx: Int) -> Void) {
-        specklesAccessLock.lock()
-        for idx in 0 ..< speckles.count {
-            callback(&speckles[idx], idx)
+        // Edits a copy and writes it back once, so didSet runs once per batch.
+        var updated = speckles
+        for idx in updated.indices {
+            callback(&updated[idx], idx)
         }
-        specklesAccessLock.unlock()
+        speckles = updated
     }
 }
